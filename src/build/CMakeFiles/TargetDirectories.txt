@@ -1,0 +1,5 @@
+/home/zhang/SearchEngine/src/build/CMakeFiles/SearchEngine.dir
+/home/zhang/SearchEngine/src/build/CMakeFiles/Client.dir
+/home/zhang/SearchEngine/src/build/CMakeFiles/Corpus.dir
+/home/zhang/SearchEngine/src/build/CMakeFiles/edit_cache.dir
+/home/zhang/SearchEngine/src/build/CMakeFiles/rebuild_cache.dir

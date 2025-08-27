@@ -1,4 +1,5 @@
 #include "SearchEngineServer.hpp"
+#include "Logger.hpp"
 #include <iostream>
 #include <csignal>
 
@@ -9,7 +10,7 @@ SearchEngineServer *g_server = nullptr;
 
 void signalHandler(int sig) {
     if (sig == SIGINT || sig == SIGTERM) {
-        cout << "\n[Main] Caught signal " << sig << ", stopping server..." << endl;
+        LOG_WARN(("Caught signal " + std::to_string(sig) + ", stopping server...").c_str());
         if (g_server) {
             g_server->stop();
         }
@@ -27,7 +28,7 @@ int main(int argc, char **argv)
         port = atoi(argv[2]);
     }
 
-    cout << "[Main] Starting SearchEngineServer on " << ip << ":" << port << endl;
+    LOG_INFO(("Starting SearchEngineServer on " + ip + ":" + std::to_string(port)).c_str());
 
     SearchEngineServer server(ip, port);
     g_server = &server;

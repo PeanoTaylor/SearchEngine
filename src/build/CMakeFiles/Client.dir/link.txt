@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/Client.dir/Client.cpp.o CMakeFiles/Client.dir/ProtocolParser.cpp.o -o ../Client  -lpthread -llog4cpp -ltinyxml2 

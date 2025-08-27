@@ -3,6 +3,7 @@
  */
 
 #include "TcpConnection.hpp"
+#include "Logger.hpp"
 #include <cstring>
 #include <iostream>
 
@@ -15,7 +16,7 @@
  * @param loop
  */
 TcpConnection::TcpConnection(int fd, EventLoop *loop)
-    : _sock(fd), _sockIO(fd), _localAddr(getLocalAddr()), _peerAddr(getPeerAddr()),_loop(loop)
+    : _sock(fd), _sockIO(fd), _localAddr(getLocalAddr()), _peerAddr(getPeerAddr()), _loop(loop)
 {
 }
 
@@ -32,6 +33,10 @@ bool TcpConnection::isClosed()
 {
     char buf[5] = {0};
     int ret = ::recv(_sock.getFd(), buf, sizeof(buf), MSG_PEEK);
+    if (ret < 0)
+    {
+        LOG_ERROR("recv(MSG_PEEK) failed");
+    }
     return 0 == ret;
 }
 
@@ -44,9 +49,12 @@ string TcpConnection::receive()
     int headSize = sizeof(int) * 2;
     char header[8] = {0};
     int n = _sockIO.readn(header, headSize);
-    if (n == 0) {
+    if (n == 0)
+    {
         return ""; // 对端关闭
-    } else if (n < headSize) {
+    }
+    else if (n < headSize)
+    {
         return ""; // 不完整
     }
 
@@ -55,14 +63,17 @@ string TcpConnection::receive()
     memcpy(&tag, header, 4);
     memcpy(&length, header + 4, 4);
 
-    if (length < 0 || length > 10 * 1024 * 1024) {
-        std::cerr << "Invalid packet length: " << length << endl;
+    if (length < 0 || length > 10 * 1024 * 1024)
+    {
+        LOG_ERROR(("Invalid packet length: " + std::to_string(length)).c_str());
         return "";
     }
 
     string value(length, '\0');
     n = _sockIO.readn(&value[0], length);
-    if (n < length) {
+    if (n < length)
+    {
+        LOG_WARN("Incomplete packet received");
         return "";
     }
 
@@ -70,6 +81,7 @@ string TcpConnection::receive()
     string packet;
     packet.append(header, headSize);
     packet.append(value);
+    LOG_DEBUG(("Received packet length=" + std::to_string(length)).c_str());
     return packet;
 }
 
@@ -79,9 +91,16 @@ string TcpConnection::receive()
  */
 void TcpConnection::send(const string &msg)
 {
-    _sockIO.writen(const_cast<char *>(msg.c_str()), msg.size());
+    int n = _sockIO.writen(const_cast<char *>(msg.c_str()), msg.size());
+    if (n < (int)msg.size())
+    {
+        LOG_ERROR("send failed or partial write");
+    }
+    else
+    {
+        LOG_DEBUG(("send success size=" + std::to_string(msg.size())).c_str());
+    }
 }
-
 /**
  * @param msg
  * @return void
@@ -89,7 +108,8 @@ void TcpConnection::send(const string &msg)
 void TcpConnection::sendInLoop(const string &msg)
 {
     auto con = shared_from_this();
-    _loop->runInLoop([con,msg]{con->send(msg);});
+    _loop->runInLoop([con, msg]
+                     { con->send(msg); });
 }
 
 /**

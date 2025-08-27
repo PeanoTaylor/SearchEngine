@@ -3,6 +3,7 @@
  */
 
 #include "Acceptor.hpp"
+#include "Logger.hpp"
 
 /**
  * Acceptor implementation
@@ -40,7 +41,11 @@ int Acceptor::accept()
     int connfd = ::accept(_sock.getFd(), nullptr, nullptr);
     if (connfd < 0)
     {
-        perror("accept");
+        LOG_ERROR("accept failed");
+    }
+    else
+    {
+        LOG_INFO(("new connection fd=" + std::to_string(connfd)).c_str());
     }
     return connfd;
 }
@@ -79,7 +84,7 @@ void Acceptor::bind()
     int ret = ::bind(_sock.getFd(), (struct sockaddr *)_addr.getInetAddressPtr(), sizeof(struct sockaddr));
     if (ret < 0)
     {
-        perror("bind");
+        LOG_ERROR("bind failed");
         exit(EXIT_FAILURE);
     }
 }
@@ -92,7 +97,7 @@ void Acceptor::listen()
     int ret = ::listen(_sock.getFd(), 4096);
     if (ret < 0)
     {
-        perror("listen");
+        LOG_ERROR("listen failed");
         exit(EXIT_FAILURE);
     }
 }

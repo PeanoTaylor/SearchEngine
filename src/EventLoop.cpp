@@ -3,6 +3,7 @@
  */
 
 #include "EventLoop.hpp"
+#include "Logger.hpp"
 
 /**
  * EventLoop implementation
@@ -120,7 +121,7 @@ int EventLoop::createEventFd()
     int evtfd = eventfd(0, EFD_NONBLOCK);
     if (evtfd < 0)
     {
-        perror("eventfd");
+        LOG_ERROR("eventfd create failed");
         exit(EXIT_FAILURE);
     }
     return evtfd;
@@ -133,7 +134,7 @@ int EventLoop::createEpollFd()
     _epfd = epoll_create(OPEN_MAX);
     if (_epfd < 0)
     {
-        perror("epoll create");
+        LOG_ERROR("epoll create failed");
         exit(EXIT_FAILURE);
     }
     return _epfd;
@@ -151,7 +152,7 @@ void EventLoop::addEpollReadFd(int fd)
     int ret = epoll_ctl(_epfd, EPOLL_CTL_ADD, fd, &event);
     if (ret < 0)
     {
-        perror("epoll add");
+        LOG_ERROR("epoll add failed");
         exit(EXIT_FAILURE);
     }
 }
@@ -165,7 +166,7 @@ void EventLoop::delEpollReadFd(int fd)
     int ret = epoll_ctl(_epfd, EPOLL_CTL_DEL, fd, nullptr);
     if (ret < 0)
     {
-        perror("epoll del");
+        LOG_ERROR("epoll del failed");
         exit(EXIT_FAILURE);
     }
 }
@@ -179,7 +180,7 @@ void EventLoop::waitEpollFd()
     int nready = epoll_wait(_epfd, ep, OPEN_MAX, -1);
     if (nready < 0)
     {
-        perror("epoll_wait");
+        LOG_ERROR("epoll wait failed");
         exit(EXIT_FAILURE);
     }
     for (int i = 0; i < nready; ++i)
@@ -206,9 +207,10 @@ void EventLoop::handleNewConnection()
     int connfd = _acceptor.accept();
     if (connfd < 0)
     {
-        perror("accept");
+        LOG_ERROR("handleNewConnection failed");
         exit(EXIT_FAILURE);
     }
+    LOG_INFO(("Accepted new connection fd=" + std::to_string(connfd)).c_str());
 
     auto conn = make_shared<TcpConnection>(connfd, this);
     // 注册回调
@@ -242,10 +244,12 @@ void EventLoop::handleMessage(int fd)
                 close(fd);
                 conn->handleCloseCallback();
             }
+            LOG_INFO(("connection closed fd=" + std::to_string(fd)).c_str());
         }
         else
         {
             conn->handleMessageCallback();
+            LOG_DEBUG(("message from fd=" + std::to_string(fd)).c_str());
         }
     }
 }

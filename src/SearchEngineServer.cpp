@@ -61,6 +61,7 @@ void SearchEngineServer::doTaskThread(const TcpConnectionPtr &conn, std::string 
     // 这里可以使用 ProtocolParser 解包
     Message message;
     if (!ProtocolParser::Parse(msg, message)) {
+        LOG_WARN("Protocol parse error");
         conn->sendInLoop("{\"error\":\"Parse error\"}\n");
         return;
     }
@@ -79,4 +80,5 @@ void SearchEngineServer::doTaskThread(const TcpConnectionPtr &conn, std::string 
     }
 
     conn->sendInLoop(jsonResult + "\n");
+    LOG_INFO("Query result sent to client");
 }

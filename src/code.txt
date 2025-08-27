@@ -1,0 +1,5918 @@
+===== Acceptor.cpp =====
+/**
+ * Project 66th
+ */
+
+#include "Acceptor.hpp"
+
+/**
+ * Acceptor implementation
+ */
+
+/**
+ * @param ip
+ * @param port
+ */
+Acceptor::Acceptor(const string &ip, unsigned short port)
+    : _sock(), _addr(ip, port)
+{
+}
+
+Acceptor::~Acceptor()
+{
+}
+
+/**
+ * @return void
+ */
+void Acceptor::ready()
+{
+    setReuseAddr();
+    setReusePort();
+    bind();
+    listen();
+}
+
+/**
+ * @return int
+ */
+int Acceptor::accept()
+{
+    int connfd = ::accept(_sock.getFd(), nullptr, nullptr);
+    if (connfd < 0)
+    {
+        perror("accept");
+    }
+    return connfd;
+}
+
+/**
+ * @return int
+ */
+int Acceptor::fd()
+{
+    return _sock.getFd();
+}
+
+/**
+ * @return void
+ */
+void Acceptor::setReuseAddr()
+{
+    int flag = 1;
+    setsockopt(_sock.getFd(), SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(flag));
+}
+
+/**
+ * @return void
+ */
+void Acceptor::setReusePort()
+{
+    int flag = 1;
+    setsockopt(_sock.getFd(), SOL_SOCKET, SO_REUSEPORT, &flag, sizeof(flag));
+}
+
+/**
+ * @return void
+ */
+void Acceptor::bind()
+{
+    int ret = ::bind(_sock.getFd(), (struct sockaddr *)_addr.getInetAddressPtr(), sizeof(struct sockaddr));
+    if (ret < 0)
+    {
+        perror("bind");
+        exit(EXIT_FAILURE);
+    }
+}
+
+/**
+ * @return void
+ */
+void Acceptor::listen()
+{
+    int ret = ::listen(_sock.getFd(), 4096);
+    if (ret < 0)
+    {
+        perror("listen");
+        exit(EXIT_FAILURE);
+    }
+}===== Acceptor.hpp =====
+/**
+ * Project 66th
+ */
+
+#pragma once
+#include <string>
+#include "Socket.hpp"
+#include "InetAddress.hpp"
+using std::string;
+class Acceptor
+{
+public:
+    /**
+     * @param ip
+     * @param port
+     */
+    Acceptor(const string &ip, unsigned short port);
+
+    ~Acceptor();
+
+    void ready();
+
+    int accept();
+
+    int fd();
+
+private:
+    Socket _sock;
+    InetAddress _addr;
+
+    void setReuseAddr();
+
+    void setReusePort();
+
+    void bind();
+
+    void listen();
+};
+===== buildCorpus.cpp =====
+#include "PageProcessor.hpp"
+#include "KeywordProcessor.hpp"
+#include "DirectoryScanner.hpp"
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    cout << "开始构建语料索引..." << endl;
+    PageProcessor pp;
+    pp.process("../corpus/webpages"); // 语料目录
+
+    cout << "开始构建词典索引..." << endl;
+    KeyWordProcessor kwp;
+    kwp.process("../corpus/CN", "../corpus/EN");
+
+    cout << "离线构建完成！" << endl;
+    return 0;
+}
+===== Client.cpp =====
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <cstring>
+#include <iostream>
+#include "ProtocolParser.hpp"
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+    string ip = "127.0.0.1";
+    int port = 8888;
+
+    if (argc == 3)
+    {
+        ip = argv[1];
+        port = atoi(argv[2]);
+    }
+
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0)
+    {
+        perror("socket");
+        return -1;
+    }
+
+    sockaddr_in serverAddr;
+    memset(&serverAddr, 0, sizeof(serverAddr));
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(port);
+    inet_pton(AF_INET, ip.c_str(), &serverAddr.sin_addr);
+
+    if (connect(sockfd, (sockaddr *)&serverAddr, sizeof(serverAddr)) < 0)
+    {
+        perror("connect");
+        close(sockfd);
+        return -1;
+    }
+
+    cout << "Connected to " << ip << ":" << port << endl;
+    cout << "请输入查询词(输入 exit 退出):" << endl;
+
+    string line;
+    char buf[4096];
+    while (true)
+    {
+        cout << "> ";
+        getline(cin, line);
+        if (line == "exit")
+            break;
+
+        Message msg;
+        msg.tag = 1;
+        msg.length = line.size();
+        msg.value = line;
+        string packet = ProtocolParser::serialize(msg);
+        send(sockfd, packet.c_str(), packet.size(), 0);
+
+        // 接收数据
+        memset(buf, 0, sizeof(buf));
+        int n = recv(sockfd, buf, sizeof(buf) - 1, 0);
+        if (n > 0)
+        {
+            cout << "[Server Reply]: "  << endl;
+            cout << buf << endl;
+
+        }
+        else if (n == 0)// 对端断开
+        {
+            cout << "Server closed connection." << endl;
+            break;
+        }
+        else
+        {
+            perror("recv");
+            break;
+        }
+    }
+
+    close(sockfd);
+    return 0;
+}
+===== CMakeLists.txt =====
+cmake_minimum_required(VERSION 3.15)
+
+# 项目名称
+project(SearchEngine)
+
+# 指定C++的版本
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../)
+
+# 生成的可执行程序
+add_executable(SearchEngine
+    Acceptor.cpp
+    EventLoop.cpp
+    InetAddress.cpp
+    KeyRecommander.cpp
+    Logger.cpp
+    main.cpp
+    ProtocolParser.cpp
+    SearchEngineServer.cpp
+    Socket.cpp
+    SocketIO.cpp
+    TaskQueue.cpp
+    TcpConnection.cpp
+    TcpServer.cpp
+    ThreadPool.cpp
+)
+
+target_compile_options(SearchEngine PRIVATE
+    -g
+)
+
+target_link_libraries(SearchEngine PRIVATE
+    pthread
+    log4cpp
+    tinyxml2
+)
+
+add_executable(Client
+    Client.cpp
+    ProtocolParser.cpp
+)
+
+target_compile_options(Client PRIVATE
+    -g
+)
+
+target_link_libraries(Client PRIVATE
+    pthread
+    log4cpp
+    tinyxml2
+)
+
+add_executable(Corpus
+    buildCorpus.cpp
+    KeywordProcessor.cpp
+    PageProcessor.cpp
+    DirectoryScanner.cpp
+)
+
+target_compile_options(Corpus PRIVATE
+    -g
+)
+
+target_link_libraries(Corpus PRIVATE
+    log4cpp
+    tinyxml2
+)===== DirectoryScanner.cpp =====
+#include "DirectoryScanner.hpp"
+#include <dirent.h>
+#include <sys/types.h>
+#include <iostream>
+using namespace std;
+
+// 遍历目录
+vector<string> DirectoryScanner::scan(const string& dir){
+    vector<string> files;
+    DIR *dp = opendir(dir.c_str());
+    // 判断目录是否在存在
+    if(!dp){
+        perror("fail open");
+        return files;
+    }
+
+    struct dirent* entry;
+    while((entry = readdir(dp)) != nullptr){
+        string name(entry->d_name);
+        if(name == "." || name == "..")
+            continue;
+        files.emplace_back(dir + "/" +name);
+    }
+    closedir(dp);
+    return files;
+}
+===== DirectoryScanner.hpp =====
+#pragma once
+#include <vector>
+#include <string>
+using std::vector;
+using std::string;
+
+class DirectoryScanner
+{
+public:
+    /**
+     * 遍历目录 dir, 获取目录里面的所有文件名
+     */ 
+    static vector<string> scan(const string& dir);
+
+private:
+    DirectoryScanner() = delete;
+};
+===== EventLoop.cpp =====
+/**
+ * Project 66th
+ */
+
+#include "EventLoop.hpp"
+
+/**
+ * EventLoop implementation
+ */
+
+/**
+ * @param acc
+ */
+EventLoop::EventLoop(Acceptor &acc) : _epfd(createEpollFd()), _evtfd(createEventFd()), _isLooping(false), _acceptor(acc), _evlist(OPEN_MAX)
+{
+    addEpollReadFd(_acceptor.fd());
+    addEpollReadFd(_evtfd);
+}
+
+EventLoop::~EventLoop()
+{
+}
+
+/**
+ * @return void
+ */
+void EventLoop::loop()
+{
+    _isLooping = true;
+    while (_isLooping)
+    {
+        waitEpollFd();
+    }
+}
+
+/**
+ * @return void
+ */
+void EventLoop::unloop()
+{
+    _isLooping = false;
+}
+
+/**
+ * @param cb
+ */
+void EventLoop::setNewConnectionCallBack(TcpConnectionCallBack &&cb)
+{
+    _onNewConnection = std::move(cb);
+}
+
+/**
+ * @param cb
+ */
+void EventLoop::setMessageCallBack(TcpConnectionCallBack &&cb)
+{
+    _onMessage = std::move(cb);
+}
+
+/**
+ * @param cb
+ */
+void EventLoop::setCloseCallBack(TcpConnectionCallBack &&cb)
+{
+    _onClose = std::move(cb);
+}
+
+/**
+ * @return int
+ */
+
+/**
+ * @return void
+ */
+void EventLoop::handleRead()
+{
+    uint64_t flag = 1;
+    read(_evtfd, &flag, sizeof(flag));
+    doPendingFunctors();
+}
+
+/**
+ * @return void
+ */
+void EventLoop::wakeup()
+{
+    uint64_t flag = 1;
+    write(_evtfd, &flag, sizeof(flag)); // 唤醒epoll_wait
+}
+
+/**
+ * @param cb
+ * @return void
+ */
+void EventLoop::runInLoop(function<void()> cb)
+{
+    {
+        lock_guard<mutex> lg(_mutex);
+        _pendingFunctors.push_back(std::move(cb));
+    }
+    wakeup();
+}
+
+/**
+ * @return void
+ */
+void EventLoop::doPendingFunctors()
+{
+    vector<function<void()>> functors;
+    {
+        lock_guard<mutex> lg(_mutex);
+        functors.swap(_pendingFunctors);
+    }
+    for (auto &f : functors)
+        f();
+}
+
+int EventLoop::createEventFd()
+{
+    int evtfd = eventfd(0, EFD_NONBLOCK);
+    if (evtfd < 0)
+    {
+        perror("eventfd");
+        exit(EXIT_FAILURE);
+    }
+    return evtfd;
+}
+/**
+ * @return int
+ */
+int EventLoop::createEpollFd()
+{
+    _epfd = epoll_create(OPEN_MAX);
+    if (_epfd < 0)
+    {
+        perror("epoll create");
+        exit(EXIT_FAILURE);
+    }
+    return _epfd;
+}
+
+/**
+ * @param fd
+ * @return void
+ */
+void EventLoop::addEpollReadFd(int fd)
+{
+    struct epoll_event event;
+    event.data.fd = fd;
+    event.events = EPOLLIN;
+    int ret = epoll_ctl(_epfd, EPOLL_CTL_ADD, fd, &event);
+    if (ret < 0)
+    {
+        perror("epoll add");
+        exit(EXIT_FAILURE);
+    }
+}
+
+/**
+ * @param fd
+ * @return void
+ */
+void EventLoop::delEpollReadFd(int fd)
+{
+    int ret = epoll_ctl(_epfd, EPOLL_CTL_DEL, fd, nullptr);
+    if (ret < 0)
+    {
+        perror("epoll del");
+        exit(EXIT_FAILURE);
+    }
+}
+
+/**
+ * @return void
+ */
+void EventLoop::waitEpollFd()
+{
+    struct epoll_event ep[OPEN_MAX];
+    int nready = epoll_wait(_epfd, ep, OPEN_MAX, -1);
+    if (nready < 0)
+    {
+        perror("epoll_wait");
+        exit(EXIT_FAILURE);
+    }
+    for (int i = 0; i < nready; ++i)
+    {
+        if (ep[i].data.fd == _acceptor.fd())
+        {
+            handleNewConnection();
+        }
+        else if (ep[i].data.fd == _evtfd)
+        {
+            handleRead();
+        }
+        else
+        {
+            handleMessage(ep[i].data.fd);
+        }
+    }
+}
+/**
+ * @return void
+ */
+void EventLoop::handleNewConnection()
+{
+    int connfd = _acceptor.accept();
+    if (connfd < 0)
+    {
+        perror("accept");
+        exit(EXIT_FAILURE);
+    }
+
+    auto conn = make_shared<TcpConnection>(connfd, this);
+    // 注册回调
+    conn->setNewConnectionCallback(_onNewConnection);
+    conn->setMessageCallback(_onMessage);
+    conn->setCloseCallback(_onClose);
+
+    _conns[connfd] = conn;
+    addEpollReadFd(connfd);
+
+    conn->handleNewConnectionCallback();
+}
+
+/**
+ * @param fd
+ * @return void
+ */
+void EventLoop::handleMessage(int fd)
+{
+    auto it = _conns.find(fd);
+    if (it != _conns.end())
+    {
+        auto conn = it->second;
+        bool flag = conn->isClosed();
+        if (flag)
+        {
+            if (_onClose)
+            {
+                delEpollReadFd(fd);
+                _conns.erase(it);
+                close(fd);
+                conn->handleCloseCallback();
+            }
+        }
+        else
+        {
+            conn->handleMessageCallback();
+        }
+    }
+}===== EventLoop.hpp =====
+/**
+ * Project 66th
+ */
+
+#pragma once
+#include "Acceptor.hpp"
+#include "TcpConnection.hpp"
+#include <vector>
+#include <memory>
+#include <map>
+#include <mutex>
+#include <sys/eventfd.h>
+#include <functional>
+using std::function;
+using std::lock_guard;
+using std::make_shared;
+using std::map;
+using std::mutex;
+using std::shared_ptr;
+using std::vector;
+class TcpConnection;
+#define OPEN_MAX 1024
+class EventLoop
+{
+public:
+    /**
+     * @param acc
+     */
+
+    using TcpConnectionPtr = shared_ptr<TcpConnection>;
+    using TcpConnectionCallBack = function<void(const TcpConnectionPtr &)>;
+    EventLoop(Acceptor &acc);
+
+    ~EventLoop();
+
+    void loop();
+
+    void unloop();
+
+    /**
+     * @param cb
+     */
+    void setNewConnectionCallBack(TcpConnectionCallBack &&cb);
+
+    /**
+     * @param cb
+     */
+    void setMessageCallBack(TcpConnectionCallBack &&cb);
+
+    /**
+     * @param cb
+     */
+    void setCloseCallBack(TcpConnectionCallBack &&cb);
+
+    int createEventFd();
+
+    void handleRead();
+
+    void wakeup();
+
+    /**
+     * @param cb
+     */
+    void runInLoop(function<void()> cb);
+
+    void doPendingFunctors();
+
+private:
+    int _epfd;
+    vector<struct epoll_event> _evlist;
+    bool _isLooping;
+    Acceptor &_acceptor;
+    map<int, shared_ptr<TcpConnection>> _conns;
+    TcpConnectionCallBack _onNewConnection;
+    TcpConnectionCallBack _onMessage;
+    TcpConnectionCallBack _onClose;
+    int _evtfd;
+    std::vector<function<void()>> _pendingFunctors;
+    mutex _mutex;
+
+    int createEpollFd();
+
+    /**
+     * @param fd
+     */
+    void addEpollReadFd(int fd);
+
+    /**
+     * @param fd
+     */
+    void delEpollReadFd(int fd);
+
+    void waitEpollFd();
+
+    void handleNewConnection();
+
+    /**
+     * @param fd
+     */
+    void handleMessage(int fd);
+};
+===== InetAddress.cpp =====
+/**
+ * Project 66th
+ */
+
+
+#include "InetAddress.hpp"
+
+/**
+ * InetAddress implementation
+ */
+
+
+/**
+ * @param ip
+ * @param port
+ */
+InetAddress::InetAddress(const string & ip, unsigned short port) {
+    _addr.sin_family = AF_INET;
+    _addr.sin_addr.s_addr = inet_addr(ip.c_str());
+    _addr.sin_port = htons(port);
+}
+
+/**
+ * @param addr
+ */
+InetAddress::InetAddress(const struct sockaddr_in & addr) {
+    _addr = addr;
+}
+
+InetAddress::~InetAddress() {
+
+}
+
+/**
+ * @return string
+ */
+string InetAddress::getIp() {
+    return string(inet_ntoa(_addr.sin_addr));
+}
+
+/**
+ * @return unsigned short
+ */
+unsigned short InetAddress::getPort() {
+    return ntohs(_addr.sin_port);
+}
+
+/**
+ * @return const struct sockaddr_in *
+ */
+const struct sockaddr_in * InetAddress::getInetAddressPtr() {
+    return &_addr;
+}===== InetAddress.hpp =====
+/**
+ * Project 66th
+ */
+
+
+#pragma once
+#include <iostream>
+#include <string>
+#include <stdio.h>
+#include <stdlib.h>
+#include <strings.h>
+#include <unistd.h>
+#include <ctype.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <sys/select.h>
+#include <sys/time.h>
+#include <sys/epoll.h>
+using std::cout;
+using std::endl;
+using std::string;
+class InetAddress {
+public: 
+    
+/**
+ * @param ip
+ * @param port
+ */
+InetAddress(const string & ip, unsigned short port);
+    
+/**
+ * @param addr
+ */
+InetAddress(const struct sockaddr_in & addr);
+    
+~InetAddress();
+    
+string getIp();
+    
+unsigned short getPort();
+    
+const struct sockaddr_in * getInetAddressPtr();
+private: 
+    struct sockaddr_in _addr;
+};
+===== KeyRecommander.cpp =====
+#include "KeyRecommander.hpp"
+#include <fstream>
+#include <algorithm>
+#include <sstream>
+#include <set>
+#include <queue>
+#include <string>
+#include <nlohmann/json.hpp>
+
+using std::string;
+using json = nlohmann::json;
+// 候选词
+struct CandidateWords
+{
+    string word;
+    int editDist;
+    int freq;
+    bool operator<(const CandidateWords &rhs) const
+    {
+        if (editDist != rhs.editDist)
+            return editDist > rhs.editDist; // 编辑距离小优先
+        if (freq != rhs.freq)
+            return freq < rhs.freq; // 词频大优先
+        return word > rhs.word;     // 字典序小优先
+    }
+};
+
+KeyRecommander::KeyRecommander(const string &enDictFile, const string &cnDictFile, const string &enIndexFile, const string &cnIndexDictFile)
+{
+    loadDictFile(enDictFile, cnDictFile);
+    loadIndexFile(enIndexFile, cnIndexDictFile);
+}
+
+// 英文查询
+string KeyRecommander::doQueryEn(const string &word, int k)
+{
+    std::set<int> candidateIds; // 计算词汇所含字符出现的位置(dict行号)
+    for (char ch : word)
+    {
+        string key(1, ch); // 构造为string -> unordered_map.first
+        if (en_index.count(key))
+        {                                                                    // 若索引库中存在该字符
+            candidateIds.insert(en_index[key].begin(), en_index[key].end()); // 记录该字符出现的记录(字典行号)
+        }
+    }
+
+    std::priority_queue<CandidateWords> pq; // 优先队列，根据优先级大小排序
+    for (int id : candidateIds)
+    {
+        const auto &candidate = en_dict[id].first;
+        int dist = editDistance(word, candidate);
+        int freq = en_dict[id].second;
+        pq.push({candidate, dist, freq});
+    }
+
+    json result;
+    result["candidates"] = json::array();
+    for (int i = 0; i < k && !pq.empty(); ++i)
+    {
+        auto top = pq.top();
+        pq.pop();
+        result["candidates"].push_back({{"word", top.word}, {"freq", top.freq}, {"dist", top.editDist}});
+    }
+
+    return result.dump(4);
+}
+
+// 🔹 UTF-8 分割（中文用）
+static std::vector<string> splitUtf8(const string &s)
+{
+    std::vector<string> res;
+    for (size_t i = 0; i < s.size();)
+    {
+        unsigned char c = s[i];
+        int len = 1;
+        if ((c & 0x80) == 0)
+            len = 1;
+        else if ((c & 0xE0) == 0xC0)
+            len = 2;
+        else if ((c & 0xF0) == 0xE0)
+            len = 3; // 中文常用
+        else if ((c & 0xF8) == 0xF0)
+            len = 4;
+        res.push_back(s.substr(i, len));
+        i += len;
+    }
+    return res;
+}
+
+// 中文查询
+string KeyRecommander::doQueryCn(const string &word, int k)
+{
+    auto chars = splitUtf8(word);
+
+    std::set<int> candidateIds;
+    for (auto &ch : chars)
+    {
+        if (cn_index.count(ch))
+        {
+            candidateIds.insert(cn_index[ch].begin(), cn_index[ch].end());
+        }
+    }
+
+    std::priority_queue<CandidateWords> pq;
+    for (int id : candidateIds)
+    {
+        const auto &cand = cn_dict[id].first;
+        int dist = editDistance(word, cand);
+        int freq = cn_dict[id].second;
+        pq.push({cand, dist, freq});
+    }
+
+    json result;
+    result["candidates"] = json::array();
+    for (int i = 0; i < k && !pq.empty(); ++i)
+    {
+        auto top = pq.top();
+        pq.pop();
+        result["candidates"].push_back({{"word", top.word},
+                                        {"freq", top.freq}});
+    }
+    return result.dump(4);
+}
+
+// 计算编辑距离
+int KeyRecommander::editDistance(const std::string &lhs, const std::string &rhs)
+{
+    size_t m = lhs.size(), n = rhs.size();
+    std::vector<std::vector<int>> dp(m + 1, std::vector<int>(n + 1, 0));
+    for (size_t i = 0; i <= m; ++i)
+        dp[i][0] = i;
+    for (size_t j = 0; j <= n; ++j)
+        dp[0][j] = j;
+
+    for (size_t i = 1; i <= m; ++i)
+    {
+        for (size_t j = 1; j <= n; ++j)
+        {
+            if (lhs[i - 1] == rhs[j - 1])
+                dp[i][j] = dp[i - 1][j - 1];
+            else
+                dp[i][j] = std::min({dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + 1});
+        }
+    }
+    return dp[m][n];
+}
+
+// 加载字典
+void KeyRecommander::loadDictFile(const string &enDictFile, const string &cnDictFile)
+{
+    std::ifstream ifs_en(enDictFile);
+    if (!ifs_en.is_open())
+    {
+        std::cerr << "Failed to open English dict file: " << enDictFile << std::endl;
+        return;
+    }
+    string word;
+    int freq;
+    while (ifs_en >> word >> freq)
+    {
+        en_dict.emplace_back(word, freq);
+    }
+
+    std::ifstream ifs_ch(cnDictFile);
+    if (!ifs_ch.is_open())
+    {
+        std::cerr << "Failed to open Chinese dict file: " << cnDictFile << std::endl;
+        return;
+    }
+    while (ifs_ch >> word >> freq)
+    {
+        cn_dict.emplace_back(word, freq);
+    }
+}
+
+// 加载索引库
+void KeyRecommander::loadIndexFile(const string &enIndexFile, const string &cnIndexDictFile)
+{
+    std::ifstream ifs_en(enIndexFile);
+    if (!ifs_en.is_open())
+    {
+        std::cerr << "Failed to open English index file: " << enIndexFile << std::endl;
+        return;
+    }
+
+    string key;
+    int idx;
+    string line;
+    while (std::getline(ifs_en, line))
+    {
+        std::istringstream iss(line);
+        if (!(iss >> key))
+            continue;
+        while (iss >> idx)
+        {
+            en_index[key].push_back(idx);
+        }
+    }
+
+    std::ifstream ifs_ch(cnIndexDictFile);
+    if (!ifs_ch.is_open())
+    {
+        std::cerr << "Failed to open Chinese index file: " << cnIndexDictFile << std::endl;
+        return;
+    }
+    while (std::getline(ifs_ch, line))
+    {
+        std::istringstream iss(line);
+        if (!(iss >> key))
+            continue;
+        while (iss >> idx)
+        {
+            cn_index[key].push_back(idx);
+        }
+    }
+}
+===== KeyRecommander.hpp =====
+#pragma once
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+using std::string;
+using std::unordered_map;
+using std::vector;
+class KeyRecommander
+{
+public:
+    KeyRecommander(const string &enDictFile, const string &cnDictFile, const string &enIndexFile, const string &cnIndexDictFile);
+    ~KeyRecommander() {}
+    string doQueryCn(const string &word,int k = 3);
+    string doQueryEn(const string &word,int k = 3);
+
+private:
+    int editDistance(const string &lhs, const string &rhs);
+    void loadDictFile(const string &enDictFile, const string &cnDictFile);
+    void loadIndexFile(const string &enIndexFile, const string &cnIndexDictFile);
+
+    // dict: 下标 -> (单词, 词频)
+    vector<std::pair<string, int>> cn_dict; // _index中的vector元素能够直接对应 _dict中vector的下表，不用额外建立映射关系，所以不采用map
+    vector<std::pair<string, int>> en_dict;
+    unordered_map<string, vector<int>> cn_index;
+    unordered_map<string, vector<int>> en_index;
+};
+===== KeywordProcessor.cpp =====
+#include "KeywordProcessor.hpp"
+#include "DirectoryScanner.hpp"
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <map>
+#include <vector>
+#include <unordered_set>
+#include <algorithm>
+#include <cctype>
+#include "utf8cpp/utf8.h"
+using std::map;
+using std::vector;
+
+// 辅助函数(字符判断)
+static bool isAlpha(char c)
+{
+    return std::isalpha(static_cast<unsigned char>(c));
+}
+
+// 初始化jieba
+KeyWordProcessor::KeyWordProcessor()
+    : m_tokenizer(
+          "/usr/local/dict/jieba.dict.utf8", // 词典
+          "/usr/local/dict/hmm_model.utf8",  // HMM
+          "/usr/local/dict/user.dict.utf8",  // 用户词典
+          "/usr/local/dict/idf.utf8",        // idf
+          "/usr/local/dict/stop_words.utf8"  // 停用词
+      )
+{
+    std::ifstream ifs_en("/home/zhang/SearchEngine/corpus/stopwords/en_stopwords.txt");
+    string word;
+    while (ifs_en >> word)
+    {   
+        m_enStopWords.insert(word);
+    }
+
+    std::ifstream ifs_ch("/home/zhang/SearchEngine/corpus/stopwords/cn_stopwords.txt");
+    while (ifs_ch >> word)
+    {
+        m_chStopWords.insert(word);
+    }
+}
+
+void KeyWordProcessor::process(const string &chDir, const string &enDir)
+{
+    create_en_dict(enDir, "../data/endict.dat");
+    build_en_index("../data/endict.dat", "../data/enindex.dat");
+
+    create_cn_dict(chDir, "../data/cndict.dat");
+    build_cn_index("../data/cndict.dat", "../data/cnindex.dat");
+}
+
+// 英文部分
+// 生成词典库(单词 + 频率)
+void KeyWordProcessor::create_en_dict(const string &dir, const string &outfile)
+{
+    map<string, int> dict;
+    auto files = DirectoryScanner::scan(dir);
+
+    for (auto &file : files)
+    {
+        std::ifstream ifs(file);
+        if (!ifs.is_open())
+        {
+            continue;
+        }
+
+        // 去掉数字和标点符号 + 转小写
+        string line;
+        while (std::getline(ifs, line))
+        {
+
+            for (auto &ch : line)
+            {
+                if (!isAlpha(ch))
+                {
+                    ch = ' ';
+                }
+                ch = std::tolower(ch);
+            }
+
+            // 统计每个单词(Token)的出现频率
+            std::istringstream iss(line);
+            string token;
+            while (iss >> token)// 空白字符进行切分
+            {
+                if (m_enStopWords.count(token))
+                {
+                    continue;
+                }
+                dict[token]++;// string —> frequency
+            }
+        }
+    }
+
+    // 输出词典库
+    std::ofstream ofs(outfile);
+    if (!ofs.is_open())
+    {
+        std::cerr << "Error open file" << std::endl;
+        return;
+    }
+    for (auto &[w, f] : dict)
+    {
+        ofs << w << " " << f << "\n";
+    }
+}
+
+// 生成英文索引库
+void KeyWordProcessor::build_en_index(const string &dict, const string &index)
+{
+
+    std::ifstream ifs(dict);
+    if (!ifs.is_open())
+    {
+        std::cerr << "Error: cannot open dict file " << dict << std::endl;
+        return;
+    }
+
+    std::map<char, std::vector<int>> charIndex; // 字母 -> 行号集合
+    std::vector<std::string> words;             // 保存词典里的单词,通过行号反查单词
+
+    std::string word;
+    int freq;
+    int lineId = 0;
+    while (ifs >> word >> freq)
+    {
+        words.push_back(word);
+
+        // 遍历单词中的每个字母
+        for (char c : word)
+        {
+            auto &vec = charIndex[c];
+            // 避免重复插入
+            if (vec.empty() || vec.back() != lineId)
+            {
+                vec.push_back(lineId);
+            }
+        }
+        lineId++;
+    }
+
+    // 写索引文件
+    std::ofstream ofs(index);
+    if (!ofs.is_open())
+    {
+        std::cerr << "Error: cannot open index file " << index << std::endl;
+        return;
+    }
+
+    for (auto &[ch, vec] : charIndex)
+    {
+        ofs << ch << " ";
+        for (int id : vec)
+        {
+            ofs << id << " ";
+        }
+        ofs << "\n";
+    }
+}
+
+// 判断汉字
+static bool isChinese(const std::string &s)
+{
+    auto it = s.begin();
+    while (it != s.end())
+    {
+        char32_t cp = utf8::next(it, s.end());
+        if (!((cp >= 0x4E00 && cp <= 0x9FFF) ||   // 基本汉字
+              (cp >= 0x3400 && cp <= 0x4DBF) ||   // 扩展A
+              (cp >= 0x20000 && cp <= 0x2A6DF) || // 扩展B
+              (cp >= 0x2A700 && cp <= 0x2B73F) || // 扩展C
+              (cp >= 0x2B740 && cp <= 0x2B81F) || // 扩展D
+              (cp >= 0x2B820 && cp <= 0x2CEAF) || // 扩展E
+              (cp >= 0x2CEB0 && cp <= 0x2EBEF)    // 扩展F
+              ))
+        {
+            return false; // 只要有一个不是汉字，就判定为 false
+        }
+    }
+    return true;
+}
+
+// 中文部分
+void KeyWordProcessor::create_cn_dict(const string &dir, const string &outfile)
+{
+    map<string, int> dict;
+    auto files = DirectoryScanner::scan(dir);
+
+    for (auto &file : files)
+    {
+        std::ifstream ifs(file);
+        if (!ifs.is_open())
+        {
+            continue;
+        }
+
+        // 读取整个文件内容
+        string content((std::istreambuf_iterator<char>(ifs)),
+                       std::istreambuf_iterator<char>());
+        // jieba分词
+        vector<string> words;
+        m_tokenizer.Cut(content, words, true); // true = HMM = 混合模式
+
+        for (auto &w : words)
+        {
+            if (m_chStopWords.count(w) || !isChinese(w))
+                continue; // 过滤停用词或非汉字
+            dict[w]++;
+        }
+    }
+
+    // 输出词典库
+    std::ofstream ofs(outfile);
+    if (!ofs.is_open())
+    {
+        std::cerr << "Error open file" << std::endl;
+        return;
+    }
+    for (auto &[w, f] : dict)
+    {
+        ofs << w << " " << f << "\n";
+    }
+}
+
+// 生成中文索引库
+void KeyWordProcessor::build_cn_index(const string &dict, const string &index)
+{
+    std::ifstream ifs(dict);
+    if (!ifs.is_open())
+    {
+        std::cerr << "Error: cannot open dict file " << dict << std::endl;
+        return;
+    }
+
+    map<string, vector<int>> cnindex; // 中文汉字 -> 行号集合
+    vector<string> words;             // 保存词典里的单词, 通过行号反查单词
+
+    string word;
+    int freq;
+    int lineId = 0;
+
+    while (ifs >> word >> freq)
+    {
+        words.push_back(word);
+
+        // 用 utfcpp 遍历一个个汉字
+        for (auto it = word.begin(); it != word.end();)
+        {
+            char32_t cp = utf8::next(it, word.end()); // 取一个 codepoint 并前进迭代器
+            std::string ch;
+            utf8::append(cp, std::back_inserter(ch)); // 转回 UTF-8
+
+            cnindex[ch].push_back(lineId); // 建立索引：汉字 -> 行号
+        }
+
+        lineId++;
+    }
+
+    // 写索引文件
+    std::ofstream ofs(index);
+    if (!ofs.is_open())
+    {
+        std::cerr << "Error: cannot open index file " << index << std::endl;
+        return;
+    }
+
+    for (auto &[ch, vec] : cnindex)
+    {
+        ofs << ch << " ";
+        for (int id : vec)
+        {
+            ofs << id << " ";
+        }
+        ofs << "\n";
+    }
+}
+===== KeywordProcessor.hpp =====
+// KeywordProcessor.h
+#pragma once
+#include <cppjieba/Jieba.hpp>
+#include <string>
+#include <set>
+using std::string;
+using std::set;
+
+class KeyWordProcessor {
+public:
+    KeyWordProcessor();
+	
+    // chDir: 中文语料库
+    // enDir: 英文语料库
+    void process(const string& chDir, const string& enDir);
+
+private:
+    void create_cn_dict(const string& dir, const string& outfile);
+    void build_cn_index(const string& dict, const string& index);
+
+    void create_en_dict(const string& dir, const string& outfile);
+    void build_en_index(const string& dict, const string& index);
+private:
+    cppjieba::Jieba m_tokenizer;
+    set<string> m_enStopWords;
+    set<string> m_chStopWords;
+};===== Logger.cpp =====
+#include "Logger.hpp"
+#include <log4cpp/Category.hh>
+#include <log4cpp/OstreamAppender.hh>
+#include <log4cpp/FileAppender.hh>
+#include <log4cpp/RollingFileAppender.hh>
+#include <log4cpp/PatternLayout.hh>
+
+// 初始化静态成员变量
+// 初始化静态成员变量
+Logger *Logger::_pInstance = nullptr;
+Category *Logger::_root = nullptr;
+
+// 构造函数
+Logger::Logger()
+{
+    log4cpp::PatternLayout *layout1 = new log4cpp::PatternLayout();
+    layout1->setConversionPattern("[%d] [%p] %c: %m%n");
+
+    log4cpp::PatternLayout *layout2 = new log4cpp::PatternLayout();
+    layout2->setConversionPattern("[%d] [%p] %c: %m%n");
+
+    log4cpp::PatternLayout *layout3 = new log4cpp::PatternLayout();
+    layout3->setConversionPattern("[%d] [%p] %c: %m%n");
+
+    // 终端输出
+    OstreamAppender *consoleAppender = new OstreamAppender("console", &std::cout);
+    consoleAppender->setLayout(layout1);
+    // 文件输出
+    FileAppender *fileAppender = new FileAppender("file", "../log/log.txt");
+    fileAppender->setLayout(layout2);
+
+    // 回卷文件输出（自动滚动）
+    log4cpp::RollingFileAppender *rollingAppender = new log4cpp::RollingFileAppender(
+        "rolling",         // 名称
+        "../log/rolling_log.txt", // 文件名
+        5 * 1024 * 1024,   // 最大文件大小（5MB）
+        3                  // 最大备份数量
+    );
+    rollingAppender->setLayout(layout3);
+
+    // 设置输出信息
+    _root = &Category::getRoot();
+    _root->addAppender(consoleAppender);
+    _root->addAppender(fileAppender);
+    _root->addAppender(rollingAppender);
+    _root->setPriority(Priority::DEBUG);
+}
+
+// 析构函数
+Logger::~Logger()
+{
+    if (_root)
+    {
+        _root->removeAllAppenders();
+    }
+    Category::shutdown(); // 清理资源
+}
+
+// 单例方法
+Logger *Logger::getInstance()
+{
+    if (!_pInstance)
+    {
+        _pInstance = new Logger();
+    }
+    return _pInstance;
+}
+
+// 单例销毁方法
+void Logger::destroy()
+{
+    if (_pInstance)
+    {
+        delete _pInstance;
+        _pInstance = nullptr;
+    }
+}
+
+// 日志输出方法
+void Logger::warn(const char *file, int line, const char *func, const char *msg)
+{
+    _root->warn("[%s:%d:%s] %s", file, line, func, msg);
+}
+
+void Logger::error(const char *file, int line, const char *func, const char *msg)
+{
+    _root->error("[%s:%d:%s] %s", file, line, func, msg);
+}
+
+void Logger::debug(const char *file, int line, const char *func, const char *msg)
+{
+    _root->debug("[%s:%d:%s] %s", file, line, func, msg);
+}
+
+void Logger::info(const char *file, int line, const char *func, const char *msg)
+{
+    _root->info("[%s:%d:%s] %s", file, line, func, msg);
+}
+===== Logger.hpp =====
+#ifndef LOGGER_H
+#define LOGGER_H
+#include <iostream>
+#include <log4cpp/OstreamAppender.hh>
+#include <log4cpp/PatternLayout.hh>
+#include <log4cpp/Category.hh>
+using namespace std;
+using namespace log4cpp;
+
+#define LOG_WARN(msg) Logger::getInstance()->warn(__FILE__,__LINE__,__FUNCTION__,msg)
+#define LOG_ERROR(msg) Logger::getInstance()->error(__FILE__,__LINE__,__FUNCTION__,msg)
+#define LOG_DEBUG(msg) Logger::getInstance()->debug(__FILE__,__LINE__,__FUNCTION__,msg)
+#define LOG_INFO(msg) Logger::getInstance()->info(__FILE__,__LINE__,__FUNCTION__,msg)
+
+
+
+
+class Logger{
+public:
+    void warn(const char * file, int line, const char * func, const char * msg);
+    void error(const char * file, int line, const char * func, const char * msg);
+    void debug(const char * file, int line, const char * func, const char * msg);
+    void info(const char * file, int line, const char * func, const char * msg);
+
+    static Logger * getInstance();
+
+    static void destroy();
+
+
+private:
+    Logger();
+    ~Logger();
+    Logger(const Logger &) = delete;
+    Logger & operator=(const Logger &) = delete;
+    static Logger * _pInstance;
+    static Category * _root;
+};
+
+
+#endif===== main.cpp =====
+#include "SearchEngineServer.hpp"
+#include <iostream>
+#include <csignal>
+
+using namespace std;
+
+// 全局 server 指针，用于信号处理
+SearchEngineServer *g_server = nullptr;
+
+void signalHandler(int sig) {
+    if (sig == SIGINT || sig == SIGTERM) {
+        cout << "\n[Main] Caught signal " << sig << ", stopping server..." << endl;
+        if (g_server) {
+            g_server->stop();
+        }
+        exit(0);
+    }
+}
+
+int main(int argc, char **argv)
+{
+    string ip = "127.0.0.1";
+    int port = 8888;
+
+    if (argc == 3) {
+        ip = argv[1];
+        port = atoi(argv[2]);
+    }
+
+    cout << "[Main] Starting SearchEngineServer on " << ip << ":" << port << endl;
+
+    SearchEngineServer server(ip, port);
+    g_server = &server;
+
+    // 注册信号处理函数，方便 Ctrl+C 停止服务
+    signal(SIGINT, signalHandler);
+    signal(SIGTERM, signalHandler);
+
+    server.start();
+
+    return 0;
+}
+===== PageProcessor.cpp =====
+#include "PageProcessor.hpp"
+#include "simhash/Simhasher.hpp"
+#include "DirectoryScanner.hpp"
+#include <tinyxml2.h>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include <set>
+#include <sstream>
+#include <fstream>
+#include <cmath>
+
+using namespace tinyxml2;
+using std::ofstream;
+using std::ostringstream;
+using std::set;
+using std::string;
+using std::unordered_map;
+using std::vector;
+
+PageProcessor::PageProcessor()
+    : m_tokenizer("/usr/local/dict/jieba.dict.utf8",
+                  "/usr/local/dict/hmm_model.utf8",
+                  "/usr/local/dict/user.dict.utf8",
+                  "/usr/local/dict/idf.utf8",
+                  "/usr/local/dict/stop_words.utf8"),
+      m_hasher("/usr/local/dict/jieba.dict.utf8",
+               "/usr/local/dict/hmm_model.utf8",
+               "/usr/local/dict/idf.utf8",
+               "/usr/local/dict/stop_words.utf8")
+{
+    std::ifstream ifs("/home/zhang/SearchEngine/corpus/stopwords/cn_stopwords.txt");
+    string word;
+    while (ifs >> word)
+    {
+        m_stopWords.insert(word);
+    }
+}
+void PageProcessor::process(const std::string &dir)
+{
+    extract_documents(dir);
+    deduplicate_documents();
+    build_pages_and_offsets("../data/webpages.dat", "../data/weboffset.dat");
+    build_inverted_index("../data/invertindex.dat");
+}
+
+// 提取文档
+void PageProcessor::extract_documents(const std::string &dir)
+{
+    // 获取目录下所有文件路径
+    auto files = DirectoryScanner::scan(dir);
+    int id = 0;
+
+    for (auto &file : files)
+    {
+        XMLDocument doc;
+        if (doc.LoadFile(file.c_str()) != XML_SUCCESS)
+        {
+            std::cerr << "Error: cannot load xml file " << file << std::endl;
+            continue;
+        }
+
+        XMLElement *root = doc.RootElement();
+        if (!root)
+            continue;
+
+        // 先找 channel
+        XMLElement *channel = root->FirstChildElement("channel");
+        XMLElement *item = nullptr;
+        if (channel)
+        {
+            item = channel->FirstChildElement("item");
+        }
+        else
+        {
+            item = root->FirstChildElement("item"); // 有些语料直接在 root 下
+        }
+
+        while (item)
+        {
+            Document d;
+            d.id = id++;
+
+            XMLElement *title = item->FirstChildElement("title");
+            XMLElement *link = item->FirstChildElement("link");
+
+            if (title && title->GetText())
+                d.title = title->GetText();
+            if (link && link->GetText())
+                d.link = link->GetText();
+
+            // 如果item中有content
+            XMLElement *cont = item->FirstChildElement("content");
+            if (cont && cont->GetText())
+            {
+                d.content = cont->GetText();
+            }
+            else
+            {
+                XMLElement *desc = item->FirstChildElement("description");
+                if (desc && desc->GetText())
+                {
+                    d.content = desc->GetText();
+                }
+            }
+
+            // 4. 只有当 content 非空时，才加入 m_documents
+            if (!d.content.empty())
+            {
+                m_documents.push_back(std::move(d));
+            }
+
+            item = item->NextSiblingElement("item");
+        }
+    }
+}
+
+// 计算汉明距离
+/* static int hammingDistance(uint64_t hashValue, uint64_t hash)
+{
+    int xOR = hashValue ^ hash;
+    int distance = 0;
+    while (xOR)
+    {
+        distance += (xOR & 1);
+        xOR >>= 1;
+    }
+    return distance;
+} */
+
+// 高效汉明距离
+static inline int hammingDistance(uint64_t hashValue, uint64_t hash)
+{
+    return __builtin_popcountll(hashValue ^ hash); // 硬件指令
+}
+
+// 文档去重
+void PageProcessor::deduplicate_documents()
+{
+    vector<Document> uniqueDocs;
+    set<uint64_t> check_hash;
+
+    for (auto &doc : m_documents)
+    {
+        uint64_t hashValue = 0;
+        // 直接用 make 生成 simhash
+        if (!m_hasher.make(doc.content, 200, hashValue))
+        {
+            std::cerr << "Simhash make() failed for doc: " << doc.id << std::endl;
+            continue;
+        }
+
+        bool duplicate = false;
+        for (auto &hash : check_hash)
+        {
+            // XOR: 找出不同位
+            int dist = hammingDistance(hashValue, hash); // 汉明距离
+            if (dist <= 3)                               // 阈值: ≤3 表示相似
+            {
+                duplicate = true;
+                break;
+            }
+        }
+
+        if (!duplicate)
+        {
+            check_hash.insert(hashValue); // simhash 记录到集合，方便后续查重
+            uniqueDocs.push_back(doc);
+        }
+    }
+
+    m_documents.swap(uniqueDocs); // 替换掉原来的所有文档
+}
+
+// 生成网页库和偏移库
+void PageProcessor::build_pages_and_offsets(const string &pagesFile, const string &offsetsFile)
+{
+    ofstream ofsPages(pagesFile);
+    ofstream ofsOffsets(offsetsFile);
+
+    int offset = 0;
+    for (auto &doc : m_documents)
+    {
+        ostringstream oss;
+        oss << "<doc>\n"
+            << "  <id>" << doc.id << "</id>\n"
+            << "  <link>" << doc.link << "</link>\n"
+            << "  <title>" << doc.title << "</title>\n"
+            << "  <content>" << doc.content << "</content>\n"
+            << "</doc>\n";
+
+        string page = oss.str();
+        ofsPages << page;
+
+        ofsOffsets << doc.id << " " << offset << " " << page.size() << "\n";
+        offset += page.size();
+    }
+}
+
+// 建立倒排索引
+void PageProcessor::build_inverted_index(const std::string &indexFile)
+{
+    // 计算 TF-IDF
+    unordered_map<string, int> df;                             // 包含该关键字的文档个数
+    vector<unordered_map<string, int>> tf(m_documents.size()); // 关键字在文档中出现的次数
+
+    for (size_t i = 0; i < m_documents.size(); ++i)
+    {
+        vector<string> words;                                 // 存分词结果
+        m_tokenizer.Cut(m_documents[i].content, words, true); // HMM混合模式
+
+        for (auto &word : words)
+        {
+            if (m_stopWords.count(word))
+                continue;
+            ++tf[i][word]; // 第i篇文章中word出现的次数
+        }
+        for (auto &kv : tf[i]) // 在同一篇文档里多次出现也只算一次 DF
+            ++df[kv.first];
+    }
+
+    size_t N = m_documents.size();
+    for (size_t i = 0; i < N; ++i)
+    {
+        for (auto &[w, freq] : tf[i])
+        {
+            double idf = log((double)N / (df[w] + 1));
+            double weight = freq * idf;
+            m_invertedIndex[w][m_documents[i].id] = weight;
+        }
+    }
+
+    ofstream ofs(indexFile);
+    for (auto &[word, postings] : m_invertedIndex)
+    {
+        ofs << word << " ";
+        for (auto &[docId, weight] : postings)
+        {
+            ofs << docId << " " << weight << " ";
+        }
+        ofs << "\n";
+    }
+}
+===== PageProcessor.hpp =====
+#pragma once
+#include <string>
+#include <vector>
+#include <set>
+#include "cppjieba/Jieba.hpp"
+#include "simhash/Simhasher.hpp"
+
+class PageProcessor
+{
+public:
+    PageProcessor();
+    void process(const std::string& dir);
+
+private:
+    void extract_documents(const std::string& dir);
+    void deduplicate_documents();
+    void build_pages_and_offsets(const std::string& pages, const std::string& offsets);
+    void build_inverted_index(const std::string& filename);
+private:
+    struct Document 
+    {
+        int id;
+        std::string link;
+        std::string title;
+        std::string content;
+    };
+
+private:
+    cppjieba::Jieba m_tokenizer;
+    simhash::Simhasher m_hasher;
+    std::set<std::string> m_stopWords;    // 使用set, 而非vector, 是为了方便查找
+    std::vector<Document> m_documents;    
+    std::map<std::string, std::map<int, double>> m_invertedIndex;
+};
+
+===== ProtocolParser.cpp =====
+#include "ProtocolParser.hpp"
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+// ProtocolParser.cpp
+bool ProtocolParser::Parse(const std::string &raw, Message &msg)
+{
+    if (raw.size() < 2 * sizeof(int))
+    {
+        return false; // tag + length
+    }
+
+    const char *p = raw.data();
+    int tag = 0, length = 0;
+
+    // 用 memcpy 避免未对齐的问题
+    std::memcpy(&tag, p, sizeof(int));
+    p += sizeof(tag);// 
+    std::memcpy(&length, p, sizeof(int));
+    p += sizeof(length);
+
+    if (length < 0)
+        return false;
+    if (raw.size() < 2 * sizeof(int) + length)
+    {
+        return false; // 包体不完整
+    }
+
+    msg.tag = tag;
+    msg.length = length;
+    msg.value.assign(p, length);
+    return true; // ✅ 别忘了
+}
+
+std::string ProtocolParser::serialize(const Message &msg)
+{
+    string raw;
+    raw.reserve(msg.length + 2 * sizeof(int)); // 预留空间
+
+    // 消息写入内存
+    raw.append(reinterpret_cast<const char *>(&msg.tag), sizeof(int));
+    raw.append(reinterpret_cast<const char *>(&msg.length), sizeof(int));
+    raw.append(msg.value);
+
+    return raw;
+}===== ProtocolParser.hpp =====
+#pragma once
+#include <iostream>
+
+struct Message
+{
+    int tag;
+    int length;
+    std::string value;
+};
+
+class ProtocolParser
+{
+public:
+    ProtocolParser() {}
+    ~ProtocolParser() {}
+
+    // 从字节流解析为 Message
+    static bool Parse(const std::string &raw,Message &msg);
+    // 将Message序列化为字节流
+    static std::string serialize(const Message &msg);
+};
+===== SearchEngineServer.cpp =====
+#include "SearchEngineServer.hpp"
+#include "Logger.hpp"
+#include "ProtocolParser.hpp"
+#include "KeyRecommander.hpp"
+#include <functional>
+#include <iostream>
+using namespace std;
+
+SearchEngineServer::SearchEngineServer(const std::string &ip, int port)
+    : _tcpserver(ip, port), _threadpool(4, 10) {}
+
+void SearchEngineServer::start()
+{
+    _threadpool.start();
+    // 注册三个回调函数
+    _tcpserver.setAllCallback(
+        std::bind(&SearchEngineServer::onConnection, this, std::placeholders::_1),
+        std::bind(&SearchEngineServer::onMessage, this, std::placeholders::_1),
+        std::bind(&SearchEngineServer::onClose, this, std::placeholders::_1));
+
+    LOG_INFO("SearchEngineServer start ...");
+    _tcpserver.start();
+}
+
+void SearchEngineServer::stop()
+{
+    _threadpool.stop();
+    _tcpserver.stop();
+    LOG_INFO("SearchEngineServer stop ...");
+}
+
+void SearchEngineServer::onConnection(const TcpConnectionPtr &conn)
+{
+    string msg = conn->toString() + " has connected.";
+    LOG_INFO(msg.c_str());
+}
+
+// 任务到达，让线程池来执行任务
+void SearchEngineServer::onMessage(const TcpConnectionPtr &conn)
+{
+    string msg = conn->receive(); // 已经是完整包
+    if (!msg.empty())
+    {
+        LOG_INFO(("received msg size=" + to_string(msg.size())).c_str());
+        _threadpool.addTask(std::bind(&SearchEngineServer::doTaskThread, this, conn, msg));
+    }
+    else
+    {
+        LOG_INFO("peer closed connection");
+    }
+}
+
+void SearchEngineServer::onClose(const TcpConnectionPtr &conn)
+{
+    string msg = conn->toString() + " has closed.";
+    LOG_INFO(msg.c_str());
+}
+
+void SearchEngineServer::doTaskThread(const TcpConnectionPtr &conn, std::string &msg)
+{
+    // 这里可以使用 ProtocolParser 解包
+    Message message;
+    if (!ProtocolParser::Parse(msg, message)) {
+        conn->sendInLoop("{\"error\":\"Parse error\"}\n");
+        return;
+    }
+
+    static KeyRecommander recommander(
+        "../data/endict.dat", "../data/cndict.dat",
+        "../data/enindex.dat", "../data/cnindex.dat");
+
+    bool isChinese = (unsigned char)message.value[0] & 0x80;
+
+    std::string jsonResult;
+    if (isChinese) {
+        jsonResult = recommander.doQueryCn(message.value, 5);
+    } else {
+        jsonResult = recommander.doQueryEn(message.value, 5);
+    }
+
+    conn->sendInLoop(jsonResult + "\n");
+}
+===== SearchEngineServer.hpp =====
+#pragma once
+#include "TcpServer.hpp"
+#include "ThreadPool.hpp"
+class SearchEngineServer
+{
+public:
+    SearchEngineServer(const std::string &ip,int port);
+    ~SearchEngineServer() = default;
+    void start();
+    void stop();
+    void onConnection(const TcpConnectionPtr &cb_conn);
+    void onMessage(const TcpConnectionPtr &cb_mess);
+    void onClose(const TcpConnectionPtr &cb_close);
+    void doTaskThread(const TcpConnectionPtr &, std::string &msg);
+
+private:
+    TcpServer _tcpserver;
+    ThreadPool _threadpool;
+};
+
+===== Socket.cpp =====
+/**
+ * Project 66th
+ */
+
+#include "Socket.hpp"
+
+/**
+ * Socket implementation
+ */
+
+Socket::Socket()
+{
+    _fd = socket(AF_INET,SOCK_STREAM,0);
+    if(_fd < 0){
+        perror("socket");
+        return;
+    }
+}
+
+/**
+ * @param fd
+ */
+Socket::Socket(int fd)
+{
+    _fd = fd;
+}
+
+Socket::~Socket()
+{
+}
+
+/**
+ * @return int
+ */
+int Socket::getFd()
+{
+    return _fd;
+}===== Socket.hpp =====
+/**
+ * Project 66th
+ */
+
+#pragma once
+#include <sys/types.h> 
+#include <sys/socket.h>
+#include <iostream>
+
+class Socket
+{
+public:
+    Socket();
+
+    /**
+     * @param fd
+     */
+    explicit Socket(int fd);
+
+    ~Socket();
+
+    int getFd();
+
+private:
+    int _fd;
+};
+===== SocketIO.cpp =====
+/**
+ * Project 66th
+ */
+
+#include "SocketIO.hpp"
+
+/**
+ * SocketIO implementation
+ */
+
+/**
+ * @param fd
+ */
+SocketIO::SocketIO(int fd) : _fd(fd)
+{
+}
+
+SocketIO::~SocketIO()
+{
+}
+
+/**
+ * @param buf
+ * @param len
+ * @return int
+ */
+int SocketIO::readn(char *buf, int len)
+{
+    int left = len;
+    char *pstr = buf;
+    while (left > 0)
+    {
+        int nread = ::recv(_fd, pstr, left, 0);
+        if (nread < 0)
+        {
+            if (errno == EINTR)
+                continue;      // 被信号打断重试
+            return len - left; // 出错返回已读字节数
+        }
+        else if (nread == 0)
+        {
+            return len - left; // 对端关闭
+        }
+        else
+        {
+            left -= nread;
+            pstr += nread;
+        }
+    }
+    return len;
+}
+
+/**
+ * @param buf
+ * @param len
+ * @return int
+ */
+int SocketIO::readLine(char *buf, int len)
+{
+    int total = 0, ret = 0;
+    int left = len - 1; // 预留1字节放字符串结尾'\0'
+    char *pstr = buf;
+
+    while (left > 0)
+    {
+        int ret = recv(_fd, pstr, left, MSG_PEEK);
+        if (ret == 0)
+        {
+            break; // 对端关闭
+        }
+        else if (ret == -1 && errno == EINTR)
+        {
+            continue; // 发生中断
+        }
+        else // peek到数据，查找有无'\n'
+        {
+            int idx = 0;
+            for (; idx < ret; ++idx)
+            {
+                if (pstr[idx] == '\n')
+                { // 找到了就消费掉socket缓冲区
+                    int size = idx + 1;
+                    if (readn(pstr, size) != size)
+                        return -1;
+                    pstr += size;
+                    total += size;
+                    *pstr = '\0';
+                    return total;
+                }
+            }
+            // 没有找到\n,把peek到的全部读出来
+            if (readn(pstr, ret) != ret)
+                return -1;
+            pstr += ret;
+            left -= ret;
+            total += ret;
+        }
+    }
+    *pstr = '\0';
+    return total;
+}
+
+/**
+ * @param buf
+ * @param len
+ * @return int
+ */
+int SocketIO::writen(char *buf, int len)
+{
+    int left = len;
+    char *pstr = buf;
+    while (left > 0)
+    {
+        int nwrite = write(_fd, pstr, left);
+        if (nwrite == 0)
+        {
+            break; // 对端关闭
+        }
+        else if (nwrite == -1 && errno == EINTR)
+        {
+            continue; // 发生中断
+        }
+        else
+        {
+            left -= nwrite;
+            pstr += nwrite;
+        }
+    }
+    return len;
+}===== SocketIO.hpp =====
+/**
+ * Project 66th
+ */
+
+#pragma once
+#include <string>
+#include <unistd.h>
+#include <errno.h>
+#include <sys/socket.h>
+using std::string;
+class SocketIO
+{
+public:
+    /**
+     * @param fd
+     */
+    explicit SocketIO(int fd);
+
+    ~SocketIO();
+
+    /**
+     * @param buf
+     * @param len
+     */
+    int readn(char *buf, int len);
+
+    /**
+     * @param buf
+     * @param len
+     */
+    int readLine(char *buf, int len);
+
+    /**
+     * @param buf
+     * @param len
+     */
+    int writen(char *buf, int len);
+
+private:
+    int _fd;
+};
+===== TaskQueue.cpp =====
+/**
+ * Project 66th
+ */
+
+
+#include "TaskQueue.hpp"
+
+/**
+ * TaskQueue implementation
+ */
+
+
+/**
+ * @param capa
+ */
+TaskQueue::TaskQueue(size_t capa) 
+    : m_capacity(capa)
+{}
+
+TaskQueue::~TaskQueue() 
+{}
+
+/**
+ * @param value
+ * @return void
+ */
+//生产者线程会调用push函数
+void TaskQueue::push(ElemType && value) {
+    //1.先上锁
+    unique_lock<mutex> ul(m_mtx);
+
+    //2.判满
+    /* if(full()) */
+    while(full())//防止虚假唤醒
+    {
+        //如果TaskQueue是满的，就应该让
+        //生产者在条件变量上等待
+        m_notFull.wait(ul);
+        //底层原理是：让生产者线程阻塞，
+        //会先释放锁，等到被唤醒时再重新持有锁
+    }
+
+    //如果TaskQueue不是满的，
+    //生产者线程就可以将生产的数据加入TaskQueue
+    m_que.push(std::move(value));
+
+    //唤醒消费者，可以开始消费仓库中的数据
+    m_notEmpty.notify_one();
+
+    //3.解锁（自动进行）
+}
+
+/**
+ * @return int
+ */
+//消费者线程会调用pop函数
+ElemType TaskQueue::pop() {
+    unique_lock<mutex> ul(m_mtx);
+
+    //因为此处仅仅以任务队列是否为空作为判断条件
+    //所以最后线程池退出时唤醒了子线程
+    //又会马上陷入阻塞
+    //
+    //任务队列为空，且线程池不退出，那么应该阻塞子线程
+    //任务队列为空，且线程池退出，那么不应该阻塞子线程
+    while(empty() && m_flag)
+    {
+        m_notEmpty.wait(ul);
+    }
+
+    //m_flag为true意味着线程池不退出
+    //能够通过前面的循环完全是因为empty()的结果为false
+    //代表着任务队列中有任务
+    //才能进行取任务
+    if(m_flag)
+    {
+        ElemType temp = m_que.front();
+        m_que.pop();
+
+        //唤醒生产者
+        m_notFull.notify_one();
+
+        return temp;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+/**
+ * @return bool
+ */
+bool TaskQueue::full() {
+    return m_que.size() == m_capacity;
+}
+
+/**
+ * @return bool
+ */
+bool TaskQueue::empty() {
+    return m_que.size() == 0;
+}
+
+void TaskQueue::wakeup()
+{
+    m_flag = false;
+    m_notEmpty.notify_all();
+}
+===== TaskQueue.hpp =====
+/**
+ * Project 66th
+ */
+
+
+#pragma once
+
+#include <iostream>
+#include <functional>
+#include <queue>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+using std::cout;
+using std::endl;
+using std::queue;
+using std::thread;
+using std::mutex;
+using std::unique_lock;
+using std::lock_guard;
+using std::condition_variable;
+using std::function;
+using std::bind;
+
+extern mutex coutMtx;
+
+using ElemType = function<void()>;
+
+class TaskQueue {
+public: 
+
+    /**
+     * @param capa
+     */
+    TaskQueue(size_t capa);
+
+    ~TaskQueue();
+
+    /**
+     * @param value
+     */
+    //往TaskQueue中添加数据（任务）
+    void push(ElemType && value);
+
+    //从TaskQueue中获取数据（任务）
+    ElemType pop();
+
+    //判满和判空，对应的状态下
+    //应该让（生产者或消费者）线程等待
+    bool full();    
+    bool empty();
+    
+    //线程池退出时唤醒所有阻塞在m_notEmpty上的子线程
+    void wakeup();
+
+
+private: 
+    size_t m_capacity;//容量
+    queue<ElemType> m_que;//存放数据的数据结构
+    mutex m_mtx;//TaskQueue中的数据是共享资源，需要锁管理
+    condition_variable m_notEmpty;//非空条件变量
+    condition_variable m_notFull;//非满条件变量
+    
+    //添加一个标志位，参与到pop的判断中
+    //为了让线程池退出时，子线程能够不再阻塞
+    bool m_flag = true;                
+};
+
+===== TcpConnection.cpp =====
+/**
+ * Project 66th
+ */
+
+#include "TcpConnection.hpp"
+#include <cstring>
+#include <iostream>
+
+/**
+ * TcpConnection implementation
+ */
+
+/**
+ * @param fd
+ * @param loop
+ */
+TcpConnection::TcpConnection(int fd, EventLoop *loop)
+    : _sock(fd), _sockIO(fd), _localAddr(getLocalAddr()), _peerAddr(getPeerAddr()),_loop(loop)
+{
+}
+
+TcpConnection::~TcpConnection()
+{
+}
+
+/**
+ * @return bool
+ */
+// 进行一次复制式的预读取
+// 如果读到的字符数为0，代表连接已经断开了
+bool TcpConnection::isClosed()
+{
+    char buf[5] = {0};
+    int ret = ::recv(_sock.getFd(), buf, sizeof(buf), MSG_PEEK);
+    return 0 == ret;
+}
+
+/**
+ * @return string
+ */
+string TcpConnection::receive()
+{
+    // 先读 8 字节头
+    int headSize = sizeof(int) * 2;
+    char header[8] = {0};
+    int n = _sockIO.readn(header, headSize);
+    if (n == 0) {
+        return ""; // 对端关闭
+    } else if (n < headSize) {
+        return ""; // 不完整
+    }
+
+    int tag = 0;
+    int length = 0;
+    memcpy(&tag, header, 4);
+    memcpy(&length, header + 4, 4);
+
+    if (length < 0 || length > 10 * 1024 * 1024) {
+        std::cerr << "Invalid packet length: " << length << endl;
+        return "";
+    }
+
+    string value(length, '\0');
+    n = _sockIO.readn(&value[0], length);
+    if (n < length) {
+        return "";
+    }
+
+    // 返回完整二进制包（头+体）
+    string packet;
+    packet.append(header, headSize);
+    packet.append(value);
+    return packet;
+}
+
+/**
+ * @param msg
+ * @return void
+ */
+void TcpConnection::send(const string &msg)
+{
+    _sockIO.writen(const_cast<char *>(msg.c_str()), msg.size());
+}
+
+/**
+ * @param msg
+ * @return void
+ */
+void TcpConnection::sendInLoop(const string &msg)
+{
+    auto con = shared_from_this();
+    _loop->runInLoop([con,msg]{con->send(msg);});
+}
+
+/**
+ * @return string
+ */
+string TcpConnection::toString()
+{
+    ostringstream oss;
+    oss << _localAddr.getIp() << ":" << _localAddr.getPort() << "->" << _peerAddr.getIp() << ":" << _peerAddr.getPort();
+    return oss.str();
+}
+
+/**
+ * @param cb
+ */
+void TcpConnection::setNewConnectionCallback(const TcpConnectionCallBack &cb)
+{
+    _onNewConnection = cb;
+}
+
+/**
+ * @param cb
+ */
+void TcpConnection::setMessageCallback(const TcpConnectionCallBack &cb)
+{
+    _onMessage = cb;
+}
+
+/**
+ * @param cb
+ */
+void TcpConnection::setCloseCallback(const TcpConnectionCallBack &cb)
+{
+    _onClose = cb;
+}
+
+/**
+ * @return void
+ */
+void TcpConnection::handleNewConnectionCallback()
+{
+    if (_onNewConnection)
+        _onNewConnection(shared_from_this());
+}
+
+/**
+ * @return void
+ */
+void TcpConnection::handleMessageCallback()
+{
+    if (_onMessage)
+        _onMessage(shared_from_this());
+}
+
+/**
+ * @return void
+ */
+void TcpConnection::handleCloseCallback()
+{
+    if (_onClose)
+        _onClose(shared_from_this());
+}
+
+/**
+ * @return InetAddress
+ */
+InetAddress TcpConnection::getLocalAddr()
+{
+    struct sockaddr_in localaddr;
+    socklen_t addr_len = sizeof(localaddr);
+    int ret = getsockname(_sock.getFd(), (struct sockaddr *)&localaddr, &addr_len);
+    if (ret < 0)
+    {
+        perror("getsockname");
+    }
+    return InetAddress(localaddr);
+}
+
+/**
+ * @return InetAddress
+ */
+InetAddress TcpConnection::getPeerAddr()
+{
+    struct sockaddr_in peeraddr;
+    socklen_t addr_len = sizeof(peeraddr);
+    int ret = getpeername(_sock.getFd(), (struct sockaddr *)&peeraddr, &addr_len);
+    if (ret < 0)
+    {
+        perror("getpeername");
+    }
+    return InetAddress(peeraddr);
+}===== TcpConnection.hpp =====
+/**
+ * Project 66th
+ */
+
+#pragma once
+#include "SocketIO.hpp"
+#include "Socket.hpp"
+#include "InetAddress.hpp"
+#include "EventLoop.hpp"
+#include <string>
+#include <sstream>
+#include <memory>
+#include <functional>
+using std::function;
+using std::ostringstream;
+using std::shared_ptr;
+using std::string;
+class TcpConnection;
+class EventLoop;
+using TcpConnectionPtr = shared_ptr<TcpConnection>;
+using TcpConnectionCallBack = function<void(const TcpConnectionPtr &)>;
+class TcpConnection : public std::enable_shared_from_this<TcpConnection>
+{
+public:
+    /**
+     * @param fd
+     * @param loop
+     */
+    TcpConnection(int fd, EventLoop *loop);
+
+    ~TcpConnection();
+
+    bool isClosed();
+
+    string receive();
+
+    /**
+     * @param msg
+     */
+    void send(const string &msg);
+
+    /**
+     * @param msg
+     */
+    void sendInLoop(const string &msg);
+
+    string toString();
+
+    /**
+     * @param cb
+     */
+    void setNewConnectionCallback(const TcpConnectionCallBack &cb);
+
+    /**
+     * @param cb
+     */
+    void setMessageCallback(const TcpConnectionCallBack &cb);
+
+    /**
+     * @param cb
+     */
+    void setCloseCallback(const TcpConnectionCallBack &cb);
+
+    void handleNewConnectionCallback();
+
+    void handleMessageCallback();
+
+    void handleCloseCallback();
+
+private:
+    EventLoop *_loop;
+    SocketIO _sockIO;
+    Socket _sock;
+    InetAddress _localAddr;
+    InetAddress _peerAddr;
+    TcpConnectionCallBack _onNewConnection;
+    TcpConnectionCallBack _onMessage;
+    TcpConnectionCallBack _onClose;
+
+    InetAddress getLocalAddr();
+
+    InetAddress getPeerAddr();
+};
+
+===== TcpServer.cpp =====
+/**
+ * Project 66th
+ */
+
+#include "TcpServer.hpp"
+#include "EventLoop.hpp"
+
+/**
+ * TcpServer implementation
+ */
+
+/**
+ * @param ip
+ * @param port
+ */
+TcpServer::TcpServer(const string &ip, unsigned short port)
+    : _acceptor(ip, port), _loop(_acceptor)
+{
+}
+
+TcpServer::~TcpServer()
+{
+}
+
+/**
+ * @param cb1
+ * @param cb2
+ * @param cb3
+ * @return void
+ */
+void TcpServer::setAllCallback(callback &&cb1, callback &&cb2, callback &&cb3)
+{
+    _loop.setNewConnectionCallBack(std::move(cb1));
+    _loop.setMessageCallBack(std::move(cb2));
+    _loop.setCloseCallBack(std::move(cb3));
+}
+
+/**
+ * @return void
+ */
+void TcpServer::start()
+{
+    _acceptor.ready();
+    _loop.loop();
+}
+
+/**
+ * @return void
+ */
+void TcpServer::stop()
+{
+    _loop.unloop();
+}
+===== TcpServer.hpp =====
+/**
+ * Project 66th
+ */
+
+
+#pragma once
+
+#include "Acceptor.hpp"
+#include "EventLoop.hpp"
+
+
+class TcpServer {
+public: 
+    using callback = function<void(const TcpConnectionPtr &)>;
+    /**
+     * @param ip
+     * @param port
+     */
+    TcpServer(const string & ip, unsigned short port);
+
+    ~TcpServer();
+
+    void start();
+
+    void stop();
+
+    /**
+     * @param cb1
+     * @param cb2
+     * @param cb3
+     */
+    void setAllCallback(callback && cb1, callback && cb2, callback &&cb3);
+private: 
+    Acceptor _acceptor;
+    EventLoop _loop;
+};
+
+
+===== ThreadPool.cpp =====
+/**
+ * Project 66th
+ */
+
+
+#include "ThreadPool.hpp"
+#include <unistd.h>
+
+/**
+ * ThreadPool implementation
+ */
+
+
+/**
+ * @param threadNum
+ * @param queSize
+ */
+ThreadPool::ThreadPool(size_t threadNum, size_t queSize) 
+: m_threadNum(threadNum)
+, m_threads()
+, m_queSize(queSize)
+, m_que(m_queSize)
+, m_isExit(false)
+{
+
+}
+
+ThreadPool::~ThreadPool() {
+
+}
+
+/**
+ * @return void
+ */
+//线程池启动
+void ThreadPool::start() {
+    for(size_t idx = 0; idx < m_threadNum; ++idx)
+    {
+        //线程池启动后，需要创建m_threadNum个子线程备用
+        //但是往vector中进行push_back时不能传左值thread
+        //因为这样会触发thread的拷贝构造，
+        //而thread拷贝构造被删除
+        //
+        /* thread th(&ThreadPool::doTask,this); */
+        /* m_threads.push_back(std::move(th)); */
+
+        m_threads.push_back(thread(&ThreadPool::doTask,this));
+    }
+}
+
+/**
+ * @return void
+*/
+//关闭线程池
+void ThreadPool::stop() {
+    //主线程执行stop函数时不应该轻易地改变标志位
+    //如果发现任务队列不为空，说明还有任务没有执行完
+    while(!m_que.empty())
+    {
+        sleep(1);
+    }
+
+    //修改标志位，表示线程池要退出
+    m_isExit = true;
+
+    //需要将threadPool声明为TaskQueue的友元类
+    /* m_que.m_notEmpty.notify_all(); */
+    m_que.wakeup();
+    
+    //让主线程等待子线程退出
+    for(auto & th : m_threads)
+    {
+        th.join();
+    }
+}
+
+/**
+ * @param ptask
+ * @return void
+ */
+void ThreadPool::addTask(ElemType && ptask) {
+    //因为如果出现空指针调用虚函数的情况
+    //一定会发生段错误，所以做一个检查
+    if(ptask)
+    {
+        //生产者线程把任务往TaskQueue里面加
+        //加锁
+        //判满，
+        //如果满就阻塞
+        //如果不满就push，并且唤醒阻塞的消费者线程（子线程）
+        m_que.push(std::move(ptask)); //已经实现过了！！！
+    }
+}
+
+/**
+ * @return ElemType
+ */
+//从TaskQueue中获取任务
+ElemType ThreadPool::getTask() {
+    return m_que.pop(); //已经实现过了！！！
+}
+
+/**
+ * @return void
+ */
+//doTask被注册为工作线程的入口函数
+void ThreadPool::doTask() {
+    //只要线程池不退出，就应该让工作线程一直执行任务
+    while(!m_isExit){
+        //如果任务队列为空，就让工作线程阻塞
+        ElemType ptask = getTask();
+        
+        if(ptask)
+        {
+            ptask();
+            /* sleep(3); */
+        }
+        else
+        {
+            cout << "ptask == nullptr" << endl;
+        }
+    }
+}
+===== ThreadPool.hpp =====
+/**
+ * Project 66th
+ */
+
+
+#pragma once
+#include "TaskQueue.hpp"
+#include <vector>
+using std::vector;
+
+
+class ThreadPool {
+public: 
+    
+/**
+ * @param threadNum
+ * @param queSize
+ */
+
+//构造函数的两个参数代表子线程的个数和任务队列的容量
+ThreadPool(size_t threadNum, size_t queSize);
+~ThreadPool();
+    
+//提供线程池启动和关闭的函数
+void start();
+void stop();
+    
+/**
+ * @param ptask
+ */
+//生产者线程可以往线程池中添加任务
+void addTask(ElemType && ptask);
+
+private: 
+    size_t m_threadNum;
+    vector<thread> m_threads;
+    size_t m_queSize;
+    TaskQueue m_que;
+    bool m_isExit;
+
+//在doTask中调用，就是从任务队列中取任务以便后续执行
+ElemType getTask();
+
+//注册给工作线程作为入口函数
+void doTask();
+};
+
+===== Acceptor.cpp =====
+/**
+ * Project 66th
+ */
+
+#include "Acceptor.hpp"
+#include "Logger.hpp"
+
+/**
+ * Acceptor implementation
+ */
+
+/**
+ * @param ip
+ * @param port
+ */
+Acceptor::Acceptor(const string &ip, unsigned short port)
+    : _sock(), _addr(ip, port)
+{
+}
+
+Acceptor::~Acceptor()
+{
+}
+
+/**
+ * @return void
+ */
+void Acceptor::ready()
+{
+    setReuseAddr();
+    setReusePort();
+    bind();
+    listen();
+}
+
+/**
+ * @return int
+ */
+int Acceptor::accept()
+{
+    int connfd = ::accept(_sock.getFd(), nullptr, nullptr);
+    if (connfd < 0)
+    {
+        LOG_ERROR("accept failed");
+    }
+    else
+    {
+        LOG_INFO(("new connection fd=" + std::to_string(connfd)).c_str());
+    }
+    return connfd;
+}
+
+/**
+ * @return int
+ */
+int Acceptor::fd()
+{
+    return _sock.getFd();
+}
+
+/**
+ * @return void
+ */
+void Acceptor::setReuseAddr()
+{
+    int flag = 1;
+    setsockopt(_sock.getFd(), SOL_SOCKET, SO_REUSEADDR, &flag, sizeof(flag));
+}
+
+/**
+ * @return void
+ */
+void Acceptor::setReusePort()
+{
+    int flag = 1;
+    setsockopt(_sock.getFd(), SOL_SOCKET, SO_REUSEPORT, &flag, sizeof(flag));
+}
+
+/**
+ * @return void
+ */
+void Acceptor::bind()
+{
+    int ret = ::bind(_sock.getFd(), (struct sockaddr *)_addr.getInetAddressPtr(), sizeof(struct sockaddr));
+    if (ret < 0)
+    {
+        LOG_ERROR("bind failed");
+        exit(EXIT_FAILURE);
+    }
+}
+
+/**
+ * @return void
+ */
+void Acceptor::listen()
+{
+    int ret = ::listen(_sock.getFd(), 4096);
+    if (ret < 0)
+    {
+        LOG_ERROR("listen failed");
+        exit(EXIT_FAILURE);
+    }
+}===== Acceptor.hpp =====
+/**
+ * Project 66th
+ */
+
+#pragma once
+#include <string>
+#include "Socket.hpp"
+#include "InetAddress.hpp"
+using std::string;
+class Acceptor
+{
+public:
+    /**
+     * @param ip
+     * @param port
+     */
+    Acceptor(const string &ip, unsigned short port);
+
+    ~Acceptor();
+
+    void ready();
+
+    int accept();
+
+    int fd();
+
+private:
+    Socket _sock;
+    InetAddress _addr;
+
+    void setReuseAddr();
+
+    void setReusePort();
+
+    void bind();
+
+    void listen();
+};
+===== buildCorpus.cpp =====
+#include "PageProcessor.hpp"
+#include "KeywordProcessor.hpp"
+#include "DirectoryScanner.hpp"
+#include <iostream>
+using namespace std;
+
+int main()
+{
+    cout << "开始构建语料索引..." << endl;
+    PageProcessor pp;
+    pp.process("../corpus/webpages"); // 语料目录
+
+    cout << "开始构建词典索引..." << endl;
+    KeyWordProcessor kwp;
+    kwp.process("../corpus/CN", "../corpus/EN");
+
+    cout << "离线构建完成！" << endl;
+    return 0;
+}
+===== Client.cpp =====
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <cstring>
+#include <iostream>
+#include "ProtocolParser.hpp"
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+    string ip = "127.0.0.1";
+    int port = 8888;
+
+    if (argc == 3)
+    {
+        ip = argv[1];
+        port = atoi(argv[2]);
+    }
+
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd < 0)
+    {
+        perror("socket");
+        return -1;
+    }
+
+    sockaddr_in serverAddr;
+    memset(&serverAddr, 0, sizeof(serverAddr));
+    serverAddr.sin_family = AF_INET;
+    serverAddr.sin_port = htons(port);
+    inet_pton(AF_INET, ip.c_str(), &serverAddr.sin_addr);
+
+    if (connect(sockfd, (sockaddr *)&serverAddr, sizeof(serverAddr)) < 0)
+    {
+        perror("connect");
+        close(sockfd);
+        return -1;
+    }
+
+    cout << "Connected to " << ip << ":" << port << endl;
+    cout << "请输入查询词(输入 exit 退出):" << endl;
+
+    string line;
+    char buf[4096];
+    while (true)
+    {
+        cout << "> ";
+        getline(cin, line);
+        if (line == "exit")
+            break;
+
+        Message msg;
+        msg.tag = 1;
+        msg.length = line.size();
+        msg.value = line;
+        string packet = ProtocolParser::serialize(msg);
+        send(sockfd, packet.c_str(), packet.size(), 0);
+
+        // 接收数据
+        memset(buf, 0, sizeof(buf));
+        int n = recv(sockfd, buf, sizeof(buf) - 1, 0);
+        if (n > 0)
+        {
+            cout << "[Server Reply]: "  << endl;
+            cout << buf << endl;
+
+        }
+        else if (n == 0)// 对端断开
+        {
+            cout << "Server closed connection." << endl;
+            break;
+        }
+        else
+        {
+            perror("recv");
+            break;
+        }
+    }
+
+    close(sockfd);
+    return 0;
+}
+===== CMakeLists.txt =====
+cmake_minimum_required(VERSION 3.15)
+
+# 项目名称
+project(SearchEngine)
+
+# 指定C++的版本
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../)
+
+# 生成的可执行程序
+add_executable(SearchEngine
+    Acceptor.cpp
+    EventLoop.cpp
+    InetAddress.cpp
+    KeyRecommander.cpp
+    Logger.cpp
+    main.cpp
+    ProtocolParser.cpp
+    SearchEngineServer.cpp
+    Socket.cpp
+    SocketIO.cpp
+    TaskQueue.cpp
+    TcpConnection.cpp
+    TcpServer.cpp
+    ThreadPool.cpp
+)
+
+target_compile_options(SearchEngine PRIVATE
+    -g
+)
+
+target_link_libraries(SearchEngine PRIVATE
+    pthread
+    log4cpp
+    tinyxml2
+)
+
+add_executable(Client
+    Client.cpp
+    ProtocolParser.cpp
+)
+
+target_compile_options(Client PRIVATE
+    -g
+)
+
+target_link_libraries(Client PRIVATE
+    pthread
+    log4cpp
+    tinyxml2
+)
+
+add_executable(Corpus
+    buildCorpus.cpp
+    KeywordProcessor.cpp
+    PageProcessor.cpp
+    DirectoryScanner.cpp
+)
+
+target_compile_options(Corpus PRIVATE
+    -g
+)
+
+target_link_libraries(Corpus PRIVATE
+    log4cpp
+    tinyxml2
+)===== DirectoryScanner.cpp =====
+#include "DirectoryScanner.hpp"
+#include <dirent.h>
+#include <sys/types.h>
+#include <iostream>
+using namespace std;
+
+// 遍历目录
+vector<string> DirectoryScanner::scan(const string& dir){
+    vector<string> files;
+    DIR *dp = opendir(dir.c_str());
+    // 判断目录是否在存在
+    if(!dp){
+        perror("fail open");
+        return files;
+    }
+
+    struct dirent* entry;
+    while((entry = readdir(dp)) != nullptr){
+        string name(entry->d_name);
+        if(name == "." || name == "..")
+            continue;
+        files.emplace_back(dir + "/" +name);
+    }
+    closedir(dp);
+    return files;
+}
+===== DirectoryScanner.hpp =====
+#pragma once
+#include <vector>
+#include <string>
+using std::vector;
+using std::string;
+
+class DirectoryScanner
+{
+public:
+    /**
+     * 遍历目录 dir, 获取目录里面的所有文件名
+     */ 
+    static vector<string> scan(const string& dir);
+
+private:
+    DirectoryScanner() = delete;
+};
+===== EventLoop.cpp =====
+/**
+ * Project 66th
+ */
+
+#include "EventLoop.hpp"
+#include "Logger.hpp"
+
+/**
+ * EventLoop implementation
+ */
+
+/**
+ * @param acc
+ */
+EventLoop::EventLoop(Acceptor &acc) : _epfd(createEpollFd()), _evtfd(createEventFd()), _isLooping(false), _acceptor(acc), _evlist(OPEN_MAX)
+{
+    addEpollReadFd(_acceptor.fd());
+    addEpollReadFd(_evtfd);
+}
+
+EventLoop::~EventLoop()
+{
+}
+
+/**
+ * @return void
+ */
+void EventLoop::loop()
+{
+    _isLooping = true;
+    while (_isLooping)
+    {
+        waitEpollFd();
+    }
+}
+
+/**
+ * @return void
+ */
+void EventLoop::unloop()
+{
+    _isLooping = false;
+}
+
+/**
+ * @param cb
+ */
+void EventLoop::setNewConnectionCallBack(TcpConnectionCallBack &&cb)
+{
+    _onNewConnection = std::move(cb);
+}
+
+/**
+ * @param cb
+ */
+void EventLoop::setMessageCallBack(TcpConnectionCallBack &&cb)
+{
+    _onMessage = std::move(cb);
+}
+
+/**
+ * @param cb
+ */
+void EventLoop::setCloseCallBack(TcpConnectionCallBack &&cb)
+{
+    _onClose = std::move(cb);
+}
+
+/**
+ * @return int
+ */
+
+/**
+ * @return void
+ */
+void EventLoop::handleRead()
+{
+    uint64_t flag = 1;
+    read(_evtfd, &flag, sizeof(flag));
+    doPendingFunctors();
+}
+
+/**
+ * @return void
+ */
+void EventLoop::wakeup()
+{
+    uint64_t flag = 1;
+    write(_evtfd, &flag, sizeof(flag)); // 唤醒epoll_wait
+}
+
+/**
+ * @param cb
+ * @return void
+ */
+void EventLoop::runInLoop(function<void()> cb)
+{
+    {
+        lock_guard<mutex> lg(_mutex);
+        _pendingFunctors.push_back(std::move(cb));
+    }
+    wakeup();
+}
+
+/**
+ * @return void
+ */
+void EventLoop::doPendingFunctors()
+{
+    vector<function<void()>> functors;
+    {
+        lock_guard<mutex> lg(_mutex);
+        functors.swap(_pendingFunctors);
+    }
+    for (auto &f : functors)
+        f();
+}
+
+int EventLoop::createEventFd()
+{
+    int evtfd = eventfd(0, EFD_NONBLOCK);
+    if (evtfd < 0)
+    {
+        LOG_ERROR("eventfd create failed");
+        exit(EXIT_FAILURE);
+    }
+    return evtfd;
+}
+/**
+ * @return int
+ */
+int EventLoop::createEpollFd()
+{
+    _epfd = epoll_create(OPEN_MAX);
+    if (_epfd < 0)
+    {
+        LOG_ERROR("epoll create failed");
+        exit(EXIT_FAILURE);
+    }
+    return _epfd;
+}
+
+/**
+ * @param fd
+ * @return void
+ */
+void EventLoop::addEpollReadFd(int fd)
+{
+    struct epoll_event event;
+    event.data.fd = fd;
+    event.events = EPOLLIN;
+    int ret = epoll_ctl(_epfd, EPOLL_CTL_ADD, fd, &event);
+    if (ret < 0)
+    {
+        LOG_ERROR("epoll add failed");
+        exit(EXIT_FAILURE);
+    }
+}
+
+/**
+ * @param fd
+ * @return void
+ */
+void EventLoop::delEpollReadFd(int fd)
+{
+    int ret = epoll_ctl(_epfd, EPOLL_CTL_DEL, fd, nullptr);
+    if (ret < 0)
+    {
+        LOG_ERROR("epoll del failed");
+        exit(EXIT_FAILURE);
+    }
+}
+
+/**
+ * @return void
+ */
+void EventLoop::waitEpollFd()
+{
+    struct epoll_event ep[OPEN_MAX];
+    int nready = epoll_wait(_epfd, ep, OPEN_MAX, -1);
+    if (nready < 0)
+    {
+        LOG_ERROR("epoll wait failed");
+        exit(EXIT_FAILURE);
+    }
+    for (int i = 0; i < nready; ++i)
+    {
+        if (ep[i].data.fd == _acceptor.fd())
+        {
+            handleNewConnection();
+        }
+        else if (ep[i].data.fd == _evtfd)
+        {
+            handleRead();
+        }
+        else
+        {
+            handleMessage(ep[i].data.fd);
+        }
+    }
+}
+/**
+ * @return void
+ */
+void EventLoop::handleNewConnection()
+{
+    int connfd = _acceptor.accept();
+    if (connfd < 0)
+    {
+        LOG_ERROR("handleNewConnection failed");
+        exit(EXIT_FAILURE);
+    }
+    LOG_INFO(("Accepted new connection fd=" + std::to_string(connfd)).c_str());
+
+    auto conn = make_shared<TcpConnection>(connfd, this);
+    // 注册回调
+    conn->setNewConnectionCallback(_onNewConnection);
+    conn->setMessageCallback(_onMessage);
+    conn->setCloseCallback(_onClose);
+
+    _conns[connfd] = conn;
+    addEpollReadFd(connfd);
+
+    conn->handleNewConnectionCallback();
+}
+
+/**
+ * @param fd
+ * @return void
+ */
+void EventLoop::handleMessage(int fd)
+{
+    auto it = _conns.find(fd);
+    if (it != _conns.end())
+    {
+        auto conn = it->second;
+        bool flag = conn->isClosed();
+        if (flag)
+        {
+            if (_onClose)
+            {
+                delEpollReadFd(fd);
+                _conns.erase(it);
+                close(fd);
+                conn->handleCloseCallback();
+            }
+            LOG_INFO(("connection closed fd=" + std::to_string(fd)).c_str());
+        }
+        else
+        {
+            conn->handleMessageCallback();
+            LOG_DEBUG(("message from fd=" + std::to_string(fd)).c_str());
+        }
+    }
+}===== EventLoop.hpp =====
+/**
+ * Project 66th
+ */
+
+#pragma once
+#include "Acceptor.hpp"
+#include "TcpConnection.hpp"
+#include <vector>
+#include <memory>
+#include <map>
+#include <mutex>
+#include <sys/eventfd.h>
+#include <functional>
+using std::function;
+using std::lock_guard;
+using std::make_shared;
+using std::map;
+using std::mutex;
+using std::shared_ptr;
+using std::vector;
+class TcpConnection;
+#define OPEN_MAX 1024
+class EventLoop
+{
+public:
+    /**
+     * @param acc
+     */
+
+    using TcpConnectionPtr = shared_ptr<TcpConnection>;
+    using TcpConnectionCallBack = function<void(const TcpConnectionPtr &)>;
+    EventLoop(Acceptor &acc);
+
+    ~EventLoop();
+
+    void loop();
+
+    void unloop();
+
+    /**
+     * @param cb
+     */
+    void setNewConnectionCallBack(TcpConnectionCallBack &&cb);
+
+    /**
+     * @param cb
+     */
+    void setMessageCallBack(TcpConnectionCallBack &&cb);
+
+    /**
+     * @param cb
+     */
+    void setCloseCallBack(TcpConnectionCallBack &&cb);
+
+    int createEventFd();
+
+    void handleRead();
+
+    void wakeup();
+
+    /**
+     * @param cb
+     */
+    void runInLoop(function<void()> cb);
+
+    void doPendingFunctors();
+
+private:
+    int _epfd;
+    vector<struct epoll_event> _evlist;
+    bool _isLooping;
+    Acceptor &_acceptor;
+    map<int, shared_ptr<TcpConnection>> _conns;
+    TcpConnectionCallBack _onNewConnection;
+    TcpConnectionCallBack _onMessage;
+    TcpConnectionCallBack _onClose;
+    int _evtfd;
+    std::vector<function<void()>> _pendingFunctors;
+    mutex _mutex;
+
+    int createEpollFd();
+
+    /**
+     * @param fd
+     */
+    void addEpollReadFd(int fd);
+
+    /**
+     * @param fd
+     */
+    void delEpollReadFd(int fd);
+
+    void waitEpollFd();
+
+    void handleNewConnection();
+
+    /**
+     * @param fd
+     */
+    void handleMessage(int fd);
+};
+===== InetAddress.cpp =====
+/**
+ * Project 66th
+ */
+
+
+#include "InetAddress.hpp"
+
+/**
+ * InetAddress implementation
+ */
+
+
+/**
+ * @param ip
+ * @param port
+ */
+InetAddress::InetAddress(const string & ip, unsigned short port) {
+    _addr.sin_family = AF_INET;
+    _addr.sin_addr.s_addr = inet_addr(ip.c_str());
+    _addr.sin_port = htons(port);
+}
+
+/**
+ * @param addr
+ */
+InetAddress::InetAddress(const struct sockaddr_in & addr) {
+    _addr = addr;
+}
+
+InetAddress::~InetAddress() {
+
+}
+
+/**
+ * @return string
+ */
+string InetAddress::getIp() {
+    return string(inet_ntoa(_addr.sin_addr));
+}
+
+/**
+ * @return unsigned short
+ */
+unsigned short InetAddress::getPort() {
+    return ntohs(_addr.sin_port);
+}
+
+/**
+ * @return const struct sockaddr_in *
+ */
+const struct sockaddr_in * InetAddress::getInetAddressPtr() {
+    return &_addr;
+}===== InetAddress.hpp =====
+/**
+ * Project 66th
+ */
+
+
+#pragma once
+#include <iostream>
+#include <string>
+#include <stdio.h>
+#include <stdlib.h>
+#include <strings.h>
+#include <unistd.h>
+#include <ctype.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <sys/select.h>
+#include <sys/time.h>
+#include <sys/epoll.h>
+using std::cout;
+using std::endl;
+using std::string;
+class InetAddress {
+public: 
+    
+/**
+ * @param ip
+ * @param port
+ */
+InetAddress(const string & ip, unsigned short port);
+    
+/**
+ * @param addr
+ */
+InetAddress(const struct sockaddr_in & addr);
+    
+~InetAddress();
+    
+string getIp();
+    
+unsigned short getPort();
+    
+const struct sockaddr_in * getInetAddressPtr();
+private: 
+    struct sockaddr_in _addr;
+};
+===== KeyRecommander.cpp =====
+#include "KeyRecommander.hpp"
+#include <fstream>
+#include <algorithm>
+#include <sstream>
+#include <set>
+#include <queue>
+#include <string>
+#include <nlohmann/json.hpp>
+
+using std::string;
+using json = nlohmann::json;
+// 候选词
+struct CandidateWords
+{
+    string word;
+    int editDist;
+    int freq;
+    bool operator<(const CandidateWords &rhs) const
+    {
+        if (editDist != rhs.editDist)
+            return editDist > rhs.editDist; // 编辑距离小优先
+        if (freq != rhs.freq)
+            return freq < rhs.freq; // 词频大优先
+        return word > rhs.word;     // 字典序小优先
+    }
+};
+
+KeyRecommander::KeyRecommander(const string &enDictFile, const string &cnDictFile, const string &enIndexFile, const string &cnIndexDictFile)
+{
+    loadDictFile(enDictFile, cnDictFile);
+    loadIndexFile(enIndexFile, cnIndexDictFile);
+}
+
+// 英文查询
+string KeyRecommander::doQueryEn(const string &word, int k)
+{
+    std::set<int> candidateIds; // 计算词汇所含字符出现的位置(dict行号)
+    for (char ch : word)
+    {
+        string key(1, ch); // 构造为string -> unordered_map.first
+        if (en_index.count(key))
+        {                                                                    // 若索引库中存在该字符
+            candidateIds.insert(en_index[key].begin(), en_index[key].end()); // 记录该字符出现的记录(字典行号)
+        }
+    }
+
+    std::priority_queue<CandidateWords> pq; // 优先队列，根据优先级大小排序
+    for (int id : candidateIds)
+    {
+        const auto &candidate = en_dict[id].first;
+        int dist = editDistance(word, candidate);
+        int freq = en_dict[id].second;
+        pq.push({candidate, dist, freq});
+    }
+
+    json result;
+    result["candidates"] = json::array();
+    for (int i = 0; i < k && !pq.empty(); ++i)
+    {
+        auto top = pq.top();
+        pq.pop();
+        result["candidates"].push_back({{"word", top.word}, {"freq", top.freq}, {"dist", top.editDist}});
+    }
+
+    return result.dump(4);
+}
+
+// 🔹 UTF-8 分割（中文用）
+static std::vector<string> splitUtf8(const string &s)
+{
+    std::vector<string> res;
+    for (size_t i = 0; i < s.size();)
+    {
+        unsigned char c = s[i];
+        int len = 1;
+        if ((c & 0x80) == 0)
+            len = 1;
+        else if ((c & 0xE0) == 0xC0)
+            len = 2;
+        else if ((c & 0xF0) == 0xE0)
+            len = 3; // 中文常用
+        else if ((c & 0xF8) == 0xF0)
+            len = 4;
+        res.push_back(s.substr(i, len));
+        i += len;
+    }
+    return res;
+}
+
+// 中文查询
+string KeyRecommander::doQueryCn(const string &word, int k)
+{
+    auto chars = splitUtf8(word);
+
+    std::set<int> candidateIds;
+    for (auto &ch : chars)
+    {
+        if (cn_index.count(ch))
+        {
+            candidateIds.insert(cn_index[ch].begin(), cn_index[ch].end());
+        }
+    }
+
+    std::priority_queue<CandidateWords> pq;
+    for (int id : candidateIds)
+    {
+        const auto &cand = cn_dict[id].first;
+        int dist = editDistance(word, cand);
+        int freq = cn_dict[id].second;
+        pq.push({cand, dist, freq});
+    }
+
+    json result;
+    result["candidates"] = json::array();
+    for (int i = 0; i < k && !pq.empty(); ++i)
+    {
+        auto top = pq.top();
+        pq.pop();
+        result["candidates"].push_back({{"word", top.word},
+                                        {"freq", top.freq}});
+    }
+    return result.dump(4);
+}
+
+// 计算编辑距离
+int KeyRecommander::editDistance(const std::string &lhs, const std::string &rhs)
+{
+    size_t m = lhs.size(), n = rhs.size();
+    std::vector<std::vector<int>> dp(m + 1, std::vector<int>(n + 1, 0));
+    for (size_t i = 0; i <= m; ++i)
+        dp[i][0] = i;
+    for (size_t j = 0; j <= n; ++j)
+        dp[0][j] = j;
+
+    for (size_t i = 1; i <= m; ++i)
+    {
+        for (size_t j = 1; j <= n; ++j)
+        {
+            if (lhs[i - 1] == rhs[j - 1])
+                dp[i][j] = dp[i - 1][j - 1];
+            else
+                dp[i][j] = std::min({dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + 1});
+        }
+    }
+    return dp[m][n];
+}
+
+// 加载字典
+void KeyRecommander::loadDictFile(const string &enDictFile, const string &cnDictFile)
+{
+    std::ifstream ifs_en(enDictFile);
+    if (!ifs_en.is_open())
+    {
+        std::cerr << "Failed to open English dict file: " << enDictFile << std::endl;
+        return;
+    }
+    string word;
+    int freq;
+    while (ifs_en >> word >> freq)
+    {
+        en_dict.emplace_back(word, freq);
+    }
+
+    std::ifstream ifs_ch(cnDictFile);
+    if (!ifs_ch.is_open())
+    {
+        std::cerr << "Failed to open Chinese dict file: " << cnDictFile << std::endl;
+        return;
+    }
+    while (ifs_ch >> word >> freq)
+    {
+        cn_dict.emplace_back(word, freq);
+    }
+}
+
+// 加载索引库
+void KeyRecommander::loadIndexFile(const string &enIndexFile, const string &cnIndexDictFile)
+{
+    std::ifstream ifs_en(enIndexFile);
+    if (!ifs_en.is_open())
+    {
+        std::cerr << "Failed to open English index file: " << enIndexFile << std::endl;
+        return;
+    }
+
+    string key;
+    int idx;
+    string line;
+    while (std::getline(ifs_en, line))
+    {
+        std::istringstream iss(line);
+        if (!(iss >> key))
+            continue;
+        while (iss >> idx)
+        {
+            en_index[key].push_back(idx);
+        }
+    }
+
+    std::ifstream ifs_ch(cnIndexDictFile);
+    if (!ifs_ch.is_open())
+    {
+        std::cerr << "Failed to open Chinese index file: " << cnIndexDictFile << std::endl;
+        return;
+    }
+    while (std::getline(ifs_ch, line))
+    {
+        std::istringstream iss(line);
+        if (!(iss >> key))
+            continue;
+        while (iss >> idx)
+        {
+            cn_index[key].push_back(idx);
+        }
+    }
+}
+===== KeyRecommander.hpp =====
+#pragma once
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+using std::string;
+using std::unordered_map;
+using std::vector;
+class KeyRecommander
+{
+public:
+    KeyRecommander(const string &enDictFile, const string &cnDictFile, const string &enIndexFile, const string &cnIndexDictFile);
+    ~KeyRecommander() {}
+    string doQueryCn(const string &word,int k = 3);
+    string doQueryEn(const string &word,int k = 3);
+
+private:
+    int editDistance(const string &lhs, const string &rhs);
+    void loadDictFile(const string &enDictFile, const string &cnDictFile);
+    void loadIndexFile(const string &enIndexFile, const string &cnIndexDictFile);
+
+    // dict: 下标 -> (单词, 词频)
+    vector<std::pair<string, int>> cn_dict; // _index中的vector元素能够直接对应 _dict中vector的下表，不用额外建立映射关系，所以不采用map
+    vector<std::pair<string, int>> en_dict;
+    unordered_map<string, vector<int>> cn_index;
+    unordered_map<string, vector<int>> en_index;
+};
+===== KeywordProcessor.cpp =====
+#include "KeywordProcessor.hpp"
+#include "DirectoryScanner.hpp"
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <map>
+#include <vector>
+#include <unordered_set>
+#include <algorithm>
+#include <cctype>
+#include "utf8cpp/utf8.h"
+using std::map;
+using std::vector;
+
+// 辅助函数(字符判断)
+static bool isAlpha(char c)
+{
+    return std::isalpha(static_cast<unsigned char>(c));
+}
+
+// 初始化jieba
+KeyWordProcessor::KeyWordProcessor()
+    : m_tokenizer(
+          "/usr/local/dict/jieba.dict.utf8", // 词典
+          "/usr/local/dict/hmm_model.utf8",  // HMM
+          "/usr/local/dict/user.dict.utf8",  // 用户词典
+          "/usr/local/dict/idf.utf8",        // idf
+          "/usr/local/dict/stop_words.utf8"  // 停用词
+      )
+{
+    std::ifstream ifs_en("/home/zhang/SearchEngine/corpus/stopwords/en_stopwords.txt");
+    string word;
+    while (ifs_en >> word)
+    {   
+        m_enStopWords.insert(word);
+    }
+
+    std::ifstream ifs_ch("/home/zhang/SearchEngine/corpus/stopwords/cn_stopwords.txt");
+    while (ifs_ch >> word)
+    {
+        m_chStopWords.insert(word);
+    }
+}
+
+void KeyWordProcessor::process(const string &chDir, const string &enDir)
+{
+    create_en_dict(enDir, "../data/endict.dat");
+    build_en_index("../data/endict.dat", "../data/enindex.dat");
+
+    create_cn_dict(chDir, "../data/cndict.dat");
+    build_cn_index("../data/cndict.dat", "../data/cnindex.dat");
+}
+
+// 英文部分
+// 生成词典库(单词 + 频率)
+void KeyWordProcessor::create_en_dict(const string &dir, const string &outfile)
+{
+    map<string, int> dict;
+    auto files = DirectoryScanner::scan(dir);
+
+    for (auto &file : files)
+    {
+        std::ifstream ifs(file);
+        if (!ifs.is_open())
+        {
+            continue;
+        }
+
+        // 去掉数字和标点符号 + 转小写
+        string line;
+        while (std::getline(ifs, line))
+        {
+
+            for (auto &ch : line)
+            {
+                if (!isAlpha(ch))
+                {
+                    ch = ' ';
+                }
+                ch = std::tolower(ch);
+            }
+
+            // 统计每个单词(Token)的出现频率
+            std::istringstream iss(line);
+            string token;
+            while (iss >> token)// 空白字符进行切分
+            {
+                if (m_enStopWords.count(token))
+                {
+                    continue;
+                }
+                dict[token]++;// string —> frequency
+            }
+        }
+    }
+
+    // 输出词典库
+    std::ofstream ofs(outfile);
+    if (!ofs.is_open())
+    {
+        std::cerr << "Error open file" << std::endl;
+        return;
+    }
+    for (auto &[w, f] : dict)
+    {
+        ofs << w << " " << f << "\n";
+    }
+}
+
+// 生成英文索引库
+void KeyWordProcessor::build_en_index(const string &dict, const string &index)
+{
+
+    std::ifstream ifs(dict);
+    if (!ifs.is_open())
+    {
+        std::cerr << "Error: cannot open dict file " << dict << std::endl;
+        return;
+    }
+
+    std::map<char, std::vector<int>> charIndex; // 字母 -> 行号集合
+    std::vector<std::string> words;             // 保存词典里的单词,通过行号反查单词
+
+    std::string word;
+    int freq;
+    int lineId = 0;
+    while (ifs >> word >> freq)
+    {
+        words.push_back(word);
+
+        // 遍历单词中的每个字母
+        for (char c : word)
+        {
+            auto &vec = charIndex[c];
+            // 避免重复插入
+            if (vec.empty() || vec.back() != lineId)
+            {
+                vec.push_back(lineId);
+            }
+        }
+        lineId++;
+    }
+
+    // 写索引文件
+    std::ofstream ofs(index);
+    if (!ofs.is_open())
+    {
+        std::cerr << "Error: cannot open index file " << index << std::endl;
+        return;
+    }
+
+    for (auto &[ch, vec] : charIndex)
+    {
+        ofs << ch << " ";
+        for (int id : vec)
+        {
+            ofs << id << " ";
+        }
+        ofs << "\n";
+    }
+}
+
+// 判断汉字
+static bool isChinese(const std::string &s)
+{
+    auto it = s.begin();
+    while (it != s.end())
+    {
+        char32_t cp = utf8::next(it, s.end());
+        if (!((cp >= 0x4E00 && cp <= 0x9FFF) ||   // 基本汉字
+              (cp >= 0x3400 && cp <= 0x4DBF) ||   // 扩展A
+              (cp >= 0x20000 && cp <= 0x2A6DF) || // 扩展B
+              (cp >= 0x2A700 && cp <= 0x2B73F) || // 扩展C
+              (cp >= 0x2B740 && cp <= 0x2B81F) || // 扩展D
+              (cp >= 0x2B820 && cp <= 0x2CEAF) || // 扩展E
+              (cp >= 0x2CEB0 && cp <= 0x2EBEF)    // 扩展F
+              ))
+        {
+            return false; // 只要有一个不是汉字，就判定为 false
+        }
+    }
+    return true;
+}
+
+// 中文部分
+void KeyWordProcessor::create_cn_dict(const string &dir, const string &outfile)
+{
+    map<string, int> dict;
+    auto files = DirectoryScanner::scan(dir);
+
+    for (auto &file : files)
+    {
+        std::ifstream ifs(file);
+        if (!ifs.is_open())
+        {
+            continue;
+        }
+
+        // 读取整个文件内容
+        string content((std::istreambuf_iterator<char>(ifs)),
+                       std::istreambuf_iterator<char>());
+        // jieba分词
+        vector<string> words;
+        m_tokenizer.Cut(content, words, true); // true = HMM = 混合模式
+
+        for (auto &w : words)
+        {
+            if (m_chStopWords.count(w) || !isChinese(w))
+                continue; // 过滤停用词或非汉字
+            dict[w]++;
+        }
+    }
+
+    // 输出词典库
+    std::ofstream ofs(outfile);
+    if (!ofs.is_open())
+    {
+        std::cerr << "Error open file" << std::endl;
+        return;
+    }
+    for (auto &[w, f] : dict)
+    {
+        ofs << w << " " << f << "\n";
+    }
+}
+
+// 生成中文索引库
+void KeyWordProcessor::build_cn_index(const string &dict, const string &index)
+{
+    std::ifstream ifs(dict);
+    if (!ifs.is_open())
+    {
+        std::cerr << "Error: cannot open dict file " << dict << std::endl;
+        return;
+    }
+
+    map<string, vector<int>> cnindex; // 中文汉字 -> 行号集合
+    vector<string> words;             // 保存词典里的单词, 通过行号反查单词
+
+    string word;
+    int freq;
+    int lineId = 0;
+
+    while (ifs >> word >> freq)
+    {
+        words.push_back(word);
+
+        // 用 utfcpp 遍历一个个汉字
+        for (auto it = word.begin(); it != word.end();)
+        {
+            char32_t cp = utf8::next(it, word.end()); // 取一个 codepoint 并前进迭代器
+            std::string ch;
+            utf8::append(cp, std::back_inserter(ch)); // 转回 UTF-8
+
+            cnindex[ch].push_back(lineId); // 建立索引：汉字 -> 行号
+        }
+
+        lineId++;
+    }
+
+    // 写索引文件
+    std::ofstream ofs(index);
+    if (!ofs.is_open())
+    {
+        std::cerr << "Error: cannot open index file " << index << std::endl;
+        return;
+    }
+
+    for (auto &[ch, vec] : cnindex)
+    {
+        ofs << ch << " ";
+        for (int id : vec)
+        {
+            ofs << id << " ";
+        }
+        ofs << "\n";
+    }
+}
+===== KeywordProcessor.hpp =====
+// KeywordProcessor.h
+#pragma once
+#include <cppjieba/Jieba.hpp>
+#include <string>
+#include <set>
+using std::string;
+using std::set;
+
+class KeyWordProcessor {
+public:
+    KeyWordProcessor();
+	
+    // chDir: 中文语料库
+    // enDir: 英文语料库
+    void process(const string& chDir, const string& enDir);
+
+private:
+    void create_cn_dict(const string& dir, const string& outfile);
+    void build_cn_index(const string& dict, const string& index);
+
+    void create_en_dict(const string& dir, const string& outfile);
+    void build_en_index(const string& dict, const string& index);
+private:
+    cppjieba::Jieba m_tokenizer;
+    set<string> m_enStopWords;
+    set<string> m_chStopWords;
+};===== Logger.cpp =====
+#include "Logger.hpp"
+#include <log4cpp/Category.hh>
+#include <log4cpp/OstreamAppender.hh>
+#include <log4cpp/FileAppender.hh>
+#include <log4cpp/RollingFileAppender.hh>
+#include <log4cpp/PatternLayout.hh>
+
+// 初始化静态成员变量
+// 初始化静态成员变量
+Logger *Logger::_pInstance = nullptr;
+Category *Logger::_root = nullptr;
+
+// 构造函数
+Logger::Logger()
+{
+    log4cpp::PatternLayout *layout1 = new log4cpp::PatternLayout();
+    layout1->setConversionPattern("[%d] [%p] %c: %m%n");
+
+    log4cpp::PatternLayout *layout2 = new log4cpp::PatternLayout();
+    layout2->setConversionPattern("[%d] [%p] %c: %m%n");
+
+    log4cpp::PatternLayout *layout3 = new log4cpp::PatternLayout();
+    layout3->setConversionPattern("[%d] [%p] %c: %m%n");
+
+    // 终端输出
+    OstreamAppender *consoleAppender = new OstreamAppender("console", &std::cout);
+    consoleAppender->setLayout(layout1);
+    // 文件输出
+    FileAppender *fileAppender = new FileAppender("file", "../log/log.txt");
+    fileAppender->setLayout(layout2);
+
+    // 回卷文件输出（自动滚动）
+    log4cpp::RollingFileAppender *rollingAppender = new log4cpp::RollingFileAppender(
+        "rolling",         // 名称
+        "../log/rolling_log.txt", // 文件名
+        5 * 1024 * 1024,   // 最大文件大小（5MB）
+        3                  // 最大备份数量
+    );
+    rollingAppender->setLayout(layout3);
+
+    // 设置输出信息
+    _root = &Category::getRoot();
+    _root->addAppender(consoleAppender);
+    _root->addAppender(fileAppender);
+    _root->addAppender(rollingAppender);
+    _root->setPriority(Priority::DEBUG);
+}
+
+// 析构函数
+Logger::~Logger()
+{
+    if (_root)
+    {
+        _root->removeAllAppenders();
+    }
+    Category::shutdown(); // 清理资源
+}
+
+// 单例方法
+Logger *Logger::getInstance()
+{
+    if (!_pInstance)
+    {
+        _pInstance = new Logger();
+    }
+    return _pInstance;
+}
+
+// 单例销毁方法
+void Logger::destroy()
+{
+    if (_pInstance)
+    {
+        delete _pInstance;
+        _pInstance = nullptr;
+    }
+}
+
+// 日志输出方法
+void Logger::warn(const char *file, int line, const char *func, const char *msg)
+{
+    _root->warn("[%s:%d:%s] %s", file, line, func, msg);
+}
+
+void Logger::error(const char *file, int line, const char *func, const char *msg)
+{
+    _root->error("[%s:%d:%s] %s", file, line, func, msg);
+}
+
+void Logger::debug(const char *file, int line, const char *func, const char *msg)
+{
+    _root->debug("[%s:%d:%s] %s", file, line, func, msg);
+}
+
+void Logger::info(const char *file, int line, const char *func, const char *msg)
+{
+    _root->info("[%s:%d:%s] %s", file, line, func, msg);
+}
+===== Logger.hpp =====
+#ifndef LOGGER_H
+#define LOGGER_H
+#include <iostream>
+#include <log4cpp/OstreamAppender.hh>
+#include <log4cpp/PatternLayout.hh>
+#include <log4cpp/Category.hh>
+using namespace std;
+using namespace log4cpp;
+
+#define LOG_WARN(msg) Logger::getInstance()->warn(__FILE__,__LINE__,__FUNCTION__,msg)
+#define LOG_ERROR(msg) Logger::getInstance()->error(__FILE__,__LINE__,__FUNCTION__,msg)
+#define LOG_DEBUG(msg) Logger::getInstance()->debug(__FILE__,__LINE__,__FUNCTION__,msg)
+#define LOG_INFO(msg) Logger::getInstance()->info(__FILE__,__LINE__,__FUNCTION__,msg)
+
+
+
+
+class Logger{
+public:
+    void warn(const char * file, int line, const char * func, const char * msg);
+    void error(const char * file, int line, const char * func, const char * msg);
+    void debug(const char * file, int line, const char * func, const char * msg);
+    void info(const char * file, int line, const char * func, const char * msg);
+
+    static Logger * getInstance();
+
+    static void destroy();
+
+
+private:
+    Logger();
+    ~Logger();
+    Logger(const Logger &) = delete;
+    Logger & operator=(const Logger &) = delete;
+    static Logger * _pInstance;
+    static Category * _root;
+};
+
+
+#endif===== main.cpp =====
+#include "SearchEngineServer.hpp"
+#include "Logger.hpp"
+#include <iostream>
+#include <csignal>
+
+using namespace std;
+
+// 全局 server 指针，用于信号处理
+SearchEngineServer *g_server = nullptr;
+
+void signalHandler(int sig) {
+    if (sig == SIGINT || sig == SIGTERM) {
+        LOG_WARN(("Caught signal " + std::to_string(sig) + ", stopping server...").c_str());
+        if (g_server) {
+            g_server->stop();
+        }
+        exit(0);
+    }
+}
+
+int main(int argc, char **argv)
+{
+    string ip = "127.0.0.1";
+    int port = 8888;
+
+    if (argc == 3) {
+        ip = argv[1];
+        port = atoi(argv[2]);
+    }
+
+    LOG_INFO(("Starting SearchEngineServer on " + ip + ":" + std::to_string(port)).c_str());
+
+    SearchEngineServer server(ip, port);
+    g_server = &server;
+
+    // 注册信号处理函数，方便 Ctrl+C 停止服务
+    signal(SIGINT, signalHandler);
+    signal(SIGTERM, signalHandler);
+
+    server.start();
+
+    return 0;
+}
+===== PageProcessor.cpp =====
+#include "PageProcessor.hpp"
+#include "simhash/Simhasher.hpp"
+#include "DirectoryScanner.hpp"
+#include <tinyxml2.h>
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include <set>
+#include <sstream>
+#include <fstream>
+#include <cmath>
+
+using namespace tinyxml2;
+using std::ofstream;
+using std::ostringstream;
+using std::set;
+using std::string;
+using std::unordered_map;
+using std::vector;
+
+PageProcessor::PageProcessor()
+    : m_tokenizer("/usr/local/dict/jieba.dict.utf8",
+                  "/usr/local/dict/hmm_model.utf8",
+                  "/usr/local/dict/user.dict.utf8",
+                  "/usr/local/dict/idf.utf8",
+                  "/usr/local/dict/stop_words.utf8"),
+      m_hasher("/usr/local/dict/jieba.dict.utf8",
+               "/usr/local/dict/hmm_model.utf8",
+               "/usr/local/dict/idf.utf8",
+               "/usr/local/dict/stop_words.utf8")
+{
+    std::ifstream ifs("/home/zhang/SearchEngine/corpus/stopwords/cn_stopwords.txt");
+    string word;
+    while (ifs >> word)
+    {
+        m_stopWords.insert(word);
+    }
+}
+void PageProcessor::process(const std::string &dir)
+{
+    extract_documents(dir);
+    deduplicate_documents();
+    build_pages_and_offsets("../data/webpages.dat", "../data/weboffset.dat");
+    build_inverted_index("../data/invertindex.dat");
+}
+
+// 提取文档
+void PageProcessor::extract_documents(const std::string &dir)
+{
+    // 获取目录下所有文件路径
+    auto files = DirectoryScanner::scan(dir);
+    int id = 0;
+
+    for (auto &file : files)
+    {
+        XMLDocument doc;
+        if (doc.LoadFile(file.c_str()) != XML_SUCCESS)
+        {
+            std::cerr << "Error: cannot load xml file " << file << std::endl;
+            continue;
+        }
+
+        XMLElement *root = doc.RootElement();
+        if (!root)
+            continue;
+
+        // 先找 channel
+        XMLElement *channel = root->FirstChildElement("channel");
+        XMLElement *item = nullptr;
+        if (channel)
+        {
+            item = channel->FirstChildElement("item");
+        }
+        else
+        {
+            item = root->FirstChildElement("item"); // 有些语料直接在 root 下
+        }
+
+        while (item)
+        {
+            Document d;
+            d.id = id++;
+
+            XMLElement *title = item->FirstChildElement("title");
+            XMLElement *link = item->FirstChildElement("link");
+
+            if (title && title->GetText())
+                d.title = title->GetText();
+            if (link && link->GetText())
+                d.link = link->GetText();
+
+            // 如果item中有content
+            XMLElement *cont = item->FirstChildElement("content");
+            if (cont && cont->GetText())
+            {
+                d.content = cont->GetText();
+            }
+            else
+            {
+                XMLElement *desc = item->FirstChildElement("description");
+                if (desc && desc->GetText())
+                {
+                    d.content = desc->GetText();
+                }
+            }
+
+            // 4. 只有当 content 非空时，才加入 m_documents
+            if (!d.content.empty())
+            {
+                m_documents.push_back(std::move(d));
+            }
+
+            item = item->NextSiblingElement("item");
+        }
+    }
+}
+
+// 计算汉明距离
+/* static int hammingDistance(uint64_t hashValue, uint64_t hash)
+{
+    int xOR = hashValue ^ hash;
+    int distance = 0;
+    while (xOR)
+    {
+        distance += (xOR & 1);
+        xOR >>= 1;
+    }
+    return distance;
+} */
+
+// 高效汉明距离
+static inline int hammingDistance(uint64_t hashValue, uint64_t hash)
+{
+    return __builtin_popcountll(hashValue ^ hash); // 硬件指令
+}
+
+// 文档去重
+void PageProcessor::deduplicate_documents()
+{
+    vector<Document> uniqueDocs;
+    set<uint64_t> check_hash;
+
+    for (auto &doc : m_documents)
+    {
+        uint64_t hashValue = 0;
+        // 直接用 make 生成 simhash
+        if (!m_hasher.make(doc.content, 200, hashValue))
+        {
+            std::cerr << "Simhash make() failed for doc: " << doc.id << std::endl;
+            continue;
+        }
+
+        bool duplicate = false;
+        for (auto &hash : check_hash)
+        {
+            // XOR: 找出不同位
+            int dist = hammingDistance(hashValue, hash); // 汉明距离
+            if (dist <= 3)                               // 阈值: ≤3 表示相似
+            {
+                duplicate = true;
+                break;
+            }
+        }
+
+        if (!duplicate)
+        {
+            check_hash.insert(hashValue); // simhash 记录到集合，方便后续查重
+            uniqueDocs.push_back(doc);
+        }
+    }
+
+    m_documents.swap(uniqueDocs); // 替换掉原来的所有文档
+}
+
+// 生成网页库和偏移库
+void PageProcessor::build_pages_and_offsets(const string &pagesFile, const string &offsetsFile)
+{
+    ofstream ofsPages(pagesFile);
+    ofstream ofsOffsets(offsetsFile);
+
+    int offset = 0;
+    for (auto &doc : m_documents)
+    {
+        ostringstream oss;
+        oss << "<doc>\n"
+            << "  <id>" << doc.id << "</id>\n"
+            << "  <link>" << doc.link << "</link>\n"
+            << "  <title>" << doc.title << "</title>\n"
+            << "  <content>" << doc.content << "</content>\n"
+            << "</doc>\n";
+
+        string page = oss.str();
+        ofsPages << page;
+
+        ofsOffsets << doc.id << " " << offset << " " << page.size() << "\n";
+        offset += page.size();
+    }
+}
+
+// 建立倒排索引
+void PageProcessor::build_inverted_index(const std::string &indexFile)
+{
+    // 计算 TF-IDF
+    unordered_map<string, int> df;                             // 包含该关键字的文档个数
+    vector<unordered_map<string, int>> tf(m_documents.size()); // 关键字在文档中出现的次数
+
+    for (size_t i = 0; i < m_documents.size(); ++i)
+    {
+        vector<string> words;                                 // 存分词结果
+        m_tokenizer.Cut(m_documents[i].content, words, true); // HMM混合模式
+
+        for (auto &word : words)
+        {
+            if (m_stopWords.count(word))
+                continue;
+            ++tf[i][word]; // 第i篇文章中word出现的次数
+        }
+        for (auto &kv : tf[i]) // 在同一篇文档里多次出现也只算一次 DF
+            ++df[kv.first];
+    }
+
+    size_t N = m_documents.size();
+    for (size_t i = 0; i < N; ++i)
+    {
+        for (auto &[w, freq] : tf[i])
+        {
+            double idf = log((double)N / (df[w] + 1));
+            double weight = freq * idf;
+            m_invertedIndex[w][m_documents[i].id] = weight;
+        }
+    }
+
+    ofstream ofs(indexFile);
+    for (auto &[word, postings] : m_invertedIndex)
+    {
+        ofs << word << " ";
+        for (auto &[docId, weight] : postings)
+        {
+            ofs << docId << " " << weight << " ";
+        }
+        ofs << "\n";
+    }
+}
+===== PageProcessor.hpp =====
+#pragma once
+#include <string>
+#include <vector>
+#include <set>
+#include "cppjieba/Jieba.hpp"
+#include "simhash/Simhasher.hpp"
+
+class PageProcessor
+{
+public:
+    PageProcessor();
+    void process(const std::string& dir);
+
+private:
+    void extract_documents(const std::string& dir);
+    void deduplicate_documents();
+    void build_pages_and_offsets(const std::string& pages, const std::string& offsets);
+    void build_inverted_index(const std::string& filename);
+private:
+    struct Document 
+    {
+        int id;
+        std::string link;
+        std::string title;
+        std::string content;
+    };
+
+private:
+    cppjieba::Jieba m_tokenizer;
+    simhash::Simhasher m_hasher;
+    std::set<std::string> m_stopWords;    // 使用set, 而非vector, 是为了方便查找
+    std::vector<Document> m_documents;    
+    std::map<std::string, std::map<int, double>> m_invertedIndex;
+};
+
+===== ProtocolParser.cpp =====
+#include "ProtocolParser.hpp"
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+// ProtocolParser.cpp
+bool ProtocolParser::Parse(const std::string &raw, Message &msg)
+{
+    if (raw.size() < 2 * sizeof(int))
+    {
+        return false; // tag + length
+    }
+
+    const char *p = raw.data();
+    int tag = 0, length = 0;
+
+    // 用 memcpy 避免未对齐的问题
+    std::memcpy(&tag, p, sizeof(int));
+    p += sizeof(tag);// 
+    std::memcpy(&length, p, sizeof(int));
+    p += sizeof(length);
+
+    if (length < 0)
+        return false;
+    if (raw.size() < 2 * sizeof(int) + length)
+    {
+        return false; // 包体不完整
+    }
+
+    msg.tag = tag;
+    msg.length = length;
+    msg.value.assign(p, length);
+    return true; // ✅ 别忘了
+}
+
+std::string ProtocolParser::serialize(const Message &msg)
+{
+    string raw;
+    raw.reserve(msg.length + 2 * sizeof(int)); // 预留空间
+
+    // 消息写入内存
+    raw.append(reinterpret_cast<const char *>(&msg.tag), sizeof(int));
+    raw.append(reinterpret_cast<const char *>(&msg.length), sizeof(int));
+    raw.append(msg.value);
+
+    return raw;
+}===== ProtocolParser.hpp =====
+#pragma once
+#include <iostream>
+
+struct Message
+{
+    int tag;
+    int length;
+    std::string value;
+};
+
+class ProtocolParser
+{
+public:
+    ProtocolParser() {}
+    ~ProtocolParser() {}
+
+    // 从字节流解析为 Message
+    static bool Parse(const std::string &raw,Message &msg);
+    // 将Message序列化为字节流
+    static std::string serialize(const Message &msg);
+};
+===== SearchEngineServer.cpp =====
+#include "SearchEngineServer.hpp"
+#include "Logger.hpp"
+#include "ProtocolParser.hpp"
+#include "KeyRecommander.hpp"
+#include <functional>
+#include <iostream>
+using namespace std;
+
+SearchEngineServer::SearchEngineServer(const std::string &ip, int port)
+    : _tcpserver(ip, port), _threadpool(4, 10) {}
+
+void SearchEngineServer::start()
+{
+    _threadpool.start();
+    // 注册三个回调函数
+    _tcpserver.setAllCallback(
+        std::bind(&SearchEngineServer::onConnection, this, std::placeholders::_1),
+        std::bind(&SearchEngineServer::onMessage, this, std::placeholders::_1),
+        std::bind(&SearchEngineServer::onClose, this, std::placeholders::_1));
+
+    LOG_INFO("SearchEngineServer start ...");
+    _tcpserver.start();
+}
+
+void SearchEngineServer::stop()
+{
+    _threadpool.stop();
+    _tcpserver.stop();
+    LOG_INFO("SearchEngineServer stop ...");
+}
+
+void SearchEngineServer::onConnection(const TcpConnectionPtr &conn)
+{
+    string msg = conn->toString() + " has connected.";
+    LOG_INFO(msg.c_str());
+}
+
+// 任务到达，让线程池来执行任务
+void SearchEngineServer::onMessage(const TcpConnectionPtr &conn)
+{
+    string msg = conn->receive(); // 已经是完整包
+    if (!msg.empty())
+    {
+        LOG_INFO(("received msg size=" + to_string(msg.size())).c_str());
+        _threadpool.addTask(std::bind(&SearchEngineServer::doTaskThread, this, conn, msg));
+    }
+    else
+    {
+        LOG_INFO("peer closed connection");
+    }
+}
+
+void SearchEngineServer::onClose(const TcpConnectionPtr &conn)
+{
+    string msg = conn->toString() + " has closed.";
+    LOG_INFO(msg.c_str());
+}
+
+void SearchEngineServer::doTaskThread(const TcpConnectionPtr &conn, std::string &msg)
+{
+    // 这里可以使用 ProtocolParser 解包
+    Message message;
+    if (!ProtocolParser::Parse(msg, message)) {
+        LOG_WARN("Protocol parse error");
+        conn->sendInLoop("{\"error\":\"Parse error\"}\n");
+        return;
+    }
+
+    static KeyRecommander recommander(
+        "../data/endict.dat", "../data/cndict.dat",
+        "../data/enindex.dat", "../data/cnindex.dat");
+
+    bool isChinese = (unsigned char)message.value[0] & 0x80;
+
+    std::string jsonResult;
+    if (isChinese) {
+        jsonResult = recommander.doQueryCn(message.value, 5);
+    } else {
+        jsonResult = recommander.doQueryEn(message.value, 5);
+    }
+
+    conn->sendInLoop(jsonResult + "\n");
+    LOG_INFO("Query result sent to client");
+}
+===== SearchEngineServer.hpp =====
+#pragma once
+#include "TcpServer.hpp"
+#include "ThreadPool.hpp"
+class SearchEngineServer
+{
+public:
+    SearchEngineServer(const std::string &ip,int port);
+    ~SearchEngineServer() = default;
+    void start();
+    void stop();
+    void onConnection(const TcpConnectionPtr &cb_conn);
+    void onMessage(const TcpConnectionPtr &cb_mess);
+    void onClose(const TcpConnectionPtr &cb_close);
+    void doTaskThread(const TcpConnectionPtr &, std::string &msg);
+
+private:
+    TcpServer _tcpserver;
+    ThreadPool _threadpool;
+};
+
+===== Socket.cpp =====
+/**
+ * Project 66th
+ */
+
+#include "Socket.hpp"
+
+/**
+ * Socket implementation
+ */
+
+Socket::Socket()
+{
+    _fd = socket(AF_INET,SOCK_STREAM,0);
+    if(_fd < 0){
+        perror("socket");
+        return;
+    }
+}
+
+/**
+ * @param fd
+ */
+Socket::Socket(int fd)
+{
+    _fd = fd;
+}
+
+Socket::~Socket()
+{
+}
+
+/**
+ * @return int
+ */
+int Socket::getFd()
+{
+    return _fd;
+}===== Socket.hpp =====
+/**
+ * Project 66th
+ */
+
+#pragma once
+#include <sys/types.h> 
+#include <sys/socket.h>
+#include <iostream>
+
+class Socket
+{
+public:
+    Socket();
+
+    /**
+     * @param fd
+     */
+    explicit Socket(int fd);
+
+    ~Socket();
+
+    int getFd();
+
+private:
+    int _fd;
+};
+===== SocketIO.cpp =====
+/**
+ * Project 66th
+ */
+
+#include "SocketIO.hpp"
+
+/**
+ * SocketIO implementation
+ */
+
+/**
+ * @param fd
+ */
+SocketIO::SocketIO(int fd) : _fd(fd)
+{
+}
+
+SocketIO::~SocketIO()
+{
+}
+
+/**
+ * @param buf
+ * @param len
+ * @return int
+ */
+int SocketIO::readn(char *buf, int len)
+{
+    int left = len;
+    char *pstr = buf;
+    while (left > 0)
+    {
+        int nread = ::recv(_fd, pstr, left, 0);
+        if (nread < 0)
+        {
+            if (errno == EINTR)
+                continue;      // 被信号打断重试
+            return len - left; // 出错返回已读字节数
+        }
+        else if (nread == 0)
+        {
+            return len - left; // 对端关闭
+        }
+        else
+        {
+            left -= nread;
+            pstr += nread;
+        }
+    }
+    return len;
+}
+
+/**
+ * @param buf
+ * @param len
+ * @return int
+ */
+int SocketIO::readLine(char *buf, int len)
+{
+    int total = 0, ret = 0;
+    int left = len - 1; // 预留1字节放字符串结尾'\0'
+    char *pstr = buf;
+
+    while (left > 0)
+    {
+        int ret = recv(_fd, pstr, left, MSG_PEEK);
+        if (ret == 0)
+        {
+            break; // 对端关闭
+        }
+        else if (ret == -1 && errno == EINTR)
+        {
+            continue; // 发生中断
+        }
+        else // peek到数据，查找有无'\n'
+        {
+            int idx = 0;
+            for (; idx < ret; ++idx)
+            {
+                if (pstr[idx] == '\n')
+                { // 找到了就消费掉socket缓冲区
+                    int size = idx + 1;
+                    if (readn(pstr, size) != size)
+                        return -1;
+                    pstr += size;
+                    total += size;
+                    *pstr = '\0';
+                    return total;
+                }
+            }
+            // 没有找到\n,把peek到的全部读出来
+            if (readn(pstr, ret) != ret)
+                return -1;
+            pstr += ret;
+            left -= ret;
+            total += ret;
+        }
+    }
+    *pstr = '\0';
+    return total;
+}
+
+/**
+ * @param buf
+ * @param len
+ * @return int
+ */
+int SocketIO::writen(char *buf, int len)
+{
+    int left = len;
+    char *pstr = buf;
+    while (left > 0)
+    {
+        int nwrite = write(_fd, pstr, left);
+        if (nwrite == 0)
+        {
+            break; // 对端关闭
+        }
+        else if (nwrite == -1 && errno == EINTR)
+        {
+            continue; // 发生中断
+        }
+        else
+        {
+            left -= nwrite;
+            pstr += nwrite;
+        }
+    }
+    return len;
+}===== SocketIO.hpp =====
+/**
+ * Project 66th
+ */
+
+#pragma once
+#include <string>
+#include <unistd.h>
+#include <errno.h>
+#include <sys/socket.h>
+using std::string;
+class SocketIO
+{
+public:
+    /**
+     * @param fd
+     */
+    explicit SocketIO(int fd);
+
+    ~SocketIO();
+
+    /**
+     * @param buf
+     * @param len
+     */
+    int readn(char *buf, int len);
+
+    /**
+     * @param buf
+     * @param len
+     */
+    int readLine(char *buf, int len);
+
+    /**
+     * @param buf
+     * @param len
+     */
+    int writen(char *buf, int len);
+
+private:
+    int _fd;
+};
+===== TaskQueue.cpp =====
+/**
+ * Project 66th
+ */
+
+
+#include "TaskQueue.hpp"
+
+/**
+ * TaskQueue implementation
+ */
+
+
+/**
+ * @param capa
+ */
+TaskQueue::TaskQueue(size_t capa) 
+    : m_capacity(capa)
+{}
+
+TaskQueue::~TaskQueue() 
+{}
+
+/**
+ * @param value
+ * @return void
+ */
+//生产者线程会调用push函数
+void TaskQueue::push(ElemType && value) {
+    //1.先上锁
+    unique_lock<mutex> ul(m_mtx);
+
+    //2.判满
+    /* if(full()) */
+    while(full())//防止虚假唤醒
+    {
+        //如果TaskQueue是满的，就应该让
+        //生产者在条件变量上等待
+        m_notFull.wait(ul);
+        //底层原理是：让生产者线程阻塞，
+        //会先释放锁，等到被唤醒时再重新持有锁
+    }
+
+    //如果TaskQueue不是满的，
+    //生产者线程就可以将生产的数据加入TaskQueue
+    m_que.push(std::move(value));
+
+    //唤醒消费者，可以开始消费仓库中的数据
+    m_notEmpty.notify_one();
+
+    //3.解锁（自动进行）
+}
+
+/**
+ * @return int
+ */
+//消费者线程会调用pop函数
+ElemType TaskQueue::pop() {
+    unique_lock<mutex> ul(m_mtx);
+
+    //因为此处仅仅以任务队列是否为空作为判断条件
+    //所以最后线程池退出时唤醒了子线程
+    //又会马上陷入阻塞
+    //
+    //任务队列为空，且线程池不退出，那么应该阻塞子线程
+    //任务队列为空，且线程池退出，那么不应该阻塞子线程
+    while(empty() && m_flag)
+    {
+        m_notEmpty.wait(ul);
+    }
+
+    //m_flag为true意味着线程池不退出
+    //能够通过前面的循环完全是因为empty()的结果为false
+    //代表着任务队列中有任务
+    //才能进行取任务
+    if(m_flag)
+    {
+        ElemType temp = m_que.front();
+        m_que.pop();
+
+        //唤醒生产者
+        m_notFull.notify_one();
+
+        return temp;
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+/**
+ * @return bool
+ */
+bool TaskQueue::full() {
+    return m_que.size() == m_capacity;
+}
+
+/**
+ * @return bool
+ */
+bool TaskQueue::empty() {
+    return m_que.size() == 0;
+}
+
+void TaskQueue::wakeup()
+{
+    m_flag = false;
+    m_notEmpty.notify_all();
+}
+===== TaskQueue.hpp =====
+/**
+ * Project 66th
+ */
+
+
+#pragma once
+
+#include <iostream>
+#include <functional>
+#include <queue>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+using std::cout;
+using std::endl;
+using std::queue;
+using std::thread;
+using std::mutex;
+using std::unique_lock;
+using std::lock_guard;
+using std::condition_variable;
+using std::function;
+using std::bind;
+
+extern mutex coutMtx;
+
+using ElemType = function<void()>;
+
+class TaskQueue {
+public: 
+
+    /**
+     * @param capa
+     */
+    TaskQueue(size_t capa);
+
+    ~TaskQueue();
+
+    /**
+     * @param value
+     */
+    //往TaskQueue中添加数据（任务）
+    void push(ElemType && value);
+
+    //从TaskQueue中获取数据（任务）
+    ElemType pop();
+
+    //判满和判空，对应的状态下
+    //应该让（生产者或消费者）线程等待
+    bool full();    
+    bool empty();
+    
+    //线程池退出时唤醒所有阻塞在m_notEmpty上的子线程
+    void wakeup();
+
+
+private: 
+    size_t m_capacity;//容量
+    queue<ElemType> m_que;//存放数据的数据结构
+    mutex m_mtx;//TaskQueue中的数据是共享资源，需要锁管理
+    condition_variable m_notEmpty;//非空条件变量
+    condition_variable m_notFull;//非满条件变量
+    
+    //添加一个标志位，参与到pop的判断中
+    //为了让线程池退出时，子线程能够不再阻塞
+    bool m_flag = true;                
+};
+
+===== TcpConnection.cpp =====
+/**
+ * Project 66th
+ */
+
+#include "TcpConnection.hpp"
+#include "Logger.hpp"
+#include <cstring>
+#include <iostream>
+
+/**
+ * TcpConnection implementation
+ */
+
+/**
+ * @param fd
+ * @param loop
+ */
+TcpConnection::TcpConnection(int fd, EventLoop *loop)
+    : _sock(fd), _sockIO(fd), _localAddr(getLocalAddr()), _peerAddr(getPeerAddr()), _loop(loop)
+{
+}
+
+TcpConnection::~TcpConnection()
+{
+}
+
+/**
+ * @return bool
+ */
+// 进行一次复制式的预读取
+// 如果读到的字符数为0，代表连接已经断开了
+bool TcpConnection::isClosed()
+{
+    char buf[5] = {0};
+    int ret = ::recv(_sock.getFd(), buf, sizeof(buf), MSG_PEEK);
+    if (ret < 0)
+    {
+        LOG_ERROR("recv(MSG_PEEK) failed");
+    }
+    return 0 == ret;
+}
+
+/**
+ * @return string
+ */
+string TcpConnection::receive()
+{
+    // 先读 8 字节头
+    int headSize = sizeof(int) * 2;
+    char header[8] = {0};
+    int n = _sockIO.readn(header, headSize);
+    if (n == 0)
+    {
+        return ""; // 对端关闭
+    }
+    else if (n < headSize)
+    {
+        return ""; // 不完整
+    }
+
+    int tag = 0;
+    int length = 0;
+    memcpy(&tag, header, 4);
+    memcpy(&length, header + 4, 4);
+
+    if (length < 0 || length > 10 * 1024 * 1024)
+    {
+        LOG_ERROR(("Invalid packet length: " + std::to_string(length)).c_str());
+        return "";
+    }
+
+    string value(length, '\0');
+    n = _sockIO.readn(&value[0], length);
+    if (n < length)
+    {
+        LOG_WARN("Incomplete packet received");
+        return "";
+    }
+
+    // 返回完整二进制包（头+体）
+    string packet;
+    packet.append(header, headSize);
+    packet.append(value);
+    LOG_DEBUG(("Received packet length=" + std::to_string(length)).c_str());
+    return packet;
+}
+
+/**
+ * @param msg
+ * @return void
+ */
+void TcpConnection::send(const string &msg)
+{
+    int n = _sockIO.writen(const_cast<char *>(msg.c_str()), msg.size());
+    if (n < (int)msg.size())
+    {
+        LOG_ERROR("send failed or partial write");
+    }
+    else
+    {
+        LOG_DEBUG(("send success size=" + std::to_string(msg.size())).c_str());
+    }
+}
+/**
+ * @param msg
+ * @return void
+ */
+void TcpConnection::sendInLoop(const string &msg)
+{
+    auto con = shared_from_this();
+    _loop->runInLoop([con, msg]
+                     { con->send(msg); });
+}
+
+/**
+ * @return string
+ */
+string TcpConnection::toString()
+{
+    ostringstream oss;
+    oss << _localAddr.getIp() << ":" << _localAddr.getPort() << "->" << _peerAddr.getIp() << ":" << _peerAddr.getPort();
+    return oss.str();
+}
+
+/**
+ * @param cb
+ */
+void TcpConnection::setNewConnectionCallback(const TcpConnectionCallBack &cb)
+{
+    _onNewConnection = cb;
+}
+
+/**
+ * @param cb
+ */
+void TcpConnection::setMessageCallback(const TcpConnectionCallBack &cb)
+{
+    _onMessage = cb;
+}
+
+/**
+ * @param cb
+ */
+void TcpConnection::setCloseCallback(const TcpConnectionCallBack &cb)
+{
+    _onClose = cb;
+}
+
+/**
+ * @return void
+ */
+void TcpConnection::handleNewConnectionCallback()
+{
+    if (_onNewConnection)
+        _onNewConnection(shared_from_this());
+}
+
+/**
+ * @return void
+ */
+void TcpConnection::handleMessageCallback()
+{
+    if (_onMessage)
+        _onMessage(shared_from_this());
+}
+
+/**
+ * @return void
+ */
+void TcpConnection::handleCloseCallback()
+{
+    if (_onClose)
+        _onClose(shared_from_this());
+}
+
+/**
+ * @return InetAddress
+ */
+InetAddress TcpConnection::getLocalAddr()
+{
+    struct sockaddr_in localaddr;
+    socklen_t addr_len = sizeof(localaddr);
+    int ret = getsockname(_sock.getFd(), (struct sockaddr *)&localaddr, &addr_len);
+    if (ret < 0)
+    {
+        perror("getsockname");
+    }
+    return InetAddress(localaddr);
+}
+
+/**
+ * @return InetAddress
+ */
+InetAddress TcpConnection::getPeerAddr()
+{
+    struct sockaddr_in peeraddr;
+    socklen_t addr_len = sizeof(peeraddr);
+    int ret = getpeername(_sock.getFd(), (struct sockaddr *)&peeraddr, &addr_len);
+    if (ret < 0)
+    {
+        perror("getpeername");
+    }
+    return InetAddress(peeraddr);
+}===== TcpConnection.hpp =====
+/**
+ * Project 66th
+ */
+
+#pragma once
+#include "SocketIO.hpp"
+#include "Socket.hpp"
+#include "InetAddress.hpp"
+#include "EventLoop.hpp"
+#include <string>
+#include <sstream>
+#include <memory>
+#include <functional>
+using std::function;
+using std::ostringstream;
+using std::shared_ptr;
+using std::string;
+class TcpConnection;
+class EventLoop;
+using TcpConnectionPtr = shared_ptr<TcpConnection>;
+using TcpConnectionCallBack = function<void(const TcpConnectionPtr &)>;
+class TcpConnection : public std::enable_shared_from_this<TcpConnection>
+{
+public:
+    /**
+     * @param fd
+     * @param loop
+     */
+    TcpConnection(int fd, EventLoop *loop);
+
+    ~TcpConnection();
+
+    bool isClosed();
+
+    string receive();
+
+    /**
+     * @param msg
+     */
+    void send(const string &msg);
+
+    /**
+     * @param msg
+     */
+    void sendInLoop(const string &msg);
+
+    string toString();
+
+    /**
+     * @param cb
+     */
+    void setNewConnectionCallback(const TcpConnectionCallBack &cb);
+
+    /**
+     * @param cb
+     */
+    void setMessageCallback(const TcpConnectionCallBack &cb);
+
+    /**
+     * @param cb
+     */
+    void setCloseCallback(const TcpConnectionCallBack &cb);
+
+    void handleNewConnectionCallback();
+
+    void handleMessageCallback();
+
+    void handleCloseCallback();
+
+private:
+    EventLoop *_loop;
+    SocketIO _sockIO;
+    Socket _sock;
+    InetAddress _localAddr;
+    InetAddress _peerAddr;
+    TcpConnectionCallBack _onNewConnection;
+    TcpConnectionCallBack _onMessage;
+    TcpConnectionCallBack _onClose;
+
+    InetAddress getLocalAddr();
+
+    InetAddress getPeerAddr();
+};
+
+===== TcpServer.cpp =====
+/**
+ * Project 66th
+ */
+
+#include "TcpServer.hpp"
+#include "EventLoop.hpp"
+
+/**
+ * TcpServer implementation
+ */
+
+/**
+ * @param ip
+ * @param port
+ */
+TcpServer::TcpServer(const string &ip, unsigned short port)
+    : _acceptor(ip, port), _loop(_acceptor)
+{
+}
+
+TcpServer::~TcpServer()
+{
+}
+
+/**
+ * @param cb1
+ * @param cb2
+ * @param cb3
+ * @return void
+ */
+void TcpServer::setAllCallback(callback &&cb1, callback &&cb2, callback &&cb3)
+{
+    _loop.setNewConnectionCallBack(std::move(cb1));
+    _loop.setMessageCallBack(std::move(cb2));
+    _loop.setCloseCallBack(std::move(cb3));
+}
+
+/**
+ * @return void
+ */
+void TcpServer::start()
+{
+    _acceptor.ready();
+    _loop.loop();
+}
+
+/**
+ * @return void
+ */
+void TcpServer::stop()
+{
+    _loop.unloop();
+}
+===== TcpServer.hpp =====
+/**
+ * Project 66th
+ */
+
+
+#pragma once
+
+#include "Acceptor.hpp"
+#include "EventLoop.hpp"
+
+
+class TcpServer {
+public: 
+    using callback = function<void(const TcpConnectionPtr &)>;
+    /**
+     * @param ip
+     * @param port
+     */
+    TcpServer(const string & ip, unsigned short port);
+
+    ~TcpServer();
+
+    void start();
+
+    void stop();
+
+    /**
+     * @param cb1
+     * @param cb2
+     * @param cb3
+     */
+    void setAllCallback(callback && cb1, callback && cb2, callback &&cb3);
+private: 
+    Acceptor _acceptor;
+    EventLoop _loop;
+};
+
+
+===== ThreadPool.cpp =====
+/**
+ * Project 66th
+ */
+
+
+#include "ThreadPool.hpp"
+#include <unistd.h>
+
+/**
+ * ThreadPool implementation
+ */
+
+
+/**
+ * @param threadNum
+ * @param queSize
+ */
+ThreadPool::ThreadPool(size_t threadNum, size_t queSize) 
+: m_threadNum(threadNum)
+, m_threads()
+, m_queSize(queSize)
+, m_que(m_queSize)
+, m_isExit(false)
+{
+
+}
+
+ThreadPool::~ThreadPool() {
+
+}
+
+/**
+ * @return void
+ */
+//线程池启动
+void ThreadPool::start() {
+    for(size_t idx = 0; idx < m_threadNum; ++idx)
+    {
+        //线程池启动后，需要创建m_threadNum个子线程备用
+        //但是往vector中进行push_back时不能传左值thread
+        //因为这样会触发thread的拷贝构造，
+        //而thread拷贝构造被删除
+        //
+        /* thread th(&ThreadPool::doTask,this); */
+        /* m_threads.push_back(std::move(th)); */
+
+        m_threads.push_back(thread(&ThreadPool::doTask,this));
+    }
+}
+
+/**
+ * @return void
+*/
+//关闭线程池
+void ThreadPool::stop() {
+    //主线程执行stop函数时不应该轻易地改变标志位
+    //如果发现任务队列不为空，说明还有任务没有执行完
+    while(!m_que.empty())
+    {
+        sleep(1);
+    }
+
+    //修改标志位，表示线程池要退出
+    m_isExit = true;
+
+    //需要将threadPool声明为TaskQueue的友元类
+    /* m_que.m_notEmpty.notify_all(); */
+    m_que.wakeup();
+    
+    //让主线程等待子线程退出
+    for(auto & th : m_threads)
+    {
+        th.join();
+    }
+}
+
+/**
+ * @param ptask
+ * @return void
+ */
+void ThreadPool::addTask(ElemType && ptask) {
+    //因为如果出现空指针调用虚函数的情况
+    //一定会发生段错误，所以做一个检查
+    if(ptask)
+    {
+        //生产者线程把任务往TaskQueue里面加
+        //加锁
+        //判满，
+        //如果满就阻塞
+        //如果不满就push，并且唤醒阻塞的消费者线程（子线程）
+        m_que.push(std::move(ptask)); //已经实现过了！！！
+    }
+}
+
+/**
+ * @return ElemType
+ */
+//从TaskQueue中获取任务
+ElemType ThreadPool::getTask() {
+    return m_que.pop(); //已经实现过了！！！
+}
+
+/**
+ * @return void
+ */
+//doTask被注册为工作线程的入口函数
+void ThreadPool::doTask() {
+    //只要线程池不退出，就应该让工作线程一直执行任务
+    while(!m_isExit){
+        //如果任务队列为空，就让工作线程阻塞
+        ElemType ptask = getTask();
+        
+        if(ptask)
+        {
+            ptask();
+            /* sleep(3); */
+        }
+        else
+        {
+            cout << "ptask == nullptr" << endl;
+        }
+    }
+}
+===== ThreadPool.hpp =====
+/**
+ * Project 66th
+ */
+
+
+#pragma once
+#include "TaskQueue.hpp"
+#include <vector>
+using std::vector;
+
+
+class ThreadPool {
+public: 
+    
+/**
+ * @param threadNum
+ * @param queSize
+ */
+
+//构造函数的两个参数代表子线程的个数和任务队列的容量
+ThreadPool(size_t threadNum, size_t queSize);
+~ThreadPool();
+    
+//提供线程池启动和关闭的函数
+void start();
+void stop();
+    
+/**
+ * @param ptask
+ */
+//生产者线程可以往线程池中添加任务
+void addTask(ElemType && ptask);
+
+private: 
+    size_t m_threadNum;
+    vector<thread> m_threads;
+    size_t m_queSize;
+    TaskQueue m_que;
+    bool m_isExit;
+
+//在doTask中调用，就是从任务队列中取任务以便后续执行
+ElemType getTask();
+
+//注册给工作线程作为入口函数
+void doTask();
+};
+

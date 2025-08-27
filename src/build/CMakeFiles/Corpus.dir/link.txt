@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/Corpus.dir/buildCorpus.cpp.o CMakeFiles/Corpus.dir/KeywordProcessor.cpp.o CMakeFiles/Corpus.dir/PageProcessor.cpp.o CMakeFiles/Corpus.dir/DirectoryScanner.cpp.o -o ../Corpus  -llog4cpp -ltinyxml2 
