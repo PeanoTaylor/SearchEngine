@@ -125,10 +125,24 @@ CMakeFiles/SearchEngine.dir/KeyRecommander.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/SearchEngine.dir/KeyRecommander.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zhang/SearchEngine/src/KeyRecommander.cpp -o CMakeFiles/SearchEngine.dir/KeyRecommander.cpp.s
 
+CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.o: CMakeFiles/SearchEngine.dir/flags.make
+CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.o: ../WebPageSearcher.cpp
+CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.o: CMakeFiles/SearchEngine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.o -MF CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.o.d -o CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.o -c /home/zhang/SearchEngine/src/WebPageSearcher.cpp
+
+CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/zhang/SearchEngine/src/WebPageSearcher.cpp > CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.i
+
+CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/zhang/SearchEngine/src/WebPageSearcher.cpp -o CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.s
+
 CMakeFiles/SearchEngine.dir/Logger.cpp.o: CMakeFiles/SearchEngine.dir/flags.make
 CMakeFiles/SearchEngine.dir/Logger.cpp.o: ../Logger.cpp
 CMakeFiles/SearchEngine.dir/Logger.cpp.o: CMakeFiles/SearchEngine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/SearchEngine.dir/Logger.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/SearchEngine.dir/Logger.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SearchEngine.dir/Logger.cpp.o -MF CMakeFiles/SearchEngine.dir/Logger.cpp.o.d -o CMakeFiles/SearchEngine.dir/Logger.cpp.o -c /home/zhang/SearchEngine/src/Logger.cpp
 
 CMakeFiles/SearchEngine.dir/Logger.cpp.i: cmake_force
@@ -142,7 +156,7 @@ CMakeFiles/SearchEngine.dir/Logger.cpp.s: cmake_force
 CMakeFiles/SearchEngine.dir/main.cpp.o: CMakeFiles/SearchEngine.dir/flags.make
 CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp
 CMakeFiles/SearchEngine.dir/main.cpp.o: CMakeFiles/SearchEngine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/SearchEngine.dir/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/SearchEngine.dir/main.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SearchEngine.dir/main.cpp.o -MF CMakeFiles/SearchEngine.dir/main.cpp.o.d -o CMakeFiles/SearchEngine.dir/main.cpp.o -c /home/zhang/SearchEngine/src/main.cpp
 
 CMakeFiles/SearchEngine.dir/main.cpp.i: cmake_force
@@ -156,7 +170,7 @@ CMakeFiles/SearchEngine.dir/main.cpp.s: cmake_force
 CMakeFiles/SearchEngine.dir/ProtocolParser.cpp.o: CMakeFiles/SearchEngine.dir/flags.make
 CMakeFiles/SearchEngine.dir/ProtocolParser.cpp.o: ../ProtocolParser.cpp
 CMakeFiles/SearchEngine.dir/ProtocolParser.cpp.o: CMakeFiles/SearchEngine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/SearchEngine.dir/ProtocolParser.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/SearchEngine.dir/ProtocolParser.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SearchEngine.dir/ProtocolParser.cpp.o -MF CMakeFiles/SearchEngine.dir/ProtocolParser.cpp.o.d -o CMakeFiles/SearchEngine.dir/ProtocolParser.cpp.o -c /home/zhang/SearchEngine/src/ProtocolParser.cpp
 
 CMakeFiles/SearchEngine.dir/ProtocolParser.cpp.i: cmake_force
@@ -170,7 +184,7 @@ CMakeFiles/SearchEngine.dir/ProtocolParser.cpp.s: cmake_force
 CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o: CMakeFiles/SearchEngine.dir/flags.make
 CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o: ../SearchEngineServer.cpp
 CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o: CMakeFiles/SearchEngine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o -MF CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o.d -o CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o -c /home/zhang/SearchEngine/src/SearchEngineServer.cpp
 
 CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.i: cmake_force
@@ -184,7 +198,7 @@ CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.s: cmake_force
 CMakeFiles/SearchEngine.dir/Socket.cpp.o: CMakeFiles/SearchEngine.dir/flags.make
 CMakeFiles/SearchEngine.dir/Socket.cpp.o: ../Socket.cpp
 CMakeFiles/SearchEngine.dir/Socket.cpp.o: CMakeFiles/SearchEngine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/SearchEngine.dir/Socket.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/SearchEngine.dir/Socket.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SearchEngine.dir/Socket.cpp.o -MF CMakeFiles/SearchEngine.dir/Socket.cpp.o.d -o CMakeFiles/SearchEngine.dir/Socket.cpp.o -c /home/zhang/SearchEngine/src/Socket.cpp
 
 CMakeFiles/SearchEngine.dir/Socket.cpp.i: cmake_force
@@ -198,7 +212,7 @@ CMakeFiles/SearchEngine.dir/Socket.cpp.s: cmake_force
 CMakeFiles/SearchEngine.dir/SocketIO.cpp.o: CMakeFiles/SearchEngine.dir/flags.make
 CMakeFiles/SearchEngine.dir/SocketIO.cpp.o: ../SocketIO.cpp
 CMakeFiles/SearchEngine.dir/SocketIO.cpp.o: CMakeFiles/SearchEngine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/SearchEngine.dir/SocketIO.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/SearchEngine.dir/SocketIO.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SearchEngine.dir/SocketIO.cpp.o -MF CMakeFiles/SearchEngine.dir/SocketIO.cpp.o.d -o CMakeFiles/SearchEngine.dir/SocketIO.cpp.o -c /home/zhang/SearchEngine/src/SocketIO.cpp
 
 CMakeFiles/SearchEngine.dir/SocketIO.cpp.i: cmake_force
@@ -212,7 +226,7 @@ CMakeFiles/SearchEngine.dir/SocketIO.cpp.s: cmake_force
 CMakeFiles/SearchEngine.dir/TaskQueue.cpp.o: CMakeFiles/SearchEngine.dir/flags.make
 CMakeFiles/SearchEngine.dir/TaskQueue.cpp.o: ../TaskQueue.cpp
 CMakeFiles/SearchEngine.dir/TaskQueue.cpp.o: CMakeFiles/SearchEngine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/SearchEngine.dir/TaskQueue.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/SearchEngine.dir/TaskQueue.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SearchEngine.dir/TaskQueue.cpp.o -MF CMakeFiles/SearchEngine.dir/TaskQueue.cpp.o.d -o CMakeFiles/SearchEngine.dir/TaskQueue.cpp.o -c /home/zhang/SearchEngine/src/TaskQueue.cpp
 
 CMakeFiles/SearchEngine.dir/TaskQueue.cpp.i: cmake_force
@@ -226,7 +240,7 @@ CMakeFiles/SearchEngine.dir/TaskQueue.cpp.s: cmake_force
 CMakeFiles/SearchEngine.dir/TcpConnection.cpp.o: CMakeFiles/SearchEngine.dir/flags.make
 CMakeFiles/SearchEngine.dir/TcpConnection.cpp.o: ../TcpConnection.cpp
 CMakeFiles/SearchEngine.dir/TcpConnection.cpp.o: CMakeFiles/SearchEngine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/SearchEngine.dir/TcpConnection.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/SearchEngine.dir/TcpConnection.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SearchEngine.dir/TcpConnection.cpp.o -MF CMakeFiles/SearchEngine.dir/TcpConnection.cpp.o.d -o CMakeFiles/SearchEngine.dir/TcpConnection.cpp.o -c /home/zhang/SearchEngine/src/TcpConnection.cpp
 
 CMakeFiles/SearchEngine.dir/TcpConnection.cpp.i: cmake_force
@@ -240,7 +254,7 @@ CMakeFiles/SearchEngine.dir/TcpConnection.cpp.s: cmake_force
 CMakeFiles/SearchEngine.dir/TcpServer.cpp.o: CMakeFiles/SearchEngine.dir/flags.make
 CMakeFiles/SearchEngine.dir/TcpServer.cpp.o: ../TcpServer.cpp
 CMakeFiles/SearchEngine.dir/TcpServer.cpp.o: CMakeFiles/SearchEngine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/SearchEngine.dir/TcpServer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/SearchEngine.dir/TcpServer.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SearchEngine.dir/TcpServer.cpp.o -MF CMakeFiles/SearchEngine.dir/TcpServer.cpp.o.d -o CMakeFiles/SearchEngine.dir/TcpServer.cpp.o -c /home/zhang/SearchEngine/src/TcpServer.cpp
 
 CMakeFiles/SearchEngine.dir/TcpServer.cpp.i: cmake_force
@@ -254,7 +268,7 @@ CMakeFiles/SearchEngine.dir/TcpServer.cpp.s: cmake_force
 CMakeFiles/SearchEngine.dir/ThreadPool.cpp.o: CMakeFiles/SearchEngine.dir/flags.make
 CMakeFiles/SearchEngine.dir/ThreadPool.cpp.o: ../ThreadPool.cpp
 CMakeFiles/SearchEngine.dir/ThreadPool.cpp.o: CMakeFiles/SearchEngine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/SearchEngine.dir/ThreadPool.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/SearchEngine.dir/ThreadPool.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SearchEngine.dir/ThreadPool.cpp.o -MF CMakeFiles/SearchEngine.dir/ThreadPool.cpp.o.d -o CMakeFiles/SearchEngine.dir/ThreadPool.cpp.o -c /home/zhang/SearchEngine/src/ThreadPool.cpp
 
 CMakeFiles/SearchEngine.dir/ThreadPool.cpp.i: cmake_force
@@ -271,6 +285,7 @@ SearchEngine_OBJECTS = \
 "CMakeFiles/SearchEngine.dir/EventLoop.cpp.o" \
 "CMakeFiles/SearchEngine.dir/InetAddress.cpp.o" \
 "CMakeFiles/SearchEngine.dir/KeyRecommander.cpp.o" \
+"CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.o" \
 "CMakeFiles/SearchEngine.dir/Logger.cpp.o" \
 "CMakeFiles/SearchEngine.dir/main.cpp.o" \
 "CMakeFiles/SearchEngine.dir/ProtocolParser.cpp.o" \
@@ -289,6 +304,7 @@ SearchEngine_EXTERNAL_OBJECTS =
 ../SearchEngine: CMakeFiles/SearchEngine.dir/EventLoop.cpp.o
 ../SearchEngine: CMakeFiles/SearchEngine.dir/InetAddress.cpp.o
 ../SearchEngine: CMakeFiles/SearchEngine.dir/KeyRecommander.cpp.o
+../SearchEngine: CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.o
 ../SearchEngine: CMakeFiles/SearchEngine.dir/Logger.cpp.o
 ../SearchEngine: CMakeFiles/SearchEngine.dir/main.cpp.o
 ../SearchEngine: CMakeFiles/SearchEngine.dir/ProtocolParser.cpp.o
@@ -301,7 +317,7 @@ SearchEngine_EXTERNAL_OBJECTS =
 ../SearchEngine: CMakeFiles/SearchEngine.dir/ThreadPool.cpp.o
 ../SearchEngine: CMakeFiles/SearchEngine.dir/build.make
 ../SearchEngine: CMakeFiles/SearchEngine.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking CXX executable ../SearchEngine"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/zhang/SearchEngine/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Linking CXX executable ../SearchEngine"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/SearchEngine.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

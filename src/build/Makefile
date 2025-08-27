@@ -566,6 +566,30 @@ ThreadPool.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SearchEngine.dir/build.make CMakeFiles/SearchEngine.dir/ThreadPool.cpp.s
 .PHONY : ThreadPool.cpp.s
 
+WebPageSearcher.o: WebPageSearcher.cpp.o
+.PHONY : WebPageSearcher.o
+
+# target to build an object file
+WebPageSearcher.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SearchEngine.dir/build.make CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.o
+.PHONY : WebPageSearcher.cpp.o
+
+WebPageSearcher.i: WebPageSearcher.cpp.i
+.PHONY : WebPageSearcher.i
+
+# target to preprocess a source file
+WebPageSearcher.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SearchEngine.dir/build.make CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.i
+.PHONY : WebPageSearcher.cpp.i
+
+WebPageSearcher.s: WebPageSearcher.cpp.s
+.PHONY : WebPageSearcher.s
+
+# target to generate assembly for a file
+WebPageSearcher.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/SearchEngine.dir/build.make CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.s
+.PHONY : WebPageSearcher.cpp.s
+
 buildCorpus.o: buildCorpus.cpp.o
 .PHONY : buildCorpus.o
 
@@ -676,6 +700,9 @@ help:
 	@echo "... ThreadPool.o"
 	@echo "... ThreadPool.i"
 	@echo "... ThreadPool.s"
+	@echo "... WebPageSearcher.o"
+	@echo "... WebPageSearcher.i"
+	@echo "... WebPageSearcher.s"
 	@echo "... buildCorpus.o"
 	@echo "... buildCorpus.i"
 	@echo "... buildCorpus.s"

@@ -15,6 +15,7 @@ add_executable(SearchEngine
     EventLoop.cpp
     InetAddress.cpp
     KeyRecommander.cpp
+    WebPageSearcher.cpp
     Logger.cpp
     main.cpp
     ProtocolParser.cpp

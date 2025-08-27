@@ -10,6 +10,8 @@
 #include <sstream>
 #include <fstream>
 #include <cmath>
+#include <codecvt>
+#include <locale>
 
 using namespace tinyxml2;
 using std::ofstream;
@@ -19,6 +21,7 @@ using std::string;
 using std::unordered_map;
 using std::vector;
 
+// 初始化构造函数
 PageProcessor::PageProcessor()
     : m_tokenizer("/usr/local/dict/jieba.dict.utf8",
                   "/usr/local/dict/hmm_model.utf8",
@@ -37,6 +40,8 @@ PageProcessor::PageProcessor()
         m_stopWords.insert(word);
     }
 }
+
+
 void PageProcessor::process(const std::string &dir)
 {
     extract_documents(dir);

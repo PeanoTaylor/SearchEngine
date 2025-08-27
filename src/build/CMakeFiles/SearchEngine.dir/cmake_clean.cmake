@@ -27,6 +27,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/SearchEngine.dir/TcpServer.cpp.o.d"
   "CMakeFiles/SearchEngine.dir/ThreadPool.cpp.o"
   "CMakeFiles/SearchEngine.dir/ThreadPool.cpp.o.d"
+  "CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.o"
+  "CMakeFiles/SearchEngine.dir/WebPageSearcher.cpp.o.d"
   "CMakeFiles/SearchEngine.dir/main.cpp.o"
   "CMakeFiles/SearchEngine.dir/main.cpp.o.d"
 )

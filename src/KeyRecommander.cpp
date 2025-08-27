@@ -6,6 +6,7 @@
 #include <queue>
 #include <string>
 #include <nlohmann/json.hpp>
+#include <iconv.h>
 
 using std::string;
 using json = nlohmann::json;

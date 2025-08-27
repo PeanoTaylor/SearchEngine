@@ -234,7 +234,7 @@ void KeyWordProcessor::build_cn_index(const string &dict, const string &index)
         return;
     }
 
-    map<string, vector<int>> cnindex; // 中文汉字 -> 行号集合
+    map<string, set<int>> cnindex; // 中文汉字 -> 行号集合
     vector<string> words;             // 保存词典里的单词, 通过行号反查单词
 
     string word;
@@ -252,7 +252,7 @@ void KeyWordProcessor::build_cn_index(const string &dict, const string &index)
             std::string ch;
             utf8::append(cp, std::back_inserter(ch)); // 转回 UTF-8
 
-            cnindex[ch].push_back(lineId); // 建立索引：汉字 -> 行号
+            cnindex[ch].insert(lineId); // 建立索引：汉字 -> 行号
         }
 
         lineId++;

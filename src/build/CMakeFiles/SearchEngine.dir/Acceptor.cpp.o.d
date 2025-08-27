@@ -179,4 +179,52 @@ CMakeFiles/SearchEngine.dir/Acceptor.cpp.o: \
  /usr/include/netinet/in.h /usr/include/x86_64-linux-gnu/bits/in.h \
  /usr/include/x86_64-linux-gnu/sys/time.h \
  /usr/include/x86_64-linux-gnu/sys/epoll.h \
- /usr/include/x86_64-linux-gnu/bits/epoll.h
+ /usr/include/x86_64-linux-gnu/bits/epoll.h \
+ /home/zhang/SearchEngine/src/Logger.hpp \
+ /usr/local/include/log4cpp/OstreamAppender.hh \
+ /usr/local/include/log4cpp/Portability.hh \
+ /usr/local/include/log4cpp/config.h /usr/local/include/log4cpp/Export.hh \
+ /usr/local/include/log4cpp/LayoutAppender.hh \
+ /usr/local/include/log4cpp/AppenderSkeleton.hh \
+ /usr/local/include/log4cpp/Appender.hh /usr/include/c++/11/map \
+ /usr/include/c++/11/bits/stl_tree.h \
+ /usr/include/c++/11/ext/aligned_buffer.h \
+ /usr/include/c++/11/bits/node_handle.h \
+ /usr/include/c++/11/bits/stl_map.h /usr/include/c++/11/tuple \
+ /usr/include/c++/11/utility /usr/include/c++/11/bits/stl_relops.h \
+ /usr/include/c++/11/array /usr/include/c++/11/bits/uses_allocator.h \
+ /usr/include/c++/11/bits/invoke.h \
+ /usr/include/c++/11/bits/stl_multimap.h \
+ /usr/include/c++/11/bits/erase_if.h /usr/include/c++/11/set \
+ /usr/include/c++/11/bits/stl_set.h \
+ /usr/include/c++/11/bits/stl_multiset.h /usr/include/c++/11/vector \
+ /usr/include/c++/11/bits/stl_uninitialized.h \
+ /usr/include/c++/11/bits/stl_vector.h \
+ /usr/include/c++/11/bits/stl_bvector.h \
+ /usr/include/c++/11/bits/vector.tcc \
+ /usr/include/x86_64-linux-gnu/sys/stat.h \
+ /usr/include/x86_64-linux-gnu/bits/stat.h \
+ /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
+ /usr/include/x86_64-linux-gnu/bits/statx.h /usr/include/linux/stat.h \
+ /usr/include/linux/types.h /usr/include/x86_64-linux-gnu/asm/types.h \
+ /usr/include/asm-generic/types.h /usr/include/asm-generic/int-ll64.h \
+ /usr/include/x86_64-linux-gnu/bits/statx-generic.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_statx_timestamp.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_statx.h \
+ /usr/include/fcntl.h /usr/include/x86_64-linux-gnu/bits/fcntl.h \
+ /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
+ /usr/include/linux/falloc.h /usr/local/include/log4cpp/Priority.hh \
+ /usr/local/include/log4cpp/Layout.hh \
+ /usr/local/include/log4cpp/LoggingEvent.hh \
+ /usr/local/include/log4cpp/TimeStamp.hh \
+ /usr/local/include/log4cpp/threading/Threading.hh \
+ /usr/local/include/log4cpp/threading/PThreads.hh /usr/include/assert.h \
+ /usr/local/include/log4cpp/Filter.hh \
+ /usr/local/include/log4cpp/BasicLayout.hh \
+ /usr/local/include/log4cpp/PatternLayout.hh \
+ /usr/local/include/log4cpp/Configurator.hh /usr/include/c++/11/sstream \
+ /usr/include/c++/11/bits/sstream.tcc \
+ /usr/local/include/log4cpp/Category.hh \
+ /usr/local/include/log4cpp/CategoryStream.hh \
+ /usr/local/include/log4cpp/Manipulator.hh \
+ /usr/local/include/log4cpp/convenience.h /usr/include/c++/11/cstdarg

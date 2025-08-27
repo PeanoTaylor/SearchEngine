@@ -228,5 +228,39 @@ CMakeFiles/SearchEngine.dir/TcpConnection.cpp.o: \
  /usr/include/c++/11/bits/algorithmfwd.h \
  /usr/include/c++/11/bits/stl_heap.h \
  /usr/include/c++/11/bits/uniform_int_dist.h /usr/include/c++/11/sstream \
- /usr/include/c++/11/bits/sstream.tcc /usr/include/c++/11/cstring \
- /usr/include/string.h
+ /usr/include/c++/11/bits/sstream.tcc \
+ /home/zhang/SearchEngine/src/Logger.hpp \
+ /usr/local/include/log4cpp/OstreamAppender.hh \
+ /usr/local/include/log4cpp/Portability.hh \
+ /usr/local/include/log4cpp/config.h /usr/local/include/log4cpp/Export.hh \
+ /usr/local/include/log4cpp/LayoutAppender.hh \
+ /usr/local/include/log4cpp/AppenderSkeleton.hh \
+ /usr/local/include/log4cpp/Appender.hh /usr/include/c++/11/set \
+ /usr/include/c++/11/bits/stl_set.h \
+ /usr/include/c++/11/bits/stl_multiset.h \
+ /usr/include/x86_64-linux-gnu/sys/stat.h \
+ /usr/include/x86_64-linux-gnu/bits/stat.h \
+ /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
+ /usr/include/x86_64-linux-gnu/bits/statx.h /usr/include/linux/stat.h \
+ /usr/include/linux/types.h /usr/include/x86_64-linux-gnu/asm/types.h \
+ /usr/include/asm-generic/types.h /usr/include/asm-generic/int-ll64.h \
+ /usr/include/x86_64-linux-gnu/bits/statx-generic.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_statx_timestamp.h \
+ /usr/include/x86_64-linux-gnu/bits/types/struct_statx.h \
+ /usr/include/fcntl.h /usr/include/x86_64-linux-gnu/bits/fcntl.h \
+ /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
+ /usr/include/linux/falloc.h /usr/local/include/log4cpp/Priority.hh \
+ /usr/local/include/log4cpp/Layout.hh \
+ /usr/local/include/log4cpp/LoggingEvent.hh \
+ /usr/local/include/log4cpp/TimeStamp.hh \
+ /usr/local/include/log4cpp/threading/Threading.hh \
+ /usr/local/include/log4cpp/threading/PThreads.hh /usr/include/assert.h \
+ /usr/local/include/log4cpp/Filter.hh \
+ /usr/local/include/log4cpp/BasicLayout.hh \
+ /usr/local/include/log4cpp/PatternLayout.hh \
+ /usr/local/include/log4cpp/Configurator.hh \
+ /usr/local/include/log4cpp/Category.hh \
+ /usr/local/include/log4cpp/CategoryStream.hh \
+ /usr/local/include/log4cpp/Manipulator.hh \
+ /usr/local/include/log4cpp/convenience.h /usr/include/c++/11/cstdarg \
+ /usr/include/c++/11/cstring /usr/include/string.h

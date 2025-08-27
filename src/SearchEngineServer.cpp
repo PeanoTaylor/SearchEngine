@@ -2,6 +2,7 @@
 #include "Logger.hpp"
 #include "ProtocolParser.hpp"
 #include "KeyRecommander.hpp"
+#include "WebPageSearcher.hpp"
 #include <functional>
 #include <iostream>
 using namespace std;
@@ -60,7 +61,8 @@ void SearchEngineServer::doTaskThread(const TcpConnectionPtr &conn, std::string 
 {
     // 这里可以使用 ProtocolParser 解包
     Message message;
-    if (!ProtocolParser::Parse(msg, message)) {
+    if (!ProtocolParser::Parse(msg, message))
+    {
         LOG_WARN("Protocol parse error");
         conn->sendInLoop("{\"error\":\"Parse error\"}\n");
         return;
@@ -70,15 +72,32 @@ void SearchEngineServer::doTaskThread(const TcpConnectionPtr &conn, std::string 
         "../data/endict.dat", "../data/cndict.dat",
         "../data/enindex.dat", "../data/cnindex.dat");
 
-    bool isChinese = (unsigned char)message.value[0] & 0x80;
+    WebPageSearcher webpagesearcher("../data/webpages.dat", "../data/weboffset.dat", "../data/invertindex.dat");
 
-    std::string jsonResult;
-    if (isChinese) {
-        jsonResult = recommander.doQueryCn(message.value, 5);
-    } else {
-        jsonResult = recommander.doQueryEn(message.value, 5);
+    std::string wordResult, webResult;
+    if (message.tag == 1)
+    {
+        // 关键字推荐
+        bool isChinese = (unsigned char)message.value[0] & 0x80;
+
+        if (isChinese)
+        {
+            wordResult = recommander.doQueryCn(message.value, 5);
+        }
+        else
+        {
+            wordResult = recommander.doQueryEn(message.value, 5);
+        }
+
+        conn->sendInLoop(wordResult + "\n");
+        LOG_INFO("Query result sent to client");
+        cout << endl;
     }
-
-    conn->sendInLoop(jsonResult + "\n");
-    LOG_INFO("Query result sent to client");
+    else if (message.tag == 2)
+    {
+        webResult = webpagesearcher.doQuery(message.value);
+        // 网页推荐
+        conn->sendInLoop(webResult + "\n");
+        cout << endl;
+    }
 }
