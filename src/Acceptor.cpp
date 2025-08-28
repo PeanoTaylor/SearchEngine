@@ -42,10 +42,7 @@ int Acceptor::accept()
     if (connfd < 0)
     {
         LOG_ERROR("accept failed");
-    }
-    else
-    {
-        LOG_INFO(("new connection fd=" + std::to_string(connfd)).c_str());
+        exit(EXIT_FAILURE);
     }
     return connfd;
 }

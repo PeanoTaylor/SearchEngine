@@ -1901,50 +1901,6 @@ CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o: ../SearchEngineServer.cpp 
   /usr/include/c++/11/bits/std_thread.h \
   /usr/include/c++/11/bits/this_thread_sleep.h \
   /usr/include/c++/11/condition_variable \
-  ../Logger.hpp \
-  /usr/local/include/log4cpp/OstreamAppender.hh \
-  /usr/local/include/log4cpp/Portability.hh \
-  /usr/local/include/log4cpp/config.h \
-  /usr/local/include/log4cpp/Export.hh \
-  /usr/local/include/log4cpp/LayoutAppender.hh \
-  /usr/local/include/log4cpp/AppenderSkeleton.hh \
-  /usr/local/include/log4cpp/Appender.hh \
-  /usr/include/c++/11/set \
-  /usr/include/c++/11/bits/stl_set.h \
-  /usr/include/c++/11/bits/stl_multiset.h \
-  /usr/include/x86_64-linux-gnu/sys/stat.h \
-  /usr/include/x86_64-linux-gnu/bits/stat.h \
-  /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
-  /usr/include/x86_64-linux-gnu/bits/statx.h \
-  /usr/include/linux/stat.h \
-  /usr/include/linux/types.h \
-  /usr/include/x86_64-linux-gnu/asm/types.h \
-  /usr/include/asm-generic/types.h \
-  /usr/include/asm-generic/int-ll64.h \
-  /usr/include/x86_64-linux-gnu/bits/statx-generic.h \
-  /usr/include/x86_64-linux-gnu/bits/types/struct_statx_timestamp.h \
-  /usr/include/x86_64-linux-gnu/bits/types/struct_statx.h \
-  /usr/include/fcntl.h \
-  /usr/include/x86_64-linux-gnu/bits/fcntl.h \
-  /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
-  /usr/include/linux/falloc.h \
-  /usr/local/include/log4cpp/Priority.hh \
-  /usr/local/include/log4cpp/Layout.hh \
-  /usr/local/include/log4cpp/LoggingEvent.hh \
-  /usr/local/include/log4cpp/TimeStamp.hh \
-  /usr/local/include/log4cpp/threading/Threading.hh \
-  /usr/local/include/log4cpp/threading/PThreads.hh \
-  /usr/include/assert.h \
-  /usr/local/include/log4cpp/Filter.hh \
-  /usr/local/include/log4cpp/BasicLayout.hh \
-  /usr/local/include/log4cpp/PatternLayout.hh \
-  /usr/local/include/log4cpp/Configurator.hh \
-  /usr/local/include/log4cpp/Category.hh \
-  /usr/local/include/log4cpp/CategoryStream.hh \
-  /usr/local/include/log4cpp/Manipulator.hh \
-  /usr/local/include/log4cpp/convenience.h \
-  /usr/include/c++/11/cstdarg \
-  ../ProtocolParser.hpp \
   ../CacheManage.hpp \
   ../LRUCache.hpp \
   /usr/include/c++/11/list \
@@ -1955,6 +1911,7 @@ CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o: ../SearchEngineServer.cpp 
   /usr/local/include/sw/redis++/redis.h \
   /usr/local/include/sw/redis++/connection_pool.h \
   /usr/include/c++/11/cassert \
+  /usr/include/assert.h \
   /usr/local/include/sw/redis++/connection.h \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
@@ -2090,7 +2047,51 @@ CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o: ../SearchEngineServer.cpp 
   /usr/include/nlohmann/detail/conversions/to_chars.hpp \
   /usr/include/nlohmann/ordered_map.hpp \
   /usr/include/nlohmann/detail/macro_unscope.hpp \
-  /usr/include/nlohmann/thirdparty/hedley/hedley_undef.hpp
+  /usr/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
+  ../Logger.hpp \
+  /usr/local/include/log4cpp/OstreamAppender.hh \
+  /usr/local/include/log4cpp/Portability.hh \
+  /usr/local/include/log4cpp/config.h \
+  /usr/local/include/log4cpp/Export.hh \
+  /usr/local/include/log4cpp/LayoutAppender.hh \
+  /usr/local/include/log4cpp/AppenderSkeleton.hh \
+  /usr/local/include/log4cpp/Appender.hh \
+  /usr/include/c++/11/set \
+  /usr/include/c++/11/bits/stl_set.h \
+  /usr/include/c++/11/bits/stl_multiset.h \
+  /usr/include/x86_64-linux-gnu/sys/stat.h \
+  /usr/include/x86_64-linux-gnu/bits/stat.h \
+  /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
+  /usr/include/x86_64-linux-gnu/bits/statx.h \
+  /usr/include/linux/stat.h \
+  /usr/include/linux/types.h \
+  /usr/include/x86_64-linux-gnu/asm/types.h \
+  /usr/include/asm-generic/types.h \
+  /usr/include/asm-generic/int-ll64.h \
+  /usr/include/x86_64-linux-gnu/bits/statx-generic.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_statx_timestamp.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_statx.h \
+  /usr/include/fcntl.h \
+  /usr/include/x86_64-linux-gnu/bits/fcntl.h \
+  /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
+  /usr/include/linux/falloc.h \
+  /usr/local/include/log4cpp/Priority.hh \
+  /usr/local/include/log4cpp/Layout.hh \
+  /usr/local/include/log4cpp/LoggingEvent.hh \
+  /usr/local/include/log4cpp/TimeStamp.hh \
+  /usr/local/include/log4cpp/threading/Threading.hh \
+  /usr/local/include/log4cpp/threading/PThreads.hh \
+  /usr/local/include/log4cpp/Filter.hh \
+  /usr/local/include/log4cpp/BasicLayout.hh \
+  /usr/local/include/log4cpp/PatternLayout.hh \
+  /usr/local/include/log4cpp/Configurator.hh \
+  /usr/local/include/log4cpp/Category.hh \
+  /usr/local/include/log4cpp/CategoryStream.hh \
+  /usr/local/include/log4cpp/Manipulator.hh \
+  /usr/local/include/log4cpp/convenience.h \
+  /usr/include/c++/11/cstdarg \
+  ../ProtocolParser.hpp \
+  /usr/include/c++/11/atomic
 
 CMakeFiles/SearchEngine.dir/Socket.cpp.o: ../Socket.cpp \
   /usr/include/stdc-predef.h \
@@ -4178,6 +4179,153 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
   /usr/include/c++/11/bits/std_thread.h \
   /usr/include/c++/11/bits/this_thread_sleep.h \
   /usr/include/c++/11/condition_variable \
+  ../CacheManage.hpp \
+  ../LRUCache.hpp \
+  /usr/include/c++/11/list \
+  /usr/include/c++/11/bits/stl_list.h \
+  /usr/include/c++/11/bits/list.tcc \
+  ../RedisClient.hpp \
+  /usr/local/include/sw/redis++/redis++.h \
+  /usr/local/include/sw/redis++/redis.h \
+  /usr/local/include/sw/redis++/connection_pool.h \
+  /usr/include/c++/11/cassert \
+  /usr/include/assert.h \
+  /usr/local/include/sw/redis++/connection.h \
+  /usr/include/c++/11/cstring \
+  /usr/include/string.h \
+  /usr/local/include/hiredis/hiredis.h \
+  /usr/local/include/hiredis/read.h \
+  /usr/local/include/hiredis/sds.h \
+  /usr/local/include/hiredis/alloc.h \
+  /usr/local/include/sw/redis++/errors.h \
+  /usr/local/include/sw/redis++/reply.h \
+  /usr/include/c++/11/iterator \
+  /usr/include/c++/11/bits/stream_iterator.h \
+  /usr/local/include/sw/redis++/utils.h \
+  /usr/local/include/sw/redis++/cxx_utils.h \
+  /usr/include/c++/11/optional \
+  /usr/include/c++/11/variant \
+  /usr/local/include/sw/redis++/tls.h \
+  /usr/local/include/sw/redis++/sentinel.h \
+  /usr/local/include/sw/redis++/shards.h \
+  /usr/local/include/sw/redis++/command_options.h \
+  /usr/local/include/sw/redis++/subscriber.h \
+  /usr/local/include/sw/redis++/command.h \
+  /usr/local/include/sw/redis++/command_args.h \
+  /usr/local/include/sw/redis++/pipeline.h \
+  /usr/local/include/sw/redis++/transaction.h \
+  /usr/local/include/sw/redis++/redis.hpp \
+  /usr/local/include/sw/redis++/redis_cluster.h \
+  /usr/local/include/sw/redis++/shards_pool.h \
+  /usr/include/c++/11/random \
+  /usr/include/c++/11/cmath \
+  /usr/include/math.h \
+  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
+  /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
+  /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
+  /usr/include/c++/11/bits/specfun.h \
+  /usr/include/c++/11/tr1/gamma.tcc \
+  /usr/include/c++/11/tr1/special_function_util.h \
+  /usr/include/c++/11/tr1/bessel_function.tcc \
+  /usr/include/c++/11/tr1/beta_function.tcc \
+  /usr/include/c++/11/tr1/ell_integral.tcc \
+  /usr/include/c++/11/tr1/exp_integral.tcc \
+  /usr/include/c++/11/tr1/hypergeometric.tcc \
+  /usr/include/c++/11/tr1/legendre_function.tcc \
+  /usr/include/c++/11/tr1/modified_bessel_func.tcc \
+  /usr/include/c++/11/tr1/poly_hermite.tcc \
+  /usr/include/c++/11/tr1/poly_laguerre.tcc \
+  /usr/include/c++/11/tr1/riemann_zeta.tcc \
+  /usr/include/c++/11/bits/random.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
+  /usr/include/c++/11/bits/random.tcc \
+  /usr/include/c++/11/numeric \
+  /usr/include/c++/11/bits/stl_numeric.h \
+  /usr/include/c++/11/pstl/glue_numeric_defs.h \
+  /usr/local/include/sw/redis++/redis_cluster.hpp \
+  /usr/local/include/sw/redis++/queued_redis.h \
+  /usr/local/include/sw/redis++/queued_redis.hpp \
+  ../KeyRecommander.hpp \
+  ../WebPageSearcher.hpp \
+  /usr/include/nlohmann/json.hpp \
+  /usr/include/c++/11/algorithm \
+  /usr/include/c++/11/pstl/glue_algorithm_defs.h \
+  /usr/include/c++/11/cstddef \
+  /usr/include/nlohmann/adl_serializer.hpp \
+  /usr/include/nlohmann/detail/conversions/from_json.hpp \
+  /usr/include/c++/11/forward_list \
+  /usr/include/c++/11/bits/forward_list.h \
+  /usr/include/c++/11/bits/forward_list.tcc \
+  /usr/include/c++/11/valarray \
+  /usr/include/c++/11/bits/valarray_array.h \
+  /usr/include/c++/11/bits/valarray_array.tcc \
+  /usr/include/c++/11/bits/valarray_before.h \
+  /usr/include/c++/11/bits/slice_array.h \
+  /usr/include/c++/11/bits/valarray_after.h \
+  /usr/include/c++/11/bits/gslice.h \
+  /usr/include/c++/11/bits/gslice_array.h \
+  /usr/include/c++/11/bits/mask_array.h \
+  /usr/include/c++/11/bits/indirect_array.h \
+  /usr/include/nlohmann/detail/exceptions.hpp \
+  /usr/include/nlohmann/detail/value_t.hpp \
+  /usr/include/nlohmann/detail/string_escape.hpp \
+  /usr/include/nlohmann/detail/macro_scope.hpp \
+  /usr/include/nlohmann/thirdparty/hedley/hedley.hpp \
+  /usr/include/nlohmann/detail/meta/detected.hpp \
+  /usr/include/nlohmann/detail/meta/void_t.hpp \
+  /usr/include/nlohmann/detail/input/position_t.hpp \
+  /usr/include/nlohmann/detail/meta/cpp_future.hpp \
+  /usr/include/nlohmann/detail/meta/identity_tag.hpp \
+  /usr/include/nlohmann/detail/meta/type_traits.hpp \
+  /usr/include/nlohmann/detail/iterators/iterator_traits.hpp \
+  /usr/include/nlohmann/detail/meta/call_std/begin.hpp \
+  /usr/include/nlohmann/detail/meta/call_std/end.hpp \
+  /usr/include/nlohmann/json_fwd.hpp \
+  /usr/include/c++/11/filesystem \
+  /usr/include/c++/11/bits/fs_fwd.h \
+  /usr/include/c++/11/bits/fs_path.h \
+  /usr/include/c++/11/locale \
+  /usr/include/c++/11/bits/locale_facets_nonio.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h \
+  /usr/include/libintl.h \
+  /usr/include/c++/11/bits/codecvt.h \
+  /usr/include/c++/11/bits/locale_facets_nonio.tcc \
+  /usr/include/c++/11/bits/locale_conv.h \
+  /usr/include/c++/11/iomanip \
+  /usr/include/c++/11/bits/quoted_string.h \
+  /usr/include/c++/11/codecvt \
+  /usr/include/c++/11/bits/fs_dir.h \
+  /usr/include/c++/11/bits/fs_ops.h \
+  /usr/include/nlohmann/detail/conversions/to_json.hpp \
+  /usr/include/nlohmann/detail/iterators/iteration_proxy.hpp \
+  /usr/include/nlohmann/byte_container_with_subtype.hpp \
+  /usr/include/nlohmann/detail/hash.hpp \
+  /usr/include/nlohmann/detail/input/binary_reader.hpp \
+  /usr/include/nlohmann/detail/input/input_adapters.hpp \
+  /usr/include/nlohmann/detail/input/json_sax.hpp \
+  /usr/include/nlohmann/detail/input/lexer.hpp \
+  /usr/include/nlohmann/detail/meta/is_sax.hpp \
+  /usr/include/nlohmann/detail/input/parser.hpp \
+  /usr/include/nlohmann/detail/iterators/internal_iterator.hpp \
+  /usr/include/nlohmann/detail/iterators/primitive_iterator.hpp \
+  /usr/include/nlohmann/detail/iterators/iter_impl.hpp \
+  /usr/include/nlohmann/detail/iterators/json_reverse_iterator.hpp \
+  /usr/include/nlohmann/detail/json_pointer.hpp \
+  /usr/include/nlohmann/detail/json_ref.hpp \
+  /usr/include/nlohmann/detail/output/binary_writer.hpp \
+  /usr/include/nlohmann/detail/output/output_adapters.hpp \
+  /usr/include/nlohmann/detail/output/serializer.hpp \
+  /usr/include/nlohmann/detail/conversions/to_chars.hpp \
+  /usr/include/nlohmann/ordered_map.hpp \
+  /usr/include/nlohmann/detail/macro_unscope.hpp \
+  /usr/include/nlohmann/thirdparty/hedley/hedley_undef.hpp \
   ../Logger.hpp \
   /usr/local/include/log4cpp/OstreamAppender.hh \
   /usr/local/include/log4cpp/Portability.hh \
@@ -4211,7 +4359,6 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
   /usr/local/include/log4cpp/TimeStamp.hh \
   /usr/local/include/log4cpp/threading/Threading.hh \
   /usr/local/include/log4cpp/threading/PThreads.hh \
-  /usr/include/assert.h \
   /usr/local/include/log4cpp/Filter.hh \
   /usr/local/include/log4cpp/BasicLayout.hh \
   /usr/local/include/log4cpp/PatternLayout.hh \
@@ -4271,6 +4418,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 ../TcpConnection.cpp:
 
 ../TaskQueue.cpp:
+
+/usr/include/c++/11/atomic:
 
 /usr/include/c++/11/bits/random.h:
 

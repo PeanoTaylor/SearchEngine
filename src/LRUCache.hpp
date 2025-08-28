@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include <list>
+
 using std::list;
 using std::lock_guard;
 using std::mutex;
@@ -50,6 +51,22 @@ public:
         }
         _list.emplace_front(key, value);
         _map[key] = _list.begin();
+    }
+
+    // 导出所有的key-value,同步共享缓存
+    vector<pair<string,string>> exportData(){
+        lock_guard<mutex> lg(_mutex);
+        vector<pair<string,string>> res;
+        for(auto &kv : _list){
+            res.push_back(kv);
+        }
+        return res;
+    }
+
+    void clear(){
+        lock_guard<mutex> lg(_mutex);
+        _list.clear();
+        _map.clear();
     }
 
     ~LRUCache() {}

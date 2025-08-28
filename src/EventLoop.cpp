@@ -210,7 +210,6 @@ void EventLoop::handleNewConnection()
         LOG_ERROR("handleNewConnection failed");
         exit(EXIT_FAILURE);
     }
-    LOG_INFO(("Accepted new connection fd=" + std::to_string(connfd)).c_str());
 
     auto conn = make_shared<TcpConnection>(connfd, this);
     // 注册回调
@@ -249,7 +248,6 @@ void EventLoop::handleMessage(int fd)
         else
         {
             conn->handleMessageCallback();
-            LOG_DEBUG(("message from fd=" + std::to_string(fd)).c_str());
         }
     }
 }

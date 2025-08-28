@@ -1,10 +1,11 @@
 #pragma once
 #include "TcpServer.hpp"
 #include "ThreadPool.hpp"
+#include "CacheManage.hpp"
 class SearchEngineServer
 {
 public:
-    SearchEngineServer(const std::string &ip,int port);
+    SearchEngineServer(const std::string &ip, int port);
     ~SearchEngineServer() = default;
     void start();
     void stop();
@@ -16,5 +17,5 @@ public:
 private:
     TcpServer _tcpserver;
     ThreadPool _threadpool;
+    CacheManage _cacheManage;
 };
-

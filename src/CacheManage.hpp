@@ -7,12 +7,22 @@
 #include <memory>
 using std::string;
 
+struct MyThread
+{
+    int id;
+    thread th;
+    LRUCache cache;
+    LRUCache patch;
+    MyThread(int tid, size_t cacheCapa, size_t patchCapa)
+        : id(tid), cache(cacheCapa), patch(patchCapa) {}
+};
+
 // 两级缓存管理器：优先 LRU，其次 Redis，最后文件/计算
 class CacheManage
 {
 public:
     CacheManage(size_t lruCapa, const string &redisUri)
-        : _lru(lruCapa), _redis(redisUri),
+        : _globalCache(lruCapa), _redis(redisUri),
           _recommander("../data/endict.dat", "../data/cndict.dat",
                        "../data/enindex.dat", "../data/cnindex.dat"),
           _searcher("../data/webpages.dat", "../data/weboffset.dat", "../data/invertindex.dat")
@@ -20,26 +30,70 @@ public:
     }
 
     // 查询接口：先查 LRU，再查 Redis，再查底层
-    string get(const string &key)
+    string get(MyThread *th, string &key)
     {
         string value;
-        // 1. LRU
-        if (_lru.get(key, value))
+        // 1. 本地缓存
+        if (th->cache.get(key, value))
         {
             return value;
         }
-        
+
         // 2. Redis
         if (_redis.get(key, value))
         {
-            _lru.put(key, value); // 回填 LRU
+            th->cache.put(key, value); // 回填 LRU
             return value;
         }
         // 3. 真正查询（落盘计算）
         value = queryFromFile(key);
-        _lru.put(key, value);
+        th->cache.put(key, value);
+        th->patch.put(key, value);
         _redis.set(key, value);
         return value;
+    }
+
+    // 添加线程上下文
+    void addThread(std::shared_ptr<MyThread> th)
+    {
+        _threads.push_back(th);
+    }
+
+    // 定时同步：合并patch -> exportAll -> 广播全局
+    void syncCaches()
+    {
+        for (auto &th : _threads)
+        {
+            auto item = th->patch.exportData();
+            for (auto &[k, v] : item)
+            {
+                _globalCache.put(k, v);
+            }
+            th->patch.clear();
+        }
+
+        // 广播全局
+        auto item = _globalCache.exportData();
+        for (auto &th : _threads)
+        {
+            for (auto &[k, v] : item)
+            {
+                th->cache.put(k, v);
+            }
+        }
+    }
+
+    // 启动后台定时同步线程
+    void startSyncThread(int intervalSec = 10)
+    {
+        std::thread([this, intervalSec]
+                    {
+            while (true)
+            {
+                std::this_thread::sleep_for(std::chrono::seconds(intervalSec));
+                syncCaches();
+            } })
+            .detach();
     }
 
     ~CacheManage() {}
@@ -71,8 +125,9 @@ private:
     }
 
 private:
-    LRUCache _lru;           // 一级缓存（进程内）
-    RedisClient _redis;      // 二级缓存（分布式）
+    LRUCache _globalCache; // 全局主缓存
+    RedisClient _redis;    // 二级缓存
     KeyRecommander _recommander;
     WebPageSearcher _searcher;
+    vector<std::shared_ptr<MyThread>> _threads;
 };
