@@ -1,0 +1,388 @@
+[2025-08-27 16:49:29,899] [INFO] : [WebPageSearcher.cpp:45:doQuery] skip word not in index: 你
+[2025-08-27 16:52:54,621] [INFO] : [WebPageSearcher.cpp:45:doQuery] skip word not in index: 你
+[2025-08-27 16:54:20,257] [INFO] : [WebPageSearcher.cpp:45:doQuery] skip word not in index: 懂
+[2025-08-27 16:54:20,258] [INFO] : [WebPageSearcher.cpp:45:doQuery] skip word not in index: 你
+[2025-08-27 17:18:59,710] [INFO] : [WebPageSearcher.cpp:45:doQuery] skip word not in index: 人
+[2025-08-27 17:19:05,538] [INFO] : [WebPageSearcher.cpp:45:doQuery] skip word not in index: 人工
+[2025-08-27 17:20:21,764] [INFO] : [WebPageSearcher.cpp:46:doQuery] skip word not in index: 人工
+[2025-08-27 20:09:59,407] [INFO] : [WebPageSearcher.cpp:73:doQuery] skip word not in index: 人工
+[2025-08-27 21:19:39,752] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-27 21:19:39,754] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:22:start] SearchEngineServer start ...
+[2025-08-27 21:19:42,884] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-27 21:19:42,884] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-27 21:19:42,885] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:36:onConnection] 127.0.0.1:8888->127.0.0.1:40686 has connected.
+[2025-08-27 21:19:52,529] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=2
+[2025-08-27 21:19:52,529] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=10
+[2025-08-27 21:19:52,529] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:19:53,605] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:94:doTaskThread] Query result sent to client
+[2025-08-27 21:19:53,605] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=499
+[2025-08-27 21:20:05,228] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:57:onClose] 127.0.0.1:8888->127.0.0.1:40686 has closed.
+[2025-08-27 21:20:05,229] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:247:handleMessage] connection closed fd=8
+[2025-08-27 21:20:29,395] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-27 21:20:29,395] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-27 21:20:29,395] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:36:onConnection] 127.0.0.1:8888->127.0.0.1:33584 has connected.
+[2025-08-27 21:20:30,468] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=1
+[2025-08-27 21:20:30,469] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=9
+[2025-08-27 21:20:30,469] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:20:31,299] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:94:doTaskThread] Query result sent to client
+[2025-08-27 21:20:31,299] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=25
+[2025-08-27 21:20:37,740] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=2
+[2025-08-27 21:20:37,740] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=10
+[2025-08-27 21:20:37,740] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:20:38,625] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:94:doTaskThread] Query result sent to client
+[2025-08-27 21:20:38,625] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=493
+[2025-08-27 21:22:46,362] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:57:onClose] 127.0.0.1:8888->127.0.0.1:33584 has closed.
+[2025-08-27 21:22:46,362] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:247:handleMessage] connection closed fd=8
+[2025-08-27 21:22:47,892] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-27 21:22:47,892] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-27 21:22:47,892] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:36:onConnection] 127.0.0.1:8888->127.0.0.1:36724 has connected.
+[2025-08-27 21:23:13,336] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=1
+[2025-08-27 21:23:13,337] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=9
+[2025-08-27 21:23:13,337] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:23:14,117] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:94:doTaskThread] Query result sent to client
+[2025-08-27 21:23:14,117] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=25
+[2025-08-27 21:23:32,523] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:57:onClose] 127.0.0.1:8888->127.0.0.1:36724 has closed.
+[2025-08-27 21:23:32,523] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:247:handleMessage] connection closed fd=8
+[2025-08-27 21:23:33,493] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-27 21:23:33,493] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-27 21:23:33,493] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:36:onConnection] 127.0.0.1:8888->127.0.0.1:46704 has connected.
+[2025-08-27 21:26:34,095] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:57:onClose] 127.0.0.1:8888->127.0.0.1:46704 has closed.
+[2025-08-27 21:26:34,095] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:247:handleMessage] connection closed fd=8
+[2025-08-27 21:26:35,027] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-27 21:26:35,027] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-27 21:26:35,027] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:36:onConnection] 127.0.0.1:8888->127.0.0.1:53748 has connected.
+[2025-08-27 21:26:38,407] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:57:onClose] 127.0.0.1:8888->127.0.0.1:53748 has closed.
+[2025-08-27 21:26:38,407] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:247:handleMessage] connection closed fd=8
+[2025-08-27 21:26:39,848] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-27 21:26:39,857] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:30:stop] SearchEngineServer stop ...
+[2025-08-27 21:28:21,640] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-27 21:28:21,641] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:22:start] SearchEngineServer start ...
+[2025-08-27 21:28:25,190] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-27 21:28:25,190] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-27 21:28:25,190] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:36:onConnection] 127.0.0.1:8888->127.0.0.1:51222 has connected.
+[2025-08-27 21:29:01,205] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-27 21:29:01,205] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:30:stop] SearchEngineServer stop ...
+[2025-08-27 21:33:05,149] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-27 21:33:05,150] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:22:start] SearchEngineServer start ...
+[2025-08-27 21:33:11,285] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-27 21:33:11,285] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-27 21:33:11,285] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:36:onConnection] 127.0.0.1:8888->127.0.0.1:52308 has connected.
+[2025-08-27 21:33:24,503] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=2
+[2025-08-27 21:33:24,503] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=10
+[2025-08-27 21:33:24,503] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:33:25,297] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=10
+[2025-08-27 21:33:49,514] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=4
+[2025-08-27 21:33:49,515] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=12
+[2025-08-27 21:33:49,515] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:33:50,357] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:94:doTaskThread] Query result sent to client
+[2025-08-27 21:33:50,358] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=500
+[2025-08-27 21:40:10,570] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-27 21:40:10,571] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:30:stop] SearchEngineServer stop ...
+[2025-08-27 21:40:17,939] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-27 21:40:17,939] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:22:start] SearchEngineServer start ...
+[2025-08-27 21:40:19,629] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-27 21:40:19,629] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-27 21:40:19,629] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:36:onConnection] 127.0.0.1:8888->127.0.0.1:50782 has connected.
+[2025-08-27 21:40:33,433] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=4
+[2025-08-27 21:40:33,433] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=12
+[2025-08-27 21:40:33,433] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:40:34,320] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:94:doTaskThread] Query result sent to client
+[2025-08-27 21:40:34,320] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=500
+[2025-08-27 21:40:41,570] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:57:onClose] 127.0.0.1:8888->127.0.0.1:50782 has closed.
+[2025-08-27 21:40:41,570] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:247:handleMessage] connection closed fd=8
+[2025-08-27 21:41:04,276] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-27 21:41:04,276] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-27 21:41:04,276] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:36:onConnection] 127.0.0.1:8888->127.0.0.1:51252 has connected.
+[2025-08-27 21:41:23,669] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:57:onClose] 127.0.0.1:8888->127.0.0.1:51252 has closed.
+[2025-08-27 21:41:23,670] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:247:handleMessage] connection closed fd=8
+[2025-08-27 21:41:31,763] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-27 21:41:31,763] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-27 21:41:31,764] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:36:onConnection] 127.0.0.1:8888->127.0.0.1:34246 has connected.
+[2025-08-27 21:41:36,583] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=5
+[2025-08-27 21:41:36,583] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=13
+[2025-08-27 21:41:36,583] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:41:37,337] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=10
+[2025-08-27 21:41:46,082] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=4
+[2025-08-27 21:41:46,082] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=12
+[2025-08-27 21:41:46,082] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:41:46,935] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:94:doTaskThread] Query result sent to client
+[2025-08-27 21:41:46,936] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=500
+[2025-08-27 21:41:49,845] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:57:onClose] 127.0.0.1:8888->127.0.0.1:34246 has closed.
+[2025-08-27 21:41:49,846] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:247:handleMessage] connection closed fd=8
+[2025-08-27 21:41:54,337] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-27 21:41:54,337] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-27 21:41:54,337] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:36:onConnection] 127.0.0.1:8888->127.0.0.1:60208 has connected.
+[2025-08-27 21:41:58,856] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=32
+[2025-08-27 21:41:58,856] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=40
+[2025-08-27 21:41:58,856] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:41:59,966] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:94:doTaskThread] Query result sent to client
+[2025-08-27 21:41:59,966] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=554
+[2025-08-27 21:42:22,093] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=52
+[2025-08-27 21:42:22,093] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=60
+[2025-08-27 21:42:22,093] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:42:23,348] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:94:doTaskThread] Query result sent to client
+[2025-08-27 21:42:23,349] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=546
+[2025-08-27 21:42:35,581] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:57:onClose] 127.0.0.1:8888->127.0.0.1:60208 has closed.
+[2025-08-27 21:42:35,581] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:247:handleMessage] connection closed fd=8
+[2025-08-27 21:44:52,524] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-27 21:44:52,528] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:30:stop] SearchEngineServer stop ...
+[2025-08-27 21:44:55,530] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-27 21:44:55,531] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:22:start] SearchEngineServer start ...
+[2025-08-27 21:44:57,389] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-27 21:44:57,389] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-27 21:44:57,389] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:36:onConnection] 127.0.0.1:8888->127.0.0.1:36984 has connected.
+[2025-08-27 21:45:05,970] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-27 21:45:05,970] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=14
+[2025-08-27 21:45:05,970] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:45:06,766] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=1799
+[2025-08-27 21:48:19,698] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=2
+[2025-08-27 21:48:19,698] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=10
+[2025-08-27 21:48:19,698] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:48:20,419] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:93:doTaskThread] Query result sent to client
+[2025-08-27 21:48:20,419] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=493
+[2025-08-27 21:48:26,023] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=3
+[2025-08-27 21:48:26,024] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=11
+[2025-08-27 21:48:26,024] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:48:26,683] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:93:doTaskThread] Query result sent to client
+[2025-08-27 21:48:26,683] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=333
+[2025-08-27 21:48:40,110] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=2
+[2025-08-27 21:48:40,110] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=10
+[2025-08-27 21:48:40,110] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:48:40,880] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=77
+[2025-08-27 21:48:48,022] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=4
+[2025-08-27 21:48:48,022] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:45:onMessage] received msg size=12
+[2025-08-27 21:48:48,022] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-27 21:48:48,745] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=79
+[2025-08-27 21:55:04,068] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:57:onClose] 127.0.0.1:8888->127.0.0.1:36984 has closed.
+[2025-08-27 21:55:04,068] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:247:handleMessage] connection closed fd=8
+[2025-08-27 21:55:05,942] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-27 21:55:05,952] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:30:stop] SearchEngineServer stop ...
+[2025-08-28 12:40:10,047] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-28 12:40:10,049] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:25:start] SearchEngineServer start ...
+[2025-08-28 12:40:13,867] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-28 12:40:13,868] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-28 12:40:13,868] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:39:onConnection] 127.0.0.1:8888->127.0.0.1:50442 has connected.
+[2025-08-28 12:40:26,654] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=12
+[2025-08-28 12:40:26,654] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:48:onMessage] received msg size=20
+[2025-08-28 12:40:26,654] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 12:40:26,685] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Query result sent to client
+[2025-08-28 12:40:26,685] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=1904
+[2025-08-28 12:40:59,903] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=18
+[2025-08-28 12:40:59,903] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:48:onMessage] received msg size=26
+[2025-08-28 12:40:59,903] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 12:40:59,911] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Query result sent to client
+[2025-08-28 12:40:59,911] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=418
+[2025-08-28 12:41:05,416] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 12:41:05,416] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:48:onMessage] received msg size=14
+[2025-08-28 12:41:05,416] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 12:41:05,421] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Query result sent to client
+[2025-08-28 12:41:05,421] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=394
+[2025-08-28 12:41:14,303] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 12:41:14,303] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:48:onMessage] received msg size=14
+[2025-08-28 12:41:14,303] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 12:41:14,305] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Query result sent to client
+[2025-08-28 12:41:14,305] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=394
+[2025-08-28 12:41:22,966] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:60:onClose] 127.0.0.1:8888->127.0.0.1:50442 has closed.
+[2025-08-28 12:41:22,966] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:247:handleMessage] connection closed fd=8
+[2025-08-28 12:41:24,766] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-28 12:41:24,767] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:33:stop] SearchEngineServer stop ...
+[2025-08-28 14:31:58,221] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-28 14:31:58,221] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:25:start] SearchEngineServer start ...
+[2025-08-28 14:31:59,480] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-28 14:31:59,480] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-28 14:31:59,480] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:39:onConnection] 127.0.0.1:8888->127.0.0.1:52216 has connected.
+[2025-08-28 14:32:03,200] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 14:32:03,200] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:48:onMessage] received msg size=14
+[2025-08-28 14:32:03,200] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 14:32:03,203] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Query result sent to client
+[2025-08-28 14:32:03,203] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=392
+[2025-08-28 14:34:06,492] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 14:34:06,492] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:48:onMessage] received msg size=14
+[2025-08-28 14:34:06,492] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 14:34:06,502] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Query result sent to client
+[2025-08-28 14:34:06,502] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=1799
+[2025-08-28 14:34:32,386] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 14:34:32,387] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:48:onMessage] received msg size=14
+[2025-08-28 14:34:32,387] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 14:34:32,390] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Query result sent to client
+[2025-08-28 14:34:32,390] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=1827
+[2025-08-28 14:35:45,940] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-28 14:35:45,941] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:33:stop] SearchEngineServer stop ...
+[2025-08-28 14:37:07,701] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-28 14:37:07,701] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:25:start] SearchEngineServer start ...
+[2025-08-28 14:37:08,589] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-28 14:37:08,589] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-28 14:37:08,589] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:39:onConnection] 127.0.0.1:8888->127.0.0.1:57444 has connected.
+[2025-08-28 14:37:14,513] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 14:37:14,513] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:48:onMessage] received msg size=14
+[2025-08-28 14:37:14,513] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 14:37:14,514] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Query result sent to client
+[2025-08-28 14:37:14,514] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=392
+[2025-08-28 14:38:49,186] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-28 14:38:49,186] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:33:stop] SearchEngineServer stop ...
+[2025-08-28 14:38:52,593] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-28 14:38:52,593] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:25:start] SearchEngineServer start ...
+[2025-08-28 14:38:53,589] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-28 14:38:53,589] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-28 14:38:53,589] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:39:onConnection] 127.0.0.1:8888->127.0.0.1:50166 has connected.
+[2025-08-28 14:39:05,015] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 14:39:05,015] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:48:onMessage] received msg size=14
+[2025-08-28 14:39:05,015] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 14:39:05,016] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Query result sent to client
+[2025-08-28 14:39:05,016] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=392
+[2025-08-28 14:40:37,759] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-28 14:40:37,760] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:33:stop] SearchEngineServer stop ...
+[2025-08-28 14:40:41,223] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-28 14:40:41,224] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:25:start] SearchEngineServer start ...
+[2025-08-28 14:40:42,664] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-28 14:40:42,664] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-28 14:40:42,664] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:39:onConnection] 127.0.0.1:8888->127.0.0.1:34830 has connected.
+[2025-08-28 14:40:50,163] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 14:40:50,163] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:48:onMessage] received msg size=14
+[2025-08-28 14:40:50,163] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 14:40:50,164] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Query result sent to client
+[2025-08-28 14:40:50,164] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=392
+[2025-08-28 14:40:58,805] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 14:40:58,806] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:48:onMessage] received msg size=14
+[2025-08-28 14:40:58,806] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 14:40:58,806] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Query result sent to client
+[2025-08-28 14:40:58,806] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=392
+[2025-08-28 14:41:04,909] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:60:onClose] 127.0.0.1:8888->127.0.0.1:34830 has closed.
+[2025-08-28 14:41:04,909] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:247:handleMessage] connection closed fd=8
+[2025-08-28 14:41:05,267] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-28 14:41:05,268] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:33:stop] SearchEngineServer stop ...
+[2025-08-28 14:42:00,331] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-28 14:42:00,331] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:25:start] SearchEngineServer start ...
+[2025-08-28 14:42:01,739] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-28 14:42:01,739] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-28 14:42:01,739] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:39:onConnection] 127.0.0.1:8888->127.0.0.1:50894 has connected.
+[2025-08-28 14:42:07,700] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 14:42:07,700] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:48:onMessage] received msg size=14
+[2025-08-28 14:42:07,700] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 14:42:07,701] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Query result sent to client
+[2025-08-28 14:42:07,701] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=392
+[2025-08-28 14:42:22,707] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 14:42:22,707] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:48:onMessage] received msg size=14
+[2025-08-28 14:42:22,707] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 14:42:22,708] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Query result sent to client
+[2025-08-28 14:42:22,708] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=392
+[2025-08-28 14:42:30,344] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 14:42:30,344] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:48:onMessage] received msg size=14
+[2025-08-28 14:42:30,344] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 14:42:30,347] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Query result sent to client
+[2025-08-28 14:42:30,347] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=1856
+[2025-08-28 14:42:38,286] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 14:42:38,286] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:48:onMessage] received msg size=14
+[2025-08-28 14:42:38,286] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 14:42:38,286] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Query result sent to client
+[2025-08-28 14:42:38,286] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=1856
+[2025-08-28 15:15:46,416] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-28 15:15:46,416] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:33:stop] SearchEngineServer stop ...
+[2025-08-28 17:05:31,338] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-28 17:05:32,069] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:28:start] SearchEngineServer start ...
+[2025-08-28 17:05:34,810] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-28 17:05:34,810] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-28 17:05:34,811] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:42:onConnection] 127.0.0.1:8888->127.0.0.1:48272 has connected.
+[2025-08-28 17:05:41,804] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=7
+[2025-08-28 17:05:41,804] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:51:onMessage] received msg size=15
+[2025-08-28 17:05:41,804] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 17:05:41,943] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:93:doTaskThread] Query result sent to client
+[2025-08-28 17:05:41,943] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=519
+[2025-08-28 17:06:03,592] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 17:06:03,592] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:51:onMessage] received msg size=14
+[2025-08-28 17:06:03,592] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 17:06:03,597] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:93:doTaskThread] Query result sent to client
+[2025-08-28 17:06:03,597] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=395
+[2025-08-28 17:07:25,482] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:63:onClose] 127.0.0.1:8888->127.0.0.1:48272 has closed.
+[2025-08-28 17:07:25,482] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:247:handleMessage] connection closed fd=8
+[2025-08-28 17:22:56,464] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-28 17:22:56,465] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:36:stop] SearchEngineServer stop ...
+[2025-08-28 17:22:57,697] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-28 17:22:58,462] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:28:start] SearchEngineServer start ...
+[2025-08-28 17:23:00,258] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-28 17:23:00,258] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-28 17:23:00,258] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:42:onConnection] 127.0.0.1:8888->127.0.0.1:49870 has connected.
+[2025-08-28 17:23:06,005] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 17:23:06,006] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:51:onMessage] received msg size=14
+[2025-08-28 17:23:06,006] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=8
+[2025-08-28 17:23:06,006] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:80:doTaskThread] Thread[136690620679744] first init -> tid=0 (cacheCapa=100, patchCapa=50)
+[2025-08-28 17:23:06,006] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:99:doTaskThread] Thread[136690620679744] tid=0 handling query: 1:你好
+[2025-08-28 17:23:06,008] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:105:doTaskThread] Query result sent to client
+[2025-08-28 17:23:06,008] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=392
+[2025-08-28 17:23:25,255] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=10
+[2025-08-28 17:23:25,255] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=10
+[2025-08-28 17:23:25,255] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:42:onConnection] 127.0.0.1:8888->127.0.0.1:46568 has connected.
+[2025-08-28 17:23:52,366] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 17:23:52,366] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:51:onMessage] received msg size=14
+[2025-08-28 17:23:52,366] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=10
+[2025-08-28 17:23:52,367] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:80:doTaskThread] Thread[136690612287040] first init -> tid=1 (cacheCapa=100, patchCapa=50)
+[2025-08-28 17:23:52,367] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:99:doTaskThread] Thread[136690612287040] tid=1 handling query: 1:我好
+[2025-08-28 17:23:52,369] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:105:doTaskThread] Query result sent to client
+[2025-08-28 17:23:52,370] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=395
+[2025-08-28 17:24:07,342] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=9
+[2025-08-28 17:24:07,342] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:51:onMessage] received msg size=17
+[2025-08-28 17:24:07,342] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:252:handleMessage] message from fd=10
+[2025-08-28 17:24:07,342] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:80:doTaskThread] Thread[136690603894336] first init -> tid=2 (cacheCapa=100, patchCapa=50)
+[2025-08-28 17:24:07,342] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:99:doTaskThread] Thread[136690603894336] tid=2 handling query: 1:大家好
+[2025-08-28 17:24:07,345] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:105:doTaskThread] Query result sent to client
+[2025-08-28 17:24:07,345] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=407
+[2025-08-28 17:27:35,781] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-28 17:27:35,781] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:36:stop] SearchEngineServer stop ...
+[2025-08-28 17:27:38,175] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-28 17:27:38,880] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:28:start] SearchEngineServer start ...
+[2025-08-28 17:27:40,224] [INFO] : [/home/zhang/SearchEngine/src/Acceptor.cpp:48:accept] new connection fd=8
+[2025-08-28 17:27:40,224] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:213:handleNewConnection] Accepted new connection fd=8
+[2025-08-28 17:27:40,224] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:42:onConnection] 127.0.0.1:8888->127.0.0.1:57386 has connected.
+[2025-08-28 17:30:22,785] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-28 17:30:22,786] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:36:stop] SearchEngineServer stop ...
+[2025-08-28 17:30:25,281] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-28 17:30:28,653] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:41:onConnection] 127.0.0.1:8888->127.0.0.1:47598 has connected.
+[2025-08-28 17:31:05,911] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 17:31:05,911] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:50:onMessage] received msg size=14
+[2025-08-28 17:31:05,911] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:251:handleMessage] message from fd=8
+[2025-08-28 17:31:05,911] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Thread[136331267393088] first init -> tid=0 (cacheCapa=100, patchCapa=50)
+[2025-08-28 17:31:05,911] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:98:doTaskThread] Thread[136331267393088] tid=0 handling query: 1:你好
+[2025-08-28 17:31:05,912] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:107:doTaskThread] Thread[136331267393088] tid=0 handling query: 1:你好Thread[136331267393088] tid=0 result sent to client
+[2025-08-28 17:31:05,912] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=392
+[2025-08-28 17:33:19,282] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-28 17:33:30,940] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-28 17:33:30,940] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:35:stop] SearchEngineServer stop ...
+[2025-08-28 17:33:32,759] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-28 17:33:35,607] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:41:onConnection] 127.0.0.1:8888->127.0.0.1:41064 has connected.
+[2025-08-28 17:33:38,728] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 17:33:38,728] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:50:onMessage] received msg size=14
+[2025-08-28 17:33:38,728] [DEBUG] : [/home/zhang/SearchEngine/src/EventLoop.cpp:251:handleMessage] message from fd=8
+[2025-08-28 17:33:38,729] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:79:doTaskThread] Thread[128504377361984] first init -> tid=0 (cacheCapa=100, patchCapa=50)
+[2025-08-28 17:33:38,729] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:98:doTaskThread] Thread[128504377361984] tid=0 handling query: 1:你好
+[2025-08-28 17:33:38,730] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:107:doTaskThread] Thread[128504377361984] tid=0 handling query: 1:你好Thread[128504377361984] tid=0 result sent to client
+[2025-08-28 17:33:38,730] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=392
+[2025-08-28 17:35:03,290] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-28 17:35:03,290] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:35:stop] SearchEngineServer stop ...
+[2025-08-28 17:35:06,421] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-28 17:35:08,061] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:41:onConnection] 127.0.0.1:8888->127.0.0.1:56716 has connected.
+[2025-08-28 17:35:10,342] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 17:35:10,342] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:50:onMessage] received msg size=14
+[2025-08-28 17:35:10,343] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:78:doTaskThread] Thread first init -> tid=0 (cacheCapa=100, patchCapa=50)
+[2025-08-28 17:35:10,343] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:97:doTaskThread] Thread[131373941241408] tid=0 handling query: 1:你好
+[2025-08-28 17:35:10,344] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:106:doTaskThread] Thread[131373941241408] tid=0 handling query: 1:你好Thread[131373941241408] tid=0 result sent to client
+[2025-08-28 17:35:10,344] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=392
+[2025-08-28 17:35:35,930] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=6
+[2025-08-28 17:35:35,930] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:50:onMessage] received msg size=14
+[2025-08-28 17:35:35,930] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:78:doTaskThread] Thread first init -> tid=1 (cacheCapa=100, patchCapa=50)
+[2025-08-28 17:35:35,930] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:97:doTaskThread] Thread[131373932848704] tid=1 handling query: 2:你好
+[2025-08-28 17:35:35,941] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:106:doTaskThread] Thread[131373932848704] tid=1 handling query: 2:你好Thread[131373932848704] tid=1 result sent to client
+[2025-08-28 17:35:35,941] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=2148
+[2025-08-28 17:36:22,518] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:62:onClose] 127.0.0.1:8888->127.0.0.1:56716 has closed.
+[2025-08-28 17:36:22,518] [INFO] : [/home/zhang/SearchEngine/src/EventLoop.cpp:246:handleMessage] connection closed fd=8
+[2025-08-28 17:36:23,854] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-28 17:36:23,855] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:35:stop] SearchEngineServer stop ...
+[2025-08-28 17:36:25,137] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-28 17:36:27,262] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:41:onConnection] 127.0.0.1:8888->127.0.0.1:45802 has connected.
+[2025-08-28 17:36:31,693] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=5
+[2025-08-28 17:36:31,693] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:50:onMessage] received msg size=13
+[2025-08-28 17:36:31,694] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:78:doTaskThread] Thread init -> tid=0 (cacheCapa=100, patchCapa=50)
+[2025-08-28 17:36:31,694] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:96:doTaskThread] Thread tid=0 handling query: 1:nihao
+[2025-08-28 17:36:31,798] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:104:doTaskThread] Thread tid=0 handling query: 1:nihaoThread tid=0 result sent to client
+[2025-08-28 17:36:31,798] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=503
+[2025-08-28 17:37:13,593] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
+[2025-08-28 17:37:13,593] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:35:stop] SearchEngineServer stop ...
