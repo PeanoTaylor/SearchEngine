@@ -1,11 +1,14 @@
 #include "SearchEngineServer.hpp"
 #include "Logger.hpp"
 #include "ProtocolParser.hpp"
-#include "KeyRecommander.hpp"
-#include "WebPageSearcher.hpp"
+#include "CacheManage.hpp"
 #include <functional>
 #include <iostream>
 using namespace std;
+
+// 全局静态缓存管理器（容量1000，可配置化）
+static CacheManage cache(100, "tcp://127.0.0.1:6379");
+
 
 SearchEngineServer::SearchEngineServer(const std::string &ip, int port)
     : _tcpserver(ip, port), _threadpool(4, 10) {}
@@ -60,7 +63,7 @@ void SearchEngineServer::onClose(const TcpConnectionPtr &conn)
 void SearchEngineServer::doTaskThread(const TcpConnectionPtr &conn, std::string &msg)
 {
     // 这里可以使用 ProtocolParser 解包
-    Message message;
+     Message message;
     if (!ProtocolParser::Parse(msg, message))
     {
         LOG_WARN("Protocol parse error");
@@ -68,36 +71,10 @@ void SearchEngineServer::doTaskThread(const TcpConnectionPtr &conn, std::string 
         return;
     }
 
-    static KeyRecommander recommander(
-        "../data/endict.dat", "../data/cndict.dat",
-        "../data/enindex.dat", "../data/cnindex.dat");
+    // 拼接缓存 key: "tag:value"
+    string cacheKey = std::to_string(message.tag) + ":" + message.value;
+    string result = cache.get(cacheKey);
 
-    WebPageSearcher webpagesearcher("../data/webpages.dat", "../data/weboffset.dat", "../data/invertindex.dat");
-
-    std::string wordResult, webResult;
-    if (message.tag == 1)
-    {
-        // 关键字推荐
-        bool isChinese = (unsigned char)message.value[0] & 0x80;
-
-        if (isChinese)
-        {
-            wordResult = recommander.doQueryCn(message.value, 5);
-        }
-        else
-        {
-            wordResult = recommander.doQueryEn(message.value, 5);
-        }
-
-        conn->sendInLoop(wordResult + "\n");
-        LOG_INFO("Query result sent to client");
-        cout << endl;
-    }
-    else if (message.tag == 2)
-    {
-        webResult = webpagesearcher.doQuery(message.value);
-        // 网页推荐
-        conn->sendInLoop(webResult + "\n");
-        cout << endl;
-    }
+    conn->sendInLoop(result + "\n");
+    LOG_INFO("Query result sent to client");
 }

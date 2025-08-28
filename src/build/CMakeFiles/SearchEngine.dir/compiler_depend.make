@@ -1945,23 +1945,44 @@ CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o: ../SearchEngineServer.cpp 
   /usr/local/include/log4cpp/convenience.h \
   /usr/include/c++/11/cstdarg \
   ../ProtocolParser.hpp \
-  ../KeyRecommander.hpp \
-  ../WebPageSearcher.hpp \
-  /usr/include/nlohmann/json.hpp \
-  /usr/include/c++/11/algorithm \
-  /usr/include/c++/11/pstl/glue_algorithm_defs.h \
-  /usr/include/c++/11/cstddef \
+  ../CacheManage.hpp \
+  ../LRUCache.hpp \
+  /usr/include/c++/11/list \
+  /usr/include/c++/11/bits/stl_list.h \
+  /usr/include/c++/11/bits/list.tcc \
+  ../RedisClient.hpp \
+  /usr/local/include/sw/redis++/redis++.h \
+  /usr/local/include/sw/redis++/redis.h \
+  /usr/local/include/sw/redis++/connection_pool.h \
+  /usr/include/c++/11/cassert \
+  /usr/local/include/sw/redis++/connection.h \
+  /usr/include/c++/11/cstring \
+  /usr/include/string.h \
+  /usr/local/include/hiredis/hiredis.h \
+  /usr/local/include/hiredis/read.h \
+  /usr/local/include/hiredis/sds.h \
+  /usr/local/include/hiredis/alloc.h \
+  /usr/local/include/sw/redis++/errors.h \
+  /usr/local/include/sw/redis++/reply.h \
   /usr/include/c++/11/iterator \
   /usr/include/c++/11/bits/stream_iterator.h \
-  /usr/include/c++/11/numeric \
-  /usr/include/c++/11/bits/stl_numeric.h \
-  /usr/include/c++/11/pstl/glue_numeric_defs.h \
-  /usr/include/nlohmann/adl_serializer.hpp \
-  /usr/include/nlohmann/detail/conversions/from_json.hpp \
-  /usr/include/c++/11/forward_list \
-  /usr/include/c++/11/bits/forward_list.h \
-  /usr/include/c++/11/bits/forward_list.tcc \
-  /usr/include/c++/11/valarray \
+  /usr/local/include/sw/redis++/utils.h \
+  /usr/local/include/sw/redis++/cxx_utils.h \
+  /usr/include/c++/11/optional \
+  /usr/include/c++/11/variant \
+  /usr/local/include/sw/redis++/tls.h \
+  /usr/local/include/sw/redis++/sentinel.h \
+  /usr/local/include/sw/redis++/shards.h \
+  /usr/local/include/sw/redis++/command_options.h \
+  /usr/local/include/sw/redis++/subscriber.h \
+  /usr/local/include/sw/redis++/command.h \
+  /usr/local/include/sw/redis++/command_args.h \
+  /usr/local/include/sw/redis++/pipeline.h \
+  /usr/local/include/sw/redis++/transaction.h \
+  /usr/local/include/sw/redis++/redis.hpp \
+  /usr/local/include/sw/redis++/redis_cluster.h \
+  /usr/local/include/sw/redis++/shards_pool.h \
+  /usr/include/c++/11/random \
   /usr/include/c++/11/cmath \
   /usr/include/math.h \
   /usr/include/x86_64-linux-gnu/bits/math-vector.h \
@@ -1986,6 +2007,27 @@ CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o: ../SearchEngineServer.cpp 
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
+  /usr/include/c++/11/bits/random.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
+  /usr/include/c++/11/bits/random.tcc \
+  /usr/include/c++/11/numeric \
+  /usr/include/c++/11/bits/stl_numeric.h \
+  /usr/include/c++/11/pstl/glue_numeric_defs.h \
+  /usr/local/include/sw/redis++/redis_cluster.hpp \
+  /usr/local/include/sw/redis++/queued_redis.h \
+  /usr/local/include/sw/redis++/queued_redis.hpp \
+  ../KeyRecommander.hpp \
+  ../WebPageSearcher.hpp \
+  /usr/include/nlohmann/json.hpp \
+  /usr/include/c++/11/algorithm \
+  /usr/include/c++/11/pstl/glue_algorithm_defs.h \
+  /usr/include/c++/11/cstddef \
+  /usr/include/nlohmann/adl_serializer.hpp \
+  /usr/include/nlohmann/detail/conversions/from_json.hpp \
+  /usr/include/c++/11/forward_list \
+  /usr/include/c++/11/bits/forward_list.h \
+  /usr/include/c++/11/bits/forward_list.tcc \
+  /usr/include/c++/11/valarray \
   /usr/include/c++/11/bits/valarray_array.h \
   /usr/include/c++/11/bits/valarray_array.tcc \
   /usr/include/c++/11/bits/valarray_before.h \
@@ -2002,7 +2044,6 @@ CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o: ../SearchEngineServer.cpp 
   /usr/include/nlohmann/thirdparty/hedley/hedley.hpp \
   /usr/include/nlohmann/detail/meta/detected.hpp \
   /usr/include/nlohmann/detail/meta/void_t.hpp \
-  /usr/include/c++/11/cassert \
   /usr/include/nlohmann/detail/input/position_t.hpp \
   /usr/include/nlohmann/detail/meta/cpp_future.hpp \
   /usr/include/nlohmann/detail/meta/identity_tag.hpp \
@@ -2032,8 +2073,6 @@ CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o: ../SearchEngineServer.cpp 
   /usr/include/nlohmann/byte_container_with_subtype.hpp \
   /usr/include/nlohmann/detail/hash.hpp \
   /usr/include/nlohmann/detail/input/binary_reader.hpp \
-  /usr/include/c++/11/cstring \
-  /usr/include/string.h \
   /usr/include/nlohmann/detail/input/input_adapters.hpp \
   /usr/include/nlohmann/detail/input/json_sax.hpp \
   /usr/include/nlohmann/detail/input/lexer.hpp \
@@ -4225,10 +4264,6 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/siginfo-arch.h:
 
-/usr/include/x86_64-linux-gnu/bits/ss_flags.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/sig_atomic_t.h:
-
 ../ThreadPool.cpp:
 
 ../TcpServer.cpp:
@@ -4236,6 +4271,48 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 ../TcpConnection.cpp:
 
 ../TaskQueue.cpp:
+
+/usr/include/c++/11/bits/random.h:
+
+/usr/include/c++/11/random:
+
+/usr/local/include/sw/redis++/redis_cluster.h:
+
+/usr/local/include/sw/redis++/redis.hpp:
+
+/usr/local/include/sw/redis++/transaction.h:
+
+/usr/local/include/sw/redis++/command_args.h:
+
+/usr/local/include/sw/redis++/command_options.h:
+
+/usr/local/include/sw/redis++/shards.h:
+
+/usr/local/include/sw/redis++/tls.h:
+
+/usr/include/c++/11/variant:
+
+/usr/include/c++/11/optional:
+
+/usr/local/include/sw/redis++/cxx_utils.h:
+
+/usr/local/include/sw/redis++/reply.h:
+
+/usr/local/include/sw/redis++/errors.h:
+
+/usr/local/include/hiredis/sds.h:
+
+/usr/local/include/sw/redis++/queued_redis.hpp:
+
+/usr/local/include/sw/redis++/redis++.h:
+
+/usr/include/x86_64-linux-gnu/bits/ss_flags.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/sig_atomic_t.h:
+
+/usr/include/c++/11/bits/list.tcc:
+
+/usr/include/c++/11/list:
 
 ../ThreadPool.hpp:
 
@@ -4303,6 +4380,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/nlohmann/detail/macro_scope.hpp:
 
+/usr/local/include/sw/redis++/shards_pool.h:
+
 /usr/include/c++/11/bits/locale_conv.h:
 
 /usr/include/nlohmann/detail/exceptions.hpp:
@@ -4341,6 +4420,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/c++/11/bits/specfun.h:
 
+/usr/include/c++/11/bits/stl_list.h:
+
 /usr/include/x86_64-linux-gnu/bits/iscanonical.h:
 
 /usr/include/x86_64-linux-gnu/bits/mathcalls.h:
@@ -4368,6 +4449,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 /usr/include/c++/11/bits/deque.tcc:
 
 /usr/include/c++/11/algorithm:
+
+../LRUCache.hpp:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h:
 
@@ -4429,6 +4512,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/c++/11/bits/atomic_base.h:
 
+/usr/local/include/sw/redis++/connection.h:
+
 /usr/include/c++/11/ext/concurrence.h:
 
 /usr/include/c++/11/bits/allocated_ptr.h:
@@ -4470,6 +4555,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 /usr/include/c++/11/bits/shared_ptr_atomic.h:
 
 /usr/local/include/log4cpp/Category.hh:
+
+/usr/local/include/sw/redis++/utils.h:
 
 /usr/include/c++/11/sstream:
 
@@ -4522,6 +4609,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 /usr/include/c++/11/ext/new_allocator.h:
 
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
+
+/usr/local/include/sw/redis++/command.h:
 
 ../TcpServer.hpp:
 
@@ -4611,6 +4700,10 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/atomic_wide_counter.h:
 
+/usr/local/include/sw/redis++/redis.h:
+
+../CacheManage.hpp:
+
 /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
 
 /usr/include/linux/falloc.h:
@@ -4699,6 +4792,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/wchar.h:
 
+../RedisClient.hpp:
+
 /usr/include/x86_64-linux-gnu/bits/fp-fast.h:
 
 /usr/include/c++/11/iostream:
@@ -4710,6 +4805,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 /usr/include/c++/11/initializer_list:
 
 /usr/include/x86_64-linux-gnu/bits/sigstksz.h:
+
+/usr/local/include/sw/redis++/sentinel.h:
 
 /usr/include/x86_64-linux-gnu/bits/stat.h:
 
@@ -4753,6 +4850,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/types/locale_t.h:
 
+/usr/local/include/sw/redis++/queued_redis.h:
+
 /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h:
 
 /usr/include/c++/11/tr1/legendre_function.tcc:
@@ -4784,6 +4883,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 /usr/include/x86_64-linux-gnu/bits/timesize.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/cpu_defines.h:
+
+/usr/local/include/sw/redis++/pipeline.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h:
 
@@ -4883,6 +4984,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/netinet/in.h:
 
+/usr/local/include/sw/redis++/subscriber.h:
+
 /usr/include/nlohmann/detail/iterators/iteration_proxy.hpp:
 
 /usr/include/c++/11/bits/predefined_ops.h:
@@ -4898,6 +5001,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 ../SocketIO.cpp:
 
 /usr/include/x86_64-linux-gnu/bits/uintn-identity.h:
+
+/usr/include/c++/11/bits/random.tcc:
 
 /usr/include/c++/11/bits/fs_path.h:
 
@@ -4940,6 +5045,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 /usr/include/c++/11/bits/charconv.h:
 
 /usr/include/c++/11/bits/basic_string.tcc:
+
+/usr/local/include/sw/redis++/redis_cluster.hpp:
 
 /usr/include/nlohmann/detail/input/json_sax.hpp:
 
@@ -4986,6 +5093,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 /usr/include/c++/11/bits/vector.tcc:
 
 /usr/include/asm-generic/sockios.h:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h:
 
 /usr/include/c++/11/bits/codecvt.h:
 
@@ -5087,6 +5196,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/c++/11/bits/locale_facets.tcc:
 
+/usr/local/include/hiredis/read.h:
+
 /usr/include/c++/11/istream:
 
 /usr/include/c++/11/bits/istream.tcc:
@@ -5121,6 +5232,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/getopt_core.h:
 
+/usr/local/include/sw/redis++/connection_pool.h:
+
 /usr/include/c++/11/vector:
 
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
@@ -5133,6 +5246,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 
 /usr/local/include/log4cpp/Portability.hh:
 
+/usr/local/include/hiredis/alloc.h:
+
 /usr/local/include/log4cpp/Export.hh:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++locale.h:
@@ -5142,6 +5257,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 /usr/local/include/log4cpp/Appender.hh:
 
 /usr/include/c++/11/bits/stl_map.h:
+
+/usr/local/include/hiredis/hiredis.h:
 
 /usr/include/c++/11/bits/stl_relops.h:
 

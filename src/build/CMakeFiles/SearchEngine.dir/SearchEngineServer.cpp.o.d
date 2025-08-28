@@ -271,18 +271,34 @@ CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o: \
  /usr/local/include/log4cpp/Manipulator.hh \
  /usr/local/include/log4cpp/convenience.h /usr/include/c++/11/cstdarg \
  /home/zhang/SearchEngine/src/ProtocolParser.hpp \
- /home/zhang/SearchEngine/src/KeyRecommander.hpp \
- /home/zhang/SearchEngine/src/WebPageSearcher.hpp \
- /usr/include/nlohmann/json.hpp /usr/include/c++/11/algorithm \
- /usr/include/c++/11/pstl/glue_algorithm_defs.h \
- /usr/include/c++/11/cstddef /usr/include/c++/11/iterator \
- /usr/include/c++/11/bits/stream_iterator.h /usr/include/c++/11/numeric \
- /usr/include/c++/11/bits/stl_numeric.h \
- /usr/include/c++/11/pstl/glue_numeric_defs.h \
- /usr/include/nlohmann/adl_serializer.hpp \
- /usr/include/nlohmann/detail/conversions/from_json.hpp \
- /usr/include/c++/11/forward_list /usr/include/c++/11/bits/forward_list.h \
- /usr/include/c++/11/bits/forward_list.tcc /usr/include/c++/11/valarray \
+ /home/zhang/SearchEngine/src/CacheManage.hpp \
+ /home/zhang/SearchEngine/src/LRUCache.hpp /usr/include/c++/11/list \
+ /usr/include/c++/11/bits/stl_list.h /usr/include/c++/11/bits/list.tcc \
+ /home/zhang/SearchEngine/src/RedisClient.hpp \
+ /usr/local/include/sw/redis++/redis++.h \
+ /usr/local/include/sw/redis++/redis.h \
+ /usr/local/include/sw/redis++/connection_pool.h \
+ /usr/include/c++/11/cassert /usr/local/include/sw/redis++/connection.h \
+ /usr/include/c++/11/cstring /usr/include/string.h \
+ /usr/local/include/hiredis/hiredis.h /usr/local/include/hiredis/read.h \
+ /usr/local/include/hiredis/sds.h /usr/local/include/hiredis/alloc.h \
+ /usr/local/include/sw/redis++/errors.h \
+ /usr/local/include/sw/redis++/reply.h /usr/include/c++/11/iterator \
+ /usr/include/c++/11/bits/stream_iterator.h \
+ /usr/local/include/sw/redis++/utils.h \
+ /usr/local/include/sw/redis++/cxx_utils.h /usr/include/c++/11/optional \
+ /usr/include/c++/11/variant /usr/local/include/sw/redis++/tls.h \
+ /usr/local/include/sw/redis++/sentinel.h \
+ /usr/local/include/sw/redis++/shards.h \
+ /usr/local/include/sw/redis++/command_options.h \
+ /usr/local/include/sw/redis++/subscriber.h \
+ /usr/local/include/sw/redis++/command.h \
+ /usr/local/include/sw/redis++/command_args.h \
+ /usr/local/include/sw/redis++/pipeline.h \
+ /usr/local/include/sw/redis++/transaction.h \
+ /usr/local/include/sw/redis++/redis.hpp \
+ /usr/local/include/sw/redis++/redis_cluster.h \
+ /usr/local/include/sw/redis++/shards_pool.h /usr/include/c++/11/random \
  /usr/include/c++/11/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
@@ -305,6 +321,22 @@ CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o: \
  /usr/include/c++/11/tr1/poly_hermite.tcc \
  /usr/include/c++/11/tr1/poly_laguerre.tcc \
  /usr/include/c++/11/tr1/riemann_zeta.tcc \
+ /usr/include/c++/11/bits/random.h \
+ /usr/include/x86_64-linux-gnu/c++/11/bits/opt_random.h \
+ /usr/include/c++/11/bits/random.tcc /usr/include/c++/11/numeric \
+ /usr/include/c++/11/bits/stl_numeric.h \
+ /usr/include/c++/11/pstl/glue_numeric_defs.h \
+ /usr/local/include/sw/redis++/redis_cluster.hpp \
+ /usr/local/include/sw/redis++/queued_redis.h \
+ /usr/local/include/sw/redis++/queued_redis.hpp \
+ /home/zhang/SearchEngine/src/KeyRecommander.hpp \
+ /home/zhang/SearchEngine/src/WebPageSearcher.hpp \
+ /usr/include/nlohmann/json.hpp /usr/include/c++/11/algorithm \
+ /usr/include/c++/11/pstl/glue_algorithm_defs.h \
+ /usr/include/c++/11/cstddef /usr/include/nlohmann/adl_serializer.hpp \
+ /usr/include/nlohmann/detail/conversions/from_json.hpp \
+ /usr/include/c++/11/forward_list /usr/include/c++/11/bits/forward_list.h \
+ /usr/include/c++/11/bits/forward_list.tcc /usr/include/c++/11/valarray \
  /usr/include/c++/11/bits/valarray_array.h \
  /usr/include/c++/11/bits/valarray_array.tcc \
  /usr/include/c++/11/bits/valarray_before.h \
@@ -320,7 +352,7 @@ CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o: \
  /usr/include/nlohmann/detail/macro_scope.hpp \
  /usr/include/nlohmann/thirdparty/hedley/hedley.hpp \
  /usr/include/nlohmann/detail/meta/detected.hpp \
- /usr/include/nlohmann/detail/meta/void_t.hpp /usr/include/c++/11/cassert \
+ /usr/include/nlohmann/detail/meta/void_t.hpp \
  /usr/include/nlohmann/detail/input/position_t.hpp \
  /usr/include/nlohmann/detail/meta/cpp_future.hpp \
  /usr/include/nlohmann/detail/meta/identity_tag.hpp \
@@ -344,7 +376,6 @@ CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o: \
  /usr/include/nlohmann/byte_container_with_subtype.hpp \
  /usr/include/nlohmann/detail/hash.hpp \
  /usr/include/nlohmann/detail/input/binary_reader.hpp \
- /usr/include/c++/11/cstring /usr/include/string.h \
  /usr/include/nlohmann/detail/input/input_adapters.hpp \
  /usr/include/nlohmann/detail/input/json_sax.hpp \
  /usr/include/nlohmann/detail/input/lexer.hpp \

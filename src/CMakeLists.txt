@@ -26,6 +26,9 @@ add_executable(SearchEngine
     TcpConnection.cpp
     TcpServer.cpp
     ThreadPool.cpp
+    CacheManage.hpp
+    LRUCache.hpp
+    RedisClient.hpp
 )
 
 target_compile_options(SearchEngine PRIVATE
@@ -36,6 +39,7 @@ target_link_libraries(SearchEngine PRIVATE
     pthread
     log4cpp
     tinyxml2
+    redis++
 )
 
 add_executable(Client
