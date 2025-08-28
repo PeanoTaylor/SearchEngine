@@ -237,7 +237,7 @@ CMakeFiles/SearchEngine.dir/SearchEngineServer.cpp.o: \
  /usr/include/c++/11/bits/this_thread_sleep.h \
  /usr/include/c++/11/condition_variable \
  /home/zhang/SearchEngine/src/CacheManage.hpp \
- /home/zhang/SearchEngine/src/LRUCache.hpp /usr/include/c++/11/list \
+ /home/zhang/SearchEngine/src/LFUCache.hpp /usr/include/c++/11/list \
  /usr/include/c++/11/bits/stl_list.h /usr/include/c++/11/bits/list.tcc \
  /home/zhang/SearchEngine/src/RedisClient.hpp \
  /usr/local/include/sw/redis++/redis++.h \

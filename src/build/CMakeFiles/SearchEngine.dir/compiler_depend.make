@@ -4180,7 +4180,7 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
   /usr/include/c++/11/bits/this_thread_sleep.h \
   /usr/include/c++/11/condition_variable \
   ../CacheManage.hpp \
-  ../LRUCache.hpp \
+  ../LFUCache.hpp \
   /usr/include/c++/11/list \
   /usr/include/c++/11/bits/stl_list.h \
   /usr/include/c++/11/bits/list.tcc \
@@ -5398,6 +5398,8 @@ CMakeFiles/SearchEngine.dir/main.cpp.o: ../main.cpp \
 /usr/local/include/hiredis/alloc.h:
 
 /usr/local/include/log4cpp/Export.hh:
+
+../LFUCache.hpp:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++locale.h:
 

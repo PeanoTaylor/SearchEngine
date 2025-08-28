@@ -1,5 +1,5 @@
 #pragma once
-#include "LRUCache.hpp"
+#include "LFUCache.hpp"
 #include "RedisClient.hpp"
 #include "KeyRecommander.hpp"
 #include "WebPageSearcher.hpp"
@@ -11,8 +11,8 @@ struct MyThread
 {
     int id;
     thread th;
-    LRUCache cache;
-    LRUCache patch;
+    LFUCache cache;
+    LFUCache patch;
     MyThread(int tid, size_t cacheCapa, size_t patchCapa)
         : id(tid), cache(cacheCapa), patch(patchCapa) {}
 };
@@ -125,7 +125,7 @@ private:
     }
 
 private:
-    LRUCache _globalCache; // 全局主缓存
+    LFUCache _globalCache; // 全局主缓存
     RedisClient _redis;    // 二级缓存
     KeyRecommander _recommander;
     WebPageSearcher _searcher;

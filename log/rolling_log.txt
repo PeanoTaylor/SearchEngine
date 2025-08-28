@@ -386,3 +386,11 @@
 [2025-08-28 17:36:31,798] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=503
 [2025-08-28 17:37:13,593] [WARN] : [/home/zhang/SearchEngine/src/main.cpp:13:signalHandler] Caught signal 2, stopping server...
 [2025-08-28 17:37:13,593] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:35:stop] SearchEngineServer stop ...
+[2025-08-28 22:15:02,083] [INFO] : [/home/zhang/SearchEngine/src/main.cpp:31:main] Starting SearchEngineServer on 127.0.0.1:8888
+[2025-08-28 22:15:04,162] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:41:onConnection] 127.0.0.1:8888->127.0.0.1:37856 has connected.
+[2025-08-28 22:15:08,966] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:84:receive] Received packet length=5
+[2025-08-28 22:15:08,966] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:50:onMessage] received msg size=13
+[2025-08-28 22:15:08,967] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:78:doTaskThread] Thread init -> tid=0 (cacheCapa=100, patchCapa=50)
+[2025-08-28 22:15:08,967] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:96:doTaskThread] Thread tid=0 handling query: 1:nihao
+[2025-08-28 22:15:09,079] [INFO] : [/home/zhang/SearchEngine/src/SearchEngineServer.cpp:104:doTaskThread] Thread tid=0 handling query: 1:nihaoThread tid=0 result sent to client
+[2025-08-28 22:15:09,079] [DEBUG] : [/home/zhang/SearchEngine/src/TcpConnection.cpp:101:send] send success size=503
